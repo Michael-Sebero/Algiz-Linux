@@ -4,7 +4,7 @@
 
 <p align="center"><strong><font size="12">Algiz Linux</font></strong> is a High-Performance, Security-Focused Meta-Distribution of Artix Linux</p>
 
-## **Algiz Linux Includes:**
+## **Includes:**
 
 ### **A Modified Kernel & Performance Tools**
 * [CachyOS Kernel](https://wiki.cachyos.org/features/kernel/)

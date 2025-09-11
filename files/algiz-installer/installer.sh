@@ -190,6 +190,13 @@ mv /home/algiz-files/files/algiz-manual/Manual /home/$USER/Desktop/
 # REMOVE PACKAGES
 paru -Rdd --noconfirm linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme mpv mesa vulkan-intel vulkan-radeon vulkan-swrast
 
+# REMOVE LEGACY NVIDIA UTILS IF INSTALLED
+for pkg in nvidia-390xx-utils lib32-nvidia-390xx-utils; do
+    if pacman -Qs "^$pkg$" > /dev/null; then
+        paru -Rdd --noconfirm "$pkg"
+    fi
+done
+
 # REMOVE XFCE PACKAGES
 paru -Rdd --noconfirm epiphany xfce4-screensaver xfce4-terminal xfce4-screenshooter parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin || true
 
@@ -291,12 +298,10 @@ case "$INIT_SYSTEM" in
     runit)
         unlink /run/runit/service/connmand 2>/dev/null || true
         pacman -Rdd --noconfirm connman connman-runit connman-gtk
-        reload_services
         ;;
     s6)
         rm -f /etc/s6/adminsv/default/contents.d/connmand
         pacman -Rdd --noconfirm connman connman-s6 connman-gtk
-        reload_services
         ;;
     openrc)
         rc-update del connman default || true
