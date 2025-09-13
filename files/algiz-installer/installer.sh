@@ -190,13 +190,6 @@ mv /home/algiz-files/files/algiz-manual/Manual /home/$USER/Desktop/
 # REMOVE PACKAGES
 paru -Rdd --noconfirm linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme mpv mesa vulkan-intel vulkan-radeon vulkan-swrast
 
-# REMOVE LEGACY NVIDIA UTILS IF INSTALLED
-for pkg in nvidia-390xx-utils lib32-nvidia-390xx-utils; do
-    if pacman -Qs "^$pkg$" > /dev/null; then
-        paru -Rdd --noconfirm "$pkg"
-    fi
-done
-
 # REMOVE XFCE PACKAGES
 paru -Rdd --noconfirm epiphany xfce4-screensaver xfce4-terminal xfce4-screenshooter parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin || true
 
@@ -239,12 +232,12 @@ fi
 
 # NVIDIA-OPENSOURCE-DESKTOP CHOICE
 if [ "$choice" = "5" ]; then
-  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} nvidia-open-dkms && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
+  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && for pkg in nvidia-390xx-utils lib32-nvidia-390xx-utils; do pacman -Qs "^$pkg$" >/dev/null && paru -Rdd --noconfirm "$pkg"; done && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} nvidia-open-dkms && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
 fi
 
 # NVIDIA-PROPRIETARY-DESKTOP CHOICE
 if [ "$choice" = "6" ]; then
-  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} nvidia-dkms && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
+  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && for pkg in nvidia-390xx-utils lib32-nvidia-390xx-utils; do pacman -Qs "^$pkg$" >/dev/null && paru -Rdd --noconfirm "$pkg"; done && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} nvidia-dkms && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
 fi
 
 # INSTALL FLATPAK PACKAGES
