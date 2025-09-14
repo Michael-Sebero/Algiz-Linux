@@ -47,6 +47,7 @@
 * [Mimalloc](https://github.com/microsoft/mimalloc) (high-performance memory allocator).
 * [Tmpfs Overlay](https://github.com/Michael-Sebero/Tmpfs-Overlay) speeds up temporary directories and reduces disk I/O.
 * [Power Manager](https://github.com/Michael-Sebero/Power-Manager) (laptop battery manager).
+* Real-time audio processing.
 
 ## Performance & Security Improvements
 * **10-25%** FPS boost in gaming.
