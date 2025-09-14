@@ -197,7 +197,7 @@ paru -Rdd --noconfirm linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-
 paru -Rdd --noconfirm epiphany xfce4-screensaver xfce4-terminal xfce4-screenshooter parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin || true
 
 # INSTALL BASE PACKAGES
-retry 5 paru -S --noconfirm --needed --ignore=nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc lib32-artix-archlinux-support unrar flatpak kate librewolf tmux liferea ksnip kcalc font-manager pix gimp gamemode lib32-gamemode okular dnscrypt-proxy apparmor bleachbit konsole catfish clamav ark gufw macchanger networkmanager nm-connection-editor wine-git wine-mono winetricks-git steam lynis element-desktop rkhunter opendoas mate-system-monitor chrony downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber rust usbguard chkrootkit wget noto-fonts-emoji tauon-music-box freetube alsa-utils expect inotify-tools preload dialog tree parallel sof-firmware booster bottles vulkan-tools mimalloc mold lld protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse lib32-libdisplay-info mesa-tkg-git lib32-mesa-tkg-git linux-firmware
+retry 5 paru -S --noconfirm --needed --ignore=nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc lib32-artix-archlinux-support unrar flatpak kate librewolf tmux liferea ksnip kcalc font-manager pix gimp gamemode lib32-gamemode okular dnscrypt-proxy apparmor bleachbit konsole catfish clamav ark gufw macchanger networkmanager nm-connection-editor wine-git wine-mono winetricks-git steam lynis element-desktop rkhunter opendoas mate-system-monitor chrony downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber rust usbguard chkrootkit wget noto-fonts-emoji tauon-music-box freetube alsa-utils expect inotify-tools preload dialog tree parallel sof-firmware booster bottles vulkan-tools mimalloc mold lld protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse lib32-libdisplay-info mesa-tkg-git lib32-mesa-tkg-git linux-firmware realtime-privileges
 
 # INSTALL INIT PACKAGES
 case "$INIT_SYSTEM" in
@@ -322,6 +322,9 @@ if [ "$choice" = "1" ] || [ "$choice" = "3" ] || [ "$choice" = "5" ] || [ "$choi
     echo "Failed to add to gamemode group"
   fi
 fi
+
+# ADD USER TO REALTIME
+usermod -aG realtime "$(logname)"
 
 # INSTALL UNIVERSAL RC.LOCAL
 
