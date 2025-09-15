@@ -33,7 +33,7 @@
 * [Media Tools](https://github.com/Michael-Sebero/Media-Tools)
 
 ### **Additional Features**
-* A comprehensive [manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/main/files/coolrune-manual/Manual).
+* A comprehensive [manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual).
 * MAC address randomization.
 * Configured `sysctl` and `limits` for security enhancements, system performance and network efficiency.
 * Low latency [PipeWire](https://github.com/PipeWire/pipewire) audio processing.
