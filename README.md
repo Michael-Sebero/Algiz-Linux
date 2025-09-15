@@ -48,12 +48,7 @@
 * [Tmpfs Overlay](https://github.com/Michael-Sebero/Tmpfs-Overlay) speeds up temporary directories and reduces disk I/O.
 * [Power Manager](https://github.com/Michael-Sebero/Power-Manager) (laptop battery manager).
 * Real-time audio processing.
-
-## Performance & Security Improvements
-* **10-25%** FPS boost in gaming.
-* **15-40%** faster system responsiveness.
-* **15-25%** improved network efficiency.
-* A Lynis system hardening rating of **80** on desktop and **78** for laptop.
+* A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80** on desktop and **78** for laptop.
 
 ## How Algiz Linux Works
 
