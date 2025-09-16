@@ -53,7 +53,7 @@
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known/esoteric performance tweaks which can be implemented on Linux along with some original implementations. The philosophy behind this "meta-distribution" is to utilize modern hardware features and hardware resources generously (when needed) while increasing system hardness greatly beyond the default.
 
-Algiz Linux isn't distributed as an ISO because I don't want to bother with hosting + costs, this project will always be on GitHub. I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxyz/LARBS) which is why this is a script-based. In a way this project is like an ISO because most of Algiz's configurations and original content are stored inside archives (for convenience & permission integrity). If you want to see what changes I've made you can view them [here](https://github.com/Michael-Sebero/Algiz-Linux/tree/main/files/algiz-packages).
+Algiz Linux isn't distributed as an ISO because I don't want to bother with hosting + costs, this project will always be on GitHub. I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxyz/LARBS) which is why this is script-based. In a way this project is like an ISO because most of Algiz's configurations and original content are stored inside archives (for convenience & permission integrity). If you want to see what changes I've made you can view them [here](https://github.com/Michael-Sebero/Algiz-Linux/tree/main/files/algiz-packages).
 
 ## How Algiz Linux Works
 
