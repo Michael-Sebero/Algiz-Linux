@@ -46,7 +46,6 @@
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP).
 * [Mimalloc](https://github.com/microsoft/mimalloc) (high-performance memory allocator).
 * [Tmpfs Overlay](https://github.com/Michael-Sebero/Tmpfs-Overlay) speeds up temporary directories and reduces disk I/O.
-* [Power Manager](https://github.com/Michael-Sebero/Power-Manager) (laptop battery manager).
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80** on desktop and **78** for laptop.
 
@@ -89,7 +88,7 @@ Algiz Linux automatically detects CPU architecture on installation to ensure opt
 
 * **NVIDIA** - Configured for maximum performance and increased visual fidelity.
 
-* **Laptop** - Balanced between power saving and increased system performance. Includes bluetooth capibility along with `power-manager` which increases system performance when the system is at 79% battery life + AC connection and at 10% enters power saving. 
+* **Laptop** - Balanced between power saving and increases system performance when the system is at 79% battery life + AC connection
 
 ### Workload-Specific Presets
 * **High Performance** - Maximum throughput configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
