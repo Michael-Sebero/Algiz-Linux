@@ -44,6 +44,7 @@
 * Custom Windows-like XFCE theme.
 * [Booster](https://github.com/anatol/booster) (mkinitcpio replacement).
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP).
+* [Power Manager](https://github.com/Michael-Sebero/Power-Manager) (laptop battery manager).
 * [Mimalloc](https://github.com/microsoft/mimalloc) (high-performance memory allocator).
 * [Tmpfs Overlay](https://github.com/Michael-Sebero/Tmpfs-Overlay) speeds up temporary directories and reduces disk I/O.
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
@@ -90,7 +91,7 @@ Algiz Linux automatically detects CPU architecture on installation to ensure opt
 
 * **NVIDIA** - Tweaked for maximum performance and increased visual fidelity.
 
-* **Laptop** - Balanced between power saving and increased system performance when the system is at 79% battery life + AC connection
+* **Laptop** - Balanced between power saving and increased system performance when the system is at 79% battery life + AC connection.
 
 ### Workload-Specific Presets
 * **High Performance** - Maximum throughput configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
