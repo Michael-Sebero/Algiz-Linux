@@ -47,8 +47,11 @@
 * [Mimalloc](https://github.com/microsoft/mimalloc) (high-performance memory allocator).
 * [Tmpfs Overlay](https://github.com/Michael-Sebero/Tmpfs-Overlay) speeds up temporary directories and reduces disk I/O.
 * [Power Manager](https://github.com/Michael-Sebero/Power-Manager) (laptop battery manager).
-* Real-time audio processing.
+* [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80** on desktop and **78** for laptop.
+
+## Summary / TLDR
+This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known/esoteric performance tweaks which can be implemented on Linux along with some original implementations. The philosophy behind this "meta-distribution" is to utilize modern hardware features and hardware resources generously (when needed) while increasing system hardness greatly beyond the default (without reducing performance).
 
 ## How Algiz Linux Works
 
@@ -82,16 +85,16 @@ Development workflows are accelerated through compiler caching with compression 
 Algiz Linux automatically detects CPU architecture on installation to ensure optimal package selection. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
 
 ### Hardware-Specific Presets
-* **AMD/Intel** - Optimized for AMD and Intel CPUs with integrated or discrete graphics, featuring auto-detection for AMD Infinity Fabric or Intel mesh topologies, RDNA/Arc GPU acceleration and enhanced scheduler affinity.
+* **AMD/Intel** - Configured for maximum performance for AMD and Intel GPUs
 
-* **NVIDIA** - Configured for NVIDIA GPU acceleration with CUDA optimizations, enhanced memory allocation for GPU computing and driver-specific performance tuning for gaming and machine learning workloads.
+* **NVIDIA** - Configured for maximum performance and increased visual fidelity.
 
-* **Laptop** - Balanced between power saving and increased system performance. Includes bluetooth capibility, faster system responsiveness and system hardening. Features `power-manager` which increases system performance when the system is at 79% battery life + AC connection and at 10% enters power saving. 
+* **Laptop** - Balanced between power saving and increased system performance. Includes bluetooth capibility along with `power-manager` which increases system performance when the system is at 79% battery life + AC connection and at 10% enters power saving. 
 
 ### Workload-Specific Presets
-* **High Performance** - Maximum throughput configuration with reduced security mitigations, aggressive CPU scheduling, expanded memory limits and enhanced graphics pipeline.
+* **High Performance** - Maximum throughput configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
 
-* **Machine Learning/LLM** - Specialized for AI workloads with HugePages allocation, NUMA topology awareness, reduced security mitigations, optimized memory bandwidth utilization and reduced kernel overhead for sustained computational tasks.
+* **Machine Learning/LLM** - Specialized for AI workloads with larger HugePages allocation, reduced security mitigations, optimized memory bandwidth utilization and reduced kernel overhead for sustained computational tasks.
 
 * **Server** - Network enhancements tailored for server hardware. Features optimized TCP stack with BBR congestion control, aggressive connection handling (2M TIME_WAIT buckets, fast recycling), enhanced network buffers (16MB socket buffers), comprehensive IPv4/IPv6 filtering with martian packet logging and DDoS mitigation through rate limiting and connection flood protection while maintaining low-latency network performance for high-throughput server applications.
 
