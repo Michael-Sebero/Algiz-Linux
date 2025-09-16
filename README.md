@@ -86,11 +86,11 @@ Development workflows are accelerated through compiler caching with compression 
 Algiz Linux automatically detects CPU architecture on installation to ensure optimal package selection. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
 
 ### Hardware-Specific Presets
-* **AMD/Intel** - Configured for maximum performance for AMD and Intel GPUs
+* **AMD/Intel** - Configured for maximum performance.
 
-* **NVIDIA** - Configured for maximum performance and increased visual fidelity.
+* **NVIDIA** - Tweaked for maximum performance and increased visual fidelity.
 
-* **Laptop** - Balanced between power saving and increases system performance when the system is at 79% battery life + AC connection
+* **Laptop** - Balanced between power saving and increased system performance when the system is at 79% battery life + AC connection
 
 ### Workload-Specific Presets
 * **High Performance** - Maximum throughput configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
