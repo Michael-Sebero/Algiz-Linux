@@ -77,12 +77,6 @@ Network performance leverages BBR congestion control and fq_codel queue manageme
 ### Filesystem & I/O Optimization
 Current I/O patterns are supported through expanded file descriptor limits and asynchronous operation capabilities. The filesystem layer includes enhanced inotify support for file monitoring applications while implementing security protections against symlink and hardlink attacks. These optimizations particularly benefit containerized applications and development environments that require extensive file access patterns.
 
-### Graphics & Gaming Acceleration
-Graphics performance is enhanced through threaded shader compilation and caching strategies that reduce stuttering and loading times. Wine and Proton compatibility layers benefit from reduced syscall overhead through event synchronization primitives, while Qt and Chromium applications leverage hardware acceleration and modern rendering techniques for improved responsiveness across desktop and web applications.
-
-### Build System & Development Optimization
-Development workflows are accelerated through compiler caching with compression and CPU-specific optimizations that maximize instruction throughput. Thread utilization is optimized for physical core topology rather than logical threads, reducing cache contention and memory bandwidth pressure on SMT-enabled systems while maintaining optimal parallelization for compilation tasks.
-
 ### CPU Architecture Detection & ALHP Repository Integration
 Algiz Linux automatically detects CPU architecture on installation to ensure optimal package selection. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
 
