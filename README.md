@@ -58,7 +58,7 @@ Originally I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxy
 Algiz Linux implements kernel hardening which increases security and performance. The system prevents privilege escalation attacks through restricted ptrace access and disabled unprivileged BPF operations, while eliminating core dump generation to reduce attack surface. Process handling is optimized for high-concurrency workloads with expanded PID limits and disabled automatic NUMA balancing.
 
 ### Memory Management
-RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases responsiveness. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and memory fragmentation for large memory workloads without consuming RAM upfront.
+RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases responsiveness. Swapping is still possible but only used when RAM is filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and memory fragmentation for large memory workloads without consuming RAM upfront.
 
 **Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. It's size is dynamically set to 25% of total RAM. The device is initialized with mkswap and immediately activated with swapon. Compression prioritizes zstd when available, falling back to lzo to maintain low CPU overhead while efficiently storing inactive memory pages.
 
@@ -69,7 +69,7 @@ RAM usage has the highest priority over swapping, keeping active data in memory 
 * Safe removal: Ensures files in use are never deleted.
 
 ### Network Stack
-Network performance leverages BBR congestion control and fq_codel queue management to improve throughput and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is configured with privacy extensions but with restrictive security settings that prioritize security over performance.
+Network performance leverages `BBR` congestion control and `fq_codel` queue management to improve throughput and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is configured with privacy extensions but with restrictive security settings that prioritize security over performance.
 
 ### CPU Architecture Detection & ALHP Repository Integration
 CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
@@ -77,9 +77,9 @@ CPU architecture is automatically detected on installation to ensure optimal pac
 ### Hardware-Specific Presets
 * **AMD/Intel** - Configured for maximum performance.
 
-* **NVIDIA** - Tweaked for maximum performance and increased visual fidelity.
+* **NVIDIA** - Tweaked for maximum visual fidelity and performance.
 
-* **Laptop** - Balanced between power saving and increased system performance when the system is at 79% battery life + AC connection.
+* **Laptop** - Balanced between power saving and performance, at 79% battery + AC connection performance is increased and reduced at 10%.
 
 ### Workload-Specific Presets
 * **Performance** - Maximum throughput configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
