@@ -55,7 +55,7 @@ Originally I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxy
 ## How Algiz Linux Works
 
 ### Kernel & Security Hardening
-Algiz Linux implements kernel hardening which increases security and performance. The system prevents privilege escalation attacks through restricted ptrace access and disabled unprivileged BPF operations, while eliminating core dump generation to reduce attack surface. Process handling is optimized for high-concurrency workloads with expanded PID limits and disabled automatic NUMA balancing to prevent unnecessary CPU migrations.
+Algiz Linux implements kernel hardening which increases security and performance. The system prevents privilege escalation attacks through restricted ptrace access and disabled unprivileged BPF operations, while eliminating core dump generation to reduce attack surface. Process handling is optimized for high-concurrency workloads with expanded PID limits and disabled automatic NUMA balancing.
 
 ### Memory Management
 RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases responsiveness. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and memory fragmentation for large memory workloads without consuming RAM upfront.
