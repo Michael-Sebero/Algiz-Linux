@@ -34,12 +34,11 @@
 
 ### **Additional Features**
 * A comprehensive [manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual).
-* MAC address randomization.
+* MAC address randomization via [Macchanger](https://www.kali.org/tools/macchanger/).
 * Low latency [PipeWire](https://github.com/PipeWire/pipewire) audio processing.
 * [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) and [Flatpak](https://flatpak.org/) repositories.
 * Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) prefix.
 * [ZFS](https://github.com/openzfs/zfs) compatiblity (for server preset only).
-* Custom Windows-like XFCE theme.
 * [Booster](https://github.com/anatol/booster) (mkinitcpio replacement).
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP).
 * [Power Manager](https://github.com/Michael-Sebero/Power-Manager) (laptop battery manager).
