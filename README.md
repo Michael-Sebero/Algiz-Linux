@@ -61,9 +61,9 @@ Algiz Linux isn't distributed as an ISO because I don't want to bother with host
 Algiz Linux implements kernel hardening which increases security and performance. The system prevents privilege escalation attacks through restricted ptrace access and disabled unprivileged BPF operations, while eliminating core dump generation to reduce attack surface. Process handling is optimized for high-concurrency workloads with expanded PID limits and disabled automatic NUMA balancing to prevent unnecessary CPU migrations that degrade cache locality.
 
 ### Memory Management Optimization
-Aggressive memory tuning prioritizes RAM utilization over swap usage, keeping active data in fast memory while optimizing write-back behavior for sustained throughput. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce TLB overhead and memory fragmentation for large memory workloads without consuming RAM upfront.
+Aggressive memory tuning prioritizes RAM utilization over swap usage, keeping active data in memory while optimizing write-back behavior for sustained throughput. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and memory fragmentation for large memory workloads without consuming RAM upfront.
 
-**Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. It's size is dynamically set to 25% of total RAM. The device is initialized with mkswap and immediately activated with swapon. Compression prioritizes zstd when available, falling back to lzo to maintain low CPU overhead while efficiently storing inactive memory pages. This setup accelerates memory-intensive workloads by reducing disk I/O and keeping more data in RAM.
+**Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. It's size is dynamically set to 25% of total RAM. The device is initialized with mkswap and immediately activated with swapon. Compression prioritizes zstd when available, falling back to lzo to maintain low CPU overhead while efficiently storing inactive memory pages.
 
 **TMPFS Overlay Integration:** Temporary directories `/tmp`, `/var/tmp`, `/var/log`, `/var/cache`, `/home/$USER/.cache/` are mounted as tmpfs to leverage RAM for high-speed file storage. Each mount has a predefined limit `/tmp` = 5G, `/var/tmp` = 1G, `/var/log` = 512M, `/var/cache` = 2G, `/home/$USER/.cache` = 2G. Essential directories `/var/cache/pacman`, `/home/$USER/.cache/paru`, `/home/$USER/.cache/nvidia`, `/home/$USER/.cache/mesa_shader_cache`, `/home/$USER/.cache/mesa_shader_cache_db` are excluded and bind-mounted on local storage.
 
@@ -88,11 +88,11 @@ Algiz Linux automatically detects CPU architecture on installation to ensure opt
 * **Laptop** - Balanced between power saving and increased system performance when the system is at 79% battery life + AC connection.
 
 ### Workload-Specific Presets
-* **High Performance** - Maximum throughput configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
-
-* **Machine Learning/LLM** - Specialized for AI workloads with larger HugePages allocation, reduced security mitigations, optimized memory bandwidth utilization and reduced kernel overhead for sustained computational tasks.
+* **Performance** - Maximum throughput configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
 
 * **Server** - Network enhancements tailored for server hardware. Features optimized TCP stack with BBR congestion control, aggressive connection handling (2M TIME_WAIT buckets, fast recycling), enhanced network buffers (16MB socket buffers), comprehensive IPv4/IPv6 filtering with martian packet logging and DDoS mitigation through rate limiting and connection flood protection while maintaining low-latency network performance for high-throughput server applications.
+
+* **AI** - Specialized for AI workloads with larger HugePages allocation, reduced security mitigations, optimized memory bandwidth utilization and reduced kernel overhead for sustained computational tasks.
 
 <p align="center">
 	<img src="https://i.postimg.cc/C53HDLTZ/ksnip-20240224-100057.png" />
