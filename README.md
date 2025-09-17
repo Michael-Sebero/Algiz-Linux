@@ -84,7 +84,7 @@ CPU architecture is automatically detected on installation to ensure optimal pac
 ### Optional Workload-Specific Presets
 * **Performance** - Maximum throughput configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
 
-* **Server** - The system enables the `BBR` congestion control algorithm and expands TCP/UDP buffer sizes up to 16MB for high-throughput connections. TCP stack handling is tuned for scalability with up to 2 million `TIME_WAIT` sockets, window scaling, and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, and disabled source routing and ICMP redirects. IPv4 and IPv6 are both hardened with rate limiting for ICMP, challenge ACK limits and disabled router advertisements. These settings balance low latency with resilience against common network abuse patterns.
+* **Server** - The system enables the `BBR` congestion control algorithm and expands TCP/UDP buffer sizes up to 16MB for high-throughput connections. TCP stack handling is tuned for scalability with up to 2 million `TIME_WAIT` sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging and disabled source routing and ICMP redirects. IPv4 and IPv6 are both hardened with rate limiting for ICMP, challenge ACK limits and disabled router advertisements. These settings balance low latency with resilience against common network abuse patterns.
 
 * **AI** - Specialized for AI workloads with larger HugePages allocation and reduced security mitigations.
 
