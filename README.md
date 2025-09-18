@@ -60,7 +60,7 @@ Algiz Linux implements kernel hardening which increases security and performance
 ### Memory Management
 RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and memory fragmentation for large memory workloads without consuming RAM upfront.
 
-**Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. Its size is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`. Compression is set to `lz4`, prioritizing low CPU overhead and high throughput over maximum compression ratio.
+**Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. Its size is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`. Compression is set to `lz4`, prioritizing low CPU overhead and high performance over maximum compression ratio.
 
 **TMPFS Overlay Integration:** Temporary directories `/tmp`, `/var/tmp`, `/var/log`, `/var/cache`, `/home/$USER/.cache/` are mounted as tmpfs to leverage RAM for high-speed file storage. Each mount has a predefined limit `/tmp` = 5G, `/var/tmp` = 1G, `/var/log` = 512M, `/var/cache` = 2G, `/home/$USER/.cache` = 2G. Essential directories `/var/cache/pacman`, `/home/$USER/.cache/paru`, `/home/$USER/.cache/nvidia`, `/home/$USER/.cache/mesa_shader_cache`, `/home/$USER/.cache/mesa_shader_cache_db` are excluded and bind-mounted on local storage.
 
@@ -68,8 +68,13 @@ RAM usage has the highest priority over swapping, keeping active data in memory 
 
 * Safe removal: Ensures files in use are never deleted.
 
-### Network Stack
-Network performance leverages `BBR` congestion control and `fq_codel` queue management to improve throughput and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is configured with privacy extensions but with restrictive security settings that prioritize security over performance.
+### Network Management
+Network performance leverages `BBR` congestion control and `fq_codel` queue management to improve performance and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is configured with privacy extensions but with restrictive security settings that prioritize security over performance.
+
+### Filesystem & I/O Optimization
+Disk and SSD performance is tuned through scheduler and queue optimizations. SSDs use the `mq-deadline` scheduler for predictable low-latency I/O, while HDDs default to `BFQ` to balance performance under heavy multi-process workloads. Read-ahead is increased to 4096 KB, improving sequential file access, while I/O queue depth is raised—128 for SATA and 512 for NVMe for higher parallelism without introducing latency spikes. Write throttling is disabled to prevent artificial slowdowns and Native Command Queuing (NCQ) is enabled for SATA drives to improve multi-request handling.
+
+**F2FS:** Drives formmated to F2FS are optimized with aggressive background garbage collection, shorter idle intervals and faster urgency triggers ensuring flash-based storage maintains performance consistency over time. To preserve SSD longevity and prevent write performance degradation, the system runs weekly TRIM operations, reclaiming unused blocks efficiently. Together, these adjustments ensure sustained high performance and efficient resource use.
 
 ### CPU Architecture Detection & ALHP Repository Integration
 CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
@@ -82,9 +87,9 @@ CPU architecture is automatically detected on installation to ensure optimal pac
 * **Laptop** - Balanced between power saving and performance, at 79% battery + AC connection performance is increased and reduced at 10%.
 
 ### Optional Workload-Specific Presets
-* **Performance** - Maximum throughput configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
+* **Performance** - Maximum performance configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
 
-* **Server** - The system enables the `BBR` congestion control algorithm and expands TCP/UDP buffer sizes up to 16MB for high-throughput connections. TCP stack handling is tuned for scalability with up to 2 million `TIME_WAIT` sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging and disabled source routing and ICMP redirects. IPv4 and IPv6 are both hardened with rate limiting for ICMP, challenge ACK limits and disabled router advertisements. These settings balance low latency with resilience against common network abuse patterns.
+* **Server** - The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million `TIME_WAIT` sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are both hardened with rate limiting for ICMP, challenge ACK limits and disabled router advertisements. These settings balance low latency with resilience against common network abuse patterns.
 
 * **AI** - Specialized for AI workloads with larger HugePages allocation and reduced security mitigations.
 
