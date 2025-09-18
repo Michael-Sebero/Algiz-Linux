@@ -69,7 +69,7 @@ RAM usage has the highest priority over swapping, keeping active data in memory 
 * Safe removal: Ensures files in use are never deleted.
 
 ### Network Management
-Network performance leverages `BBR` congestion control and `fq_codel` queue management to improve performance and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is configured with privacy extensions but with restrictive security settings that prioritize security over performance.
+Network performance leverages `BBR` congestion control and `fq_codel` queue management to improve performance and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is configured with privacy extensions but with restrictive security settings that prioritize security over performance. NetworkManager is set to use `dhclient` for DHCP with hostname handling disabled along with DNS encryption via Mullvad.
 
 ### Filesystem & I/O Optimization
 Disk and SSD performance is tuned through scheduler and queue optimizations. SSDs use the `mq-deadline` scheduler for predictable low-latency I/O, while HDDs default to `BFQ` to balance performance under heavy multi-process workloads. Read-ahead is increased to 4096 KB, improving sequential file access, while I/O queue depth is raised—128 for SATA and 512 for NVMe for higher parallelism without introducing latency spikes. Write throttling is disabled to prevent artificial slowdowns and Native Command Queuing (NCQ) is enabled for SATA drives to improve multi-request handling.
