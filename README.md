@@ -62,7 +62,7 @@ RAM usage has the highest priority over swapping, keeping active data in memory 
 
 **Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. Its size is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`. Compression is set to `lz4`, prioritizing low CPU overhead and high performance over maximum compression ratio.
 
-**Tmpfs Overlay Integration:** Temporary directories `/tmp`, `/var/tmp`, `/var/log`, `/var/cache`, `/home/$USER/.cache/` are mounted as tmpfs to leverage RAM for high-speed file storage. Each mount has a predefined limit `/tmp` = 5G, `/var/tmp` = 1G, `/var/log` = 512M, `/var/cache` = 2G, `/home/$USER/.cache` = 2G. Essential directories `/var/cache/pacman`, `/home/$USER/.cache/paru`, `/home/$USER/.cache/nvidia`, `/home/$USER/.cache/mesa_shader_cache`, `/home/$USER/.cache/mesa_shader_cache_db` are excluded and bind-mounted on local storage.
+**Tmpfs Overlay:** Temporary directories `/tmp`, `/var/tmp`, `/var/log`, `/var/cache`, `/home/$USER/.cache/` are mounted as tmpfs to leverage RAM for high-speed file storage. Each mount has a predefined limit `/tmp` = 5G, `/var/tmp` = 1G, `/var/log` = 512M, `/var/cache` = 2G, `/home/$USER/.cache` = 2G. Essential directories `/var/cache/pacman`, `/home/$USER/.cache/paru`, `/home/$USER/.cache/nvidia`, `/home/$USER/.cache/mesa_shader_cache`, `/home/$USER/.cache/mesa_shader_cache_db` are excluded and bind-mounted on local storage.
 
 * Periodic cleanup: Removes files older than 10 minutes.
 
