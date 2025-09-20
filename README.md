@@ -17,6 +17,7 @@
 * [Chkrootkit](https://en.wikipedia.org/wiki/Chkrootkit)
 * [ClamAV](https://github.com/Cisco-Talos/clamav)
 * [DNSCrypt](https://github.com/DNSCrypt/dnscrypt-protocol)
+* [DNSMasq](https://thekelleys.org.uk/dnsmasq/doc.html)
 * [Fail2Ban](https://github.com/fail2ban/fail2ban)
 * [Linux Hardening Script](https://github.com/Michael-Sebero/Linux-Hardening-Script)
 * [Lynis](https://github.com/CISOfy/lynis)
