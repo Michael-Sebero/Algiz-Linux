@@ -188,9 +188,7 @@ pacman -S paru --noconfirm --needed && retry 5 pacman -Syyu --noconfirm --needed
 mv /home/algiz-files/files/algiz-manual/Manual /home/$USER/Desktop/
 
 # REMOVE PACKAGES
-for pkg in
-    linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme mpv mesa vulkan-intel vulkan-radeon vulkan-swrast nvidia-390xx-utils lib32-nvidia-390xx-utils vulkan-mesa-device-select epiphany xfce4-screensaver xfce4-terminal xfce4-screenshooter parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin
-do
+for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme mpv mesa vulkan-intel vulkan-radeon vulkan-swrast nvidia-390xx-utils lib32-nvidia-390xx-utils vulkan-mesa-device-select epiphany xfce4-screensaver xfce4-terminal xfce4-screenshooter parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin; do
     if pacman -Qi "$pkg" &>/dev/null; then
         paru -Rdd --noconfirm "$pkg"
     fi
