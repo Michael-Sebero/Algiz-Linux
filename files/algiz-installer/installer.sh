@@ -184,7 +184,8 @@ echo -e "\e[1mFinding quickest mirrorlist, please wait...\e[0m"
 sh -c "rankmirrors -v -n 4 -m 2 /etc/pacman.d/mirrorlist > /etc/pacman.d/mirrorlist.new && mv /etc/pacman.d/mirrorlist.new /etc/pacman.d/mirrorlist && chmod 644 /etc/pacman.d/mirrorlist"
 
 ### FIRST COMMANDS AND ALGIZ-LINUX IMPORT P2 ###
-pacman -S paru --noconfirm --needed && retry 5 pacman -Syyu --noconfirm --needed --overwrite='*' --ignore=linux,linux-headers,nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc
+pacman -S paru --noconfirm --needed && retry 5 pacman -Syyu --noconfirm --needed --overwrite='*' --ignore=linux,linux-headers,nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc,modemmanager,libmm-glib
+
 mv /home/algiz-files/files/algiz-manual/Manual /home/$USER/Desktop/
 
 # REMOVE PACKAGES
@@ -195,7 +196,7 @@ for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth p
 done
 
 # INSTALL BASE PACKAGES
-retry 5 paru -S --noconfirm --needed --ignore=nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc lib32-artix-archlinux-support unrar flatpak kate librewolf tmux liferea ksnip kcalc font-manager pix gimp gamemode lib32-gamemode okular dnscrypt-proxy dnsmasq apparmor bleachbit konsole catfish clamav ark gufw macchanger networkmanager nm-connection-editor wine-git wine-mono winetricks-git steam lynis element-desktop rkhunter opendoas mate-system-monitor chrony downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber rust usbguard chkrootkit wget noto-fonts-emoji tauon-music-box freetube alsa-utils expect inotify-tools preload dialog tree parallel sof-firmware booster bottles vulkan-tools mimalloc mold lld protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse lib32-libdisplay-info mesa-tkg-git lib32-mesa-tkg-git linux-firmware realtime-privileges
+retry 5 paru -S --noconfirm --needed --ignore=nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc,modemmanager,libmm-glib lib32-artix-archlinux-support unrar flatpak kate librewolf tmux liferea ksnip kcalc font-manager pix gimp gamemode lib32-gamemode okular dnscrypt-proxy dnsmasq apparmor bleachbit konsole catfish clamav ark gufw macchanger networkmanager nm-connection-editor wine-git wine-mono winetricks-git steam lynis element-desktop rkhunter opendoas mate-system-monitor chrony downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber rust usbguard chkrootkit wget noto-fonts-emoji tauon-music-box freetube alsa-utils expect inotify-tools preload dialog tree parallel sof-firmware booster bottles vulkan-tools mimalloc mold lld protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse lib32-libdisplay-info mesa-tkg-git lib32-mesa-tkg-git linux-firmware realtime-privileges
 
 # INSTALL INIT PACKAGES
 case "$INIT_SYSTEM" in
