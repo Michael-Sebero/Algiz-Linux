@@ -46,7 +46,7 @@
 * [Mimalloc](https://github.com/microsoft/mimalloc) (high-performance memory allocator).
 * [Tmpfs Overlay](https://github.com/Michael-Sebero/Tmpfs-Overlay) speeds up temporary directories and reduces disk I/O.
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
-* A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **82** on desktop and **79** for laptop.
+* A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80** on desktop and **79** for laptop.
 
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known & esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
