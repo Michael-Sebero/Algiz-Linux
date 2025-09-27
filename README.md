@@ -51,41 +51,53 @@
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known & esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
 
-The configuration files `sysctl.conf`, `limits.conf`, `gamemode.ini` and `grub` are pre-configured for specific workloads. Depending on the variant chosen there's specific changes tailored for each. These workloads are for **AMD/Intel**, **NVIDIA**, **Laptop**, **Performance**, **Server** and **AI**. The user chooses these presets via the installer and by running the `optional` command post-installation. 
+The configuration files `sysctl.conf`, `limits.conf` and `grub` are pre-configured for specific workloads. Depending on the variant chosen there's specific changes tailored for each. These presets are **AMD/Intel**, **NVIDIA**, **Laptop**, **Performance**, **Server** and **AI**. They can be chosen in the installer and by running the `optional` command post-installation.
 
 Originally I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxyz/LARBS) which is why Algiz's installer is script-based rather than an ISO. This project is packaged similarly to an ISO due to the configurations and content being stored inside various archives. If you want to see what changes I've made you can view them [here](https://github.com/Michael-Sebero/Algiz-Linux/tree/main/files/algiz-packages).
 
 ## How Algiz Linux Works
 
 ### Kernel & Security Hardening
-Algiz Linux implements kernel hardening which increases security and performance. The system prevents privilege escalation attacks through restricted ptrace access and disabled unprivileged BPF operations, while eliminating core dump generation to reduce attack surface. Process handling is optimized for high-concurrency workloads with expanded PID limits and disabled automatic NUMA balancing.
+Algiz Linux implements comprehensive kernel hardening which increases security and performance. The system prevents privilege escalation attacks through restricted ptrace access and disabled unprivileged BPF operations, while eliminating core dump generation to prevent information leakage. Kernel debugging is restricted through pointer exposure protection and disabled SysRq functionality, with kexec disabled to prevent unauthorized kernel replacement. `ASLR` is enabled for memory protection against exploitation. NUMA balancing is disabled to eliminate automatic memory migration overhead.
 
 ### Memory Management
-RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and memory fragmentation for large memory workloads without consuming RAM upfront.
+RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and fragmentation for large memory workloads.
 
 **Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. Its size is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`. Compression is set to `lz4`, prioritizing low CPU overhead and high performance over maximum compression ratio.
 
-**Tmpfs Overlay:** Temporary directories `/tmp`, `/var/tmp`, `/var/log`, `/var/cache`, `/home/$USER/.cache/` are mounted as tmpfs to leverage RAM for high-speed file storage. Each mount has a predefined limit `/tmp` = 5G, `/var/tmp` = 1G, `/var/log` = 512M, `/var/cache` = 2G, `/home/$USER/.cache` = 2G. Essential directories `/var/cache/pacman`, `/home/$USER/.cache/paru`, `/home/$USER/.cache/nvidia`, `/home/$USER/.cache/mesa_shader_cache`, `/home/$USER/.cache/mesa_shader_cache_db` are excluded and bind-mounted on local storage.
+**Tmpfs Overlay:** Temporary directories are mounted as tmpfs with the following size limits:
+- `/tmp` – 5 GB
+- `/var/tmp` – 1 GB
+- `/var/log` – 512 MB
+- `/var/cache` – 2 GB
+- `/home/$USER/.cache/` – 2 GB
+
+The following directories are bind-mounted and remain on local storage:
+- `/var/cache/pacman`
+- `/home/$USER/.cache/paru`
+- `/home/$USER/.cache/nvidia`
+- `/home/$USER/.cache/mesa_shader_cache`
+- `/home/$USER/.cache/mesa_shader_cache_db`
 
 * Periodic cleanup: Removes files older than 10 minutes.
 
 * Safe removal: Ensures files in use are never deleted.
 
 ### Network Management
-Network performance leverages `BBR` congestion control and `fq_codel` queue management to improve performance and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is configured with privacy extensions but with restrictive security settings that prioritize security over performance. NetworkManager is set to use `dhclient` for DHCP with hostname handling disabled along with DNS encryption via [Mullvad](https://mullvad.net/en).
+Network performance leverages `BBR` congestion control and `cake` queue management to improve performance and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is limited through restrictive ICMP and routing settings. NetworkManager is set to use `dhclient` for DHCP with hostname handling disabled along with DNS encryption via [Mullvad](https://mullvad.net/en).
 
 ### Filesystem & I/O Optimization
-Disk and SSD performance is tuned through scheduler and queue optimizations. SSDs use the `mq-deadline` scheduler for predictable low-latency I/O, while HDDs default to `BFQ` to balance performance under heavy multi-process workloads. Read-ahead is increased to 4096 KB, improving sequential file access, while I/O queue depth is raised to 128 for SATA and 512 for NVMe for higher parallelism. Write throttling is disabled to prevent artificial slowdowns and Native Command Queuing (NCQ) is enabled for SATA drives to improve multi-request handling.
+Disk and SSD performance is tuned through scheduler and queue optimizations. SSDs use the `mq-deadline` scheduler for low-latency I/O, while HDDs use `bfq` for better fairness under mixed workloads. NVMe drives bypass the scheduler entirely (none) for maximum throughput. Read-ahead is increased to 4096 KB for improved sequential performance, while I/O queue depth is raised to 128 for SATA and 512 for NVMe, enabling higher parallelism. I/O request merging is enabled to combine adjacent requests for efficiency.
 
-**F2FS:** Drives formatted to F2FS are optimized with background garbage collection, shorter idle intervals and faster urgency triggers ensuring flash-based storage maintains performance consistency over time. To preserve SSD longevity and prevent write performance degradation the system runs weekly TRIM operations which reclaim unused blocks. Together these adjustments ensure sustained high performance and efficient resource use.
+**F2FS:** Root and home partitions formatted with F2FS are optimized with background garbage collection enabled and tuned idle detection intervals to maintain flash-based storage performance consistency. To preserve SSD longevity and prevent write performance degradation, the system runs TRIM operations once every 7 days, reclaiming unused blocks. These processes ensure efficient resource use across F2FS filesystems.
 
 ### CPU Architecture Detection & ALHP Repository Integration
 CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
 
 ### Hardware-Specific Presets
-* **AMD/Intel** - Configured for maximum performance.
+* **AMD/Intel** - Configured for high performance and security.
 
-* **NVIDIA** - Tweaked for maximum visual fidelity and performance.
+* **NVIDIA** - Tweaked for maximum visual fidelity, high performance and security.
 
 * **Laptop** - Balanced between power saving and performance, at 85% battery + AC connection performance is increased and reduced at 10%.
 
