@@ -53,7 +53,7 @@
 
  - The [ steal ] command installs packages from the default repo, AUR and Flatpak. It also can download videos.
  
- - On laptops the maximum charge is 79% to preserve the battery.
+ - On laptops the maximum charge is 85% to preserve the battery.
  
  - Expect slower application launches on laptop until preloader caches frequently used applications.
  

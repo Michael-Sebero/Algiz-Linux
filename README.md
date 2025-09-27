@@ -85,7 +85,7 @@ CPU architecture is automatically detected on installation to ensure optimal pac
 
 * **NVIDIA** - Tweaked for maximum visual fidelity and performance.
 
-* **Laptop** - Balanced between power saving and performance, at 79% battery + AC connection performance is increased and reduced at 10%.
+* **Laptop** - Balanced between power saving and performance, at 85% battery + AC connection performance is increased and reduced at 10%.
 
 ### Optional Workload-Specific Presets
 * **Performance** - Maximum performance configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
