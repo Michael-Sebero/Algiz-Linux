@@ -51,6 +51,8 @@
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known & esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
 
+The configuration files `sysctl.conf`, `limits.conf`, `gamemode.ini` and `grub` are pre-configured for specific workloads. Depending on the variant chosen there's specific changes tailored for each. These workloads are for **AMD/Intel**, **NVIDIA**, **Laptop**, **Performance**, **Server** and **AI**. The user chooses these presets via the installer or by running the `optional` command post-installation. 
+
 Originally I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxyz/LARBS) which is why Algiz's installer is script-based rather than an ISO. This project is packaged similarly to an ISO due to the configurations and content being stored inside various archives. If you want to see what changes I've made you can view them [here](https://github.com/Michael-Sebero/Algiz-Linux/tree/main/files/algiz-packages).
 
 ## How Algiz Linux Works
@@ -75,7 +77,7 @@ Network performance leverages `BBR` congestion control and `fq_codel` queue mana
 ### Filesystem & I/O Optimization
 Disk and SSD performance is tuned through scheduler and queue optimizations. SSDs use the `mq-deadline` scheduler for predictable low-latency I/O, while HDDs default to `BFQ` to balance performance under heavy multi-process workloads. Read-ahead is increased to 4096 KB, improving sequential file access, while I/O queue depth is raised to 128 for SATA and 512 for NVMe for higher parallelism. Write throttling is disabled to prevent artificial slowdowns and Native Command Queuing (NCQ) is enabled for SATA drives to improve multi-request handling.
 
-**F2FS:** Drives formatted to F2FS are optimized with aggressive background garbage collection, shorter idle intervals and faster urgency triggers ensuring flash-based storage maintains performance consistency over time. To preserve SSD longevity and prevent write performance degradation the system runs weekly TRIM operations which reclaim unused blocks. Together these adjustments ensure sustained high performance and efficient resource use.
+**F2FS:** Drives formatted to F2FS are optimized with background garbage collection, shorter idle intervals and faster urgency triggers ensuring flash-based storage maintains performance consistency over time. To preserve SSD longevity and prevent write performance degradation the system runs weekly TRIM operations which reclaim unused blocks. Together these adjustments ensure sustained high performance and efficient resource use.
 
 ### CPU Architecture Detection & ALHP Repository Integration
 CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
@@ -88,11 +90,11 @@ CPU architecture is automatically detected on installation to ensure optimal pac
 * **Laptop** - Balanced between power saving and performance, at 85% battery + AC connection performance is increased and reduced at 10%.
 
 ### Optional Workload-Specific Presets
-* **Performance** - Maximum performance configuration with reduced security mitigations, aggressive CPU scheduling and expanded memory limits.
+* **Performance** - Maximum performance configuration with no security mitigations, CPU scheduling and expanded memory limits.
 
 * **Server** - The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million `TIME_WAIT` sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are both hardened with rate limiting for ICMP, challenge ACK limits and disabled router advertisements. These settings balance low latency with resilience against common network abuse patterns.
 
-* **AI** - Specialized for AI workloads with larger HugePages allocation and reduced security mitigations.
+* **AI** - Specialized for AI workloads with larger HugePages allocation and no security mitigations.
 
 <p align="center">
 	<img src="https://i.postimg.cc/C53HDLTZ/ksnip-20240224-100057.png" />
