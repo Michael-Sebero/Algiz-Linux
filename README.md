@@ -79,6 +79,9 @@ Essential directories are bind-mounted and remain on local storage:
 - `/home/$USER/.cache/mesa_shader_cache`
 - `/home/$USER/.cache/mesa_shader_cache_db`
 
+(These directories can be configured and added onto in `/bin/tmpfs-overlay`)
+
+Garbage Collection:
 * Periodic cleanup: Removes files older than 10 minutes.
 
 * Safe removal: Ensures files in use are never deleted.
