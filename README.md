@@ -72,7 +72,7 @@ RAM usage has the highest priority over swapping, keeping active data in memory 
 - `/var/cache` – 2 GB
 - `/home/$USER/.cache/` – 2 GB
 
-The following directories are bind-mounted and remain on local storage:
+Essential directories are bind-mounted and remain on local storage:
 - `/var/cache/pacman`
 - `/home/$USER/.cache/paru`
 - `/home/$USER/.cache/nvidia`
