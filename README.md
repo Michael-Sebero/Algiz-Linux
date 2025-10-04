@@ -81,7 +81,7 @@ RAM usage has the highest priority over swapping, keeping active data in memory 
 
 **Specified directories can be added in** `/bin/tmpfs-overlay`
 
-Garbage Collection:
+**Garbage Collection:**
 * Periodic cleanup: Removes files older than 10 minutes.
 
 * Safe removal: Ensures files in use are never deleted.
