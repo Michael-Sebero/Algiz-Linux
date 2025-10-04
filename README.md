@@ -70,7 +70,7 @@ RAM usage has the highest priority over swapping, keeping active data in memory 
 - `/var/tmp` – 1 GB
 - `/var/log` – 512 MB
 - `/var/cache` – 2 GB
-- `/home/$USER/.cache/` – 2 GB
+- `/home/$USER/.cache` – 2 GB
 
 **Bind-mounted Directories:** Essential directories are bind-mounted and remain on local storage:
 - `/var/cache/pacman`
