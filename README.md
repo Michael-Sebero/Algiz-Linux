@@ -42,7 +42,7 @@
 * [ZFS](https://github.com/openzfs/zfs) compatiblity (for server preset only).
 * [Booster](https://github.com/anatol/booster) (mkinitcpio replacement).
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP).
-* [Power Manager](https://github.com/Michael-Sebero/Power-Manager) (laptop battery manager).
+* [System Tuner](https://github.com/Michael-Sebero/System-Tuner) (laptop performance manager).
 * [Mimalloc](https://github.com/microsoft/mimalloc) (high-performance memory allocator).
 * [Tmpfs Overlay](https://github.com/Michael-Sebero/Tmpfs-Overlay) speeds up temporary directories and reduces disk I/O.
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
@@ -63,12 +63,11 @@ Algiz Linux implements comprehensive kernel hardening which increases security a
 ### Memory Management
 RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and fragmentation for large memory workloads.
 
-**Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. Its size is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`. Compression is set to `lz4`, prioritizing low CPU overhead and high performance over maximum compression ratio.
+**Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. Zram allocation is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`. Compression is set to `lz4`, prioritizing high performance over maximum compression.
 
 **Tmpfs Overlay:** Temporary directories are mounted as tmpfs with the following size limits:
 - `/tmp` – 5 GB
 - `/var/tmp` – 1 GB
-- `/var/log` – 512 MB
 - `/var/cache` – 2 GB
 - `/home/$USER/.cache` – 2 GB
 
@@ -107,7 +106,7 @@ CPU architecture is automatically detected on installation to ensure optimal pac
 ### Optional Workload-Specific Presets
 * **Performance** - Maximum performance configuration with no security mitigations, CPU scheduling and expanded memory limits.
 
-* **Server** - The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million `TIME_WAIT` sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are both hardened with rate limiting for ICMP, challenge ACK limits and disabled router advertisements. These settings balance low latency with resilience against common network abuse patterns.
+* **Server** - The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million `TIME_WAIT` sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are both hardened with rate limiting for ICMP and disabled router advertisements. These settings balance low latency with resilience against network abuse patterns.
 
 * **AI** - Specialized for AI workloads with larger HugePages allocation and no security mitigations.
 
