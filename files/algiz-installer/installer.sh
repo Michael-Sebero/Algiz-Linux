@@ -201,13 +201,13 @@ retry 5 paru -S --noconfirm --needed --ignore=nvidia-390xx-utils,lib32-nvidia-39
 # INSTALL INIT PACKAGES
 case "$INIT_SYSTEM" in
     runit)
-        retry 5 paru -S --noconfirm --needed dnscrypt-proxy-runit dnsmasq-runit apparmor-runit clamav-runit networkmanager-runit ufw-runit usbguard-runit cpupower-runit earlyoom-runit
+        retry 5 paru -S --noconfirm --needed dnscrypt-proxy-runit dnsmasq-runit apparmor-runit clamav-runit networkmanager-runit ufw-runit usbguard-runit earlyoom-runit
         ;;
     s6)
-        retry 5 paru -S --noconfirm --needed dnscrypt-proxy-s6 dnsmasq-s6 apparmor-s6 clamav-s6 networkmanager-s6 ufw-s6 usbguard-s6 cpupower-s6 earlyoom-s6
+        retry 5 paru -S --noconfirm --needed dnscrypt-proxy-s6 dnsmasq-s6 apparmor-s6 clamav-s6 networkmanager-s6 ufw-s6 usbguard-s6 earlyoom-s6
         ;;
     openrc)
-        retry 5 paru -S --noconfirm --needed dnscrypt-proxy-openrc dnsmasq-openrc apparmor-openrc clamav-openrc networkmanager-openrc ufw-openrc usbguard-openrc cpupower-openrc earlyoom-openrc
+        retry 5 paru -S --noconfirm --needed dnscrypt-proxy-openrc dnsmasq-openrc apparmor-openrc clamav-openrc networkmanager-openrc ufw-openrc usbguard-openrc earlyoom-openrc
         ;;
 esac
 
@@ -224,7 +224,7 @@ fi
 
 # AMD/INTEL-DESKTOP CHOICE
 if [ "$choice" = "1" ] || [ "$choice" = "3" ]; then
-  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git vkbasalt lib32-vkbasalt fail2ban fail2ban-${INIT_SYSTEM}
+  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git vkbasalt lib32-vkbasalt fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM}
 fi
 
 # AMD/INTEL-LAPTOP CHOICE
@@ -234,12 +234,12 @@ fi
 
 # NVIDIA-OPENSOURCE-DESKTOP CHOICE
 if [ "$choice" = "5" ]; then
-  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} nvidia-open-dkms && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
+  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} nvidia-open-dkms cpupower cpupower-${INIT_SYSTEM} && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
 fi
 
 # NVIDIA-PROPRIETARY-DESKTOP CHOICE
 if [ "$choice" = "6" ]; then
-  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} nvidia-dkms && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
+  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} nvidia-dkms cpupower cpupower-${INIT_SYSTEM} && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
 fi
 
 # INSTALL FLATPAK PACKAGES
@@ -259,6 +259,7 @@ if [ "$choice" = "1" ] || [ "$choice" = "3" ]; then
   unzip -o algiz-root-main.zip -d /
   unzip -o algiz-root-desktop.zip -d /
   add_service fail2ban
+  add_service cpupower
 fi
 
 # LAPTOP SELECTION
@@ -276,6 +277,7 @@ if [ "$choice" = "5" ] || [ "$choice" = "6" ]; then
   unzip -o algiz-root-desktop.zip -d /
   unzip -o algiz-nvidia-patch.zip -d /
   add_service fail2ban
+  add_service cpupower
 fi
 
 ### LAST COMMANDS ###
@@ -286,7 +288,6 @@ add_service NetworkManager
 add_service dnscrypt-proxy
 add_service dnsmasq
 add_service ufw
-add_service cpupower
 add_service earlyoom
 
 # REMOVE CONNMAN & REFRESH
