@@ -234,12 +234,12 @@ fi
 
 # NVIDIA-OPENSOURCE-DESKTOP CHOICE
 if [ "$choice" = "5" ]; then
-  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} nvidia-open-dkms cpupower cpupower-${INIT_SYSTEM} && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
+  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM} nvidia-open-dkms && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
 fi
 
 # NVIDIA-PROPRIETARY-DESKTOP CHOICE
 if [ "$choice" = "6" ]; then
-  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} nvidia-dkms cpupower cpupower-${INIT_SYSTEM} && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
+  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-cachyos linux-cachyos-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM} nvidia-dkms && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
 fi
 
 # INSTALL FLATPAK PACKAGES
