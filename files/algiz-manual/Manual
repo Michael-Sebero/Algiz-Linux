@@ -41,7 +41,7 @@
  
  - The command [ optional ] installs optional packages for Algiz, this is useful if you have a laptop.
  
- - Enter the command [ nmtui ] to connect to the internet.
+ - Enter the command [ nmtui ] to connect to wifi.
 
  - To update all of your system's packages at once run the command [ update ]
 
@@ -51,15 +51,13 @@
 
  - All DNS traffic is encrypted through [ dnscrypt-proxy ] via Mullvad which prevents DNS leaks.
 
- - The [ steal ] command installs packages from the default repo, AUR and Flatpak. It also can download videos.
+ - The [ steal ] command installs packages from the default repo, AUR and Flatpak. It can also download videos.
  
  - On laptops the maximum charge is 85% to preserve the battery.
  
- - Expect slower application launches on laptop until preloader caches frequently used applications.
- 
  - Adjust your screen brightness to 60% to conserve battery life.
  
- - When connecting a charger to a laptop, system performance will increase when the battery is at 79%.
+ - When connecting a charger to a laptop, system performance will increase when the battery is at 85%.
 
  - Change shaders to Vulkan in Steam settings and enable Steam Play for Linux compatibility.
 
