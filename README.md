@@ -7,7 +7,7 @@
 ## **Includes:**
 
 ### **A Modified Kernel & Performance Tools**
-* [CachyOS Kernel](https://wiki.cachyos.org/features/kernel/)
+* [Xanmod Kernel](https://xanmod.org/)
 * [Earlyoom](https://github.com/rfjakob/earlyoom)
 * [GameMode](https://github.com/FeralInteractive/gamemode)
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus)
