@@ -6,12 +6,12 @@
 
 ## **Includes:**
 
-### **A Modified Kernel & Performance Tools**
-* [Xanmod Kernel](https://xanmod.org/)
+### **A Modified Kernel & Performance Utilities**
 * [Earlyoom](https://github.com/rfjakob/earlyoom)
-* [GameMode](https://github.com/FeralInteractive/gamemode)
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus)
-* [Sched Ext](https://github.com/sched-ext/scx)
+* [GameMode](https://github.com/FeralInteractive/gamemode)
+* [SCX](https://github.com/sched-ext/scx)
+* [Xanmod Kernel](https://xanmod.org/)
 
 ### **Security Software**
 * [AppArmor](https://en.wikipedia.org/wiki/AppArmor)
@@ -25,7 +25,7 @@
 * [USBGuard](https://github.com/USBGuard/usbguard)
 * [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall)
 
-### **Tools & Utilities**
+### **Misc Tools & Utilities**
 * [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary)
 * [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools)
 * [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools)
@@ -47,7 +47,7 @@
 * [Mimalloc](https://github.com/microsoft/mimalloc) (high-performance memory allocator).
 * [Tmpfs Overlay](https://github.com/Michael-Sebero/Tmpfs-Overlay) speeds up temporary directories and reduces disk I/O.
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
-* A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80** on desktop and **78** for laptop.
+* A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**.
 
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known & esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
@@ -60,6 +60,9 @@ Originally I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxy
 
 ### Kernel & Security Hardening
 Algiz Linux implements comprehensive kernel hardening which increases security and performance. The system prevents privilege escalation attacks through restricted ptrace access and disabled unprivileged BPF operations, while eliminating core dump generation to prevent information leakage. Kernel debugging is restricted through pointer exposure protection and disabled SysRq functionality, with kexec disabled to prevent unauthorized kernel replacement. `ASLR` is enabled for memory protection against exploitation. NUMA balancing is disabled to eliminate automatic memory migration overhead.
+
+### Kernel Scheduler
+The scheduler is set to RustLand which provides high performance and low system latency. High intensity workloads and gaming is greatly enhanced by this scheduler compared to **CFS** or **BORE**. If you want to change the scheduler it can be changed in `rc.local`.
 
 ### Memory Management
 RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and fragmentation for large memory workloads.
