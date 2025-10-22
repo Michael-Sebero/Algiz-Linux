@@ -69,7 +69,7 @@ The desktop scheduler is set to `LAVD` and laptops use `BPFLand` which provide h
 ### Memory Management
 RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and fragmentation for large memory workloads.
 
-**Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. Zram allocation is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`. Compression is set to `lz4`, prioritizing high performance over maximum compression.
+**Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. Zram allocation is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`.
 
 **Tmpfs Overlay:** Temporary directories are mounted as tmpfs with the following size limits:
 - `/tmp` – 5 GB
