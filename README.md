@@ -61,7 +61,7 @@ Originally I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxy
 Algiz Linux implements comprehensive kernel hardening which increases security and performance. The system prevents privilege escalation attacks through restricted ptrace access and disabled unprivileged BPF operations, while eliminating core dump generation to prevent information leakage. Kernel debugging is restricted through pointer exposure protection and disabled SysRq functionality, with kexec disabled to prevent unauthorized kernel replacement. `ASLR` is enabled for memory protection against exploitation. NUMA balancing is disabled to eliminate automatic memory migration overhead.
 
 ### XanMod Kernel
-The kernel which comes with the configuration is a custom build of XanMod which is tailored for x86-64-v3 CPU architecture. I've picked XanMod due to it's reliability and mature foundation, it performs more compared to baseline Linux. XanMod's **CFS** scheduler is replaced with a SCX Scheduler.
+The kernel which comes with the configuration is a custom build of XanMod which is tailored for x86-64-v3 CPU architecture. I've picked XanMod due to it's reliability and mature foundation, it performs more compared to baseline Linux. XanMod's `CFS` scheduler is replaced with a SCX Scheduler.
 
 ### Kernel Scheduler
 The desktop scheduler is set to `LAVD` and laptops use `BPFLand` which provide high performance and low system latency. `LAVD` is configured for high performance with dynamic 250 µs slicing (1000 Hz+-equivalent responsiveness) and `BPFLand` is left default for simplicity. High intensity workloads and gaming are more enhanced by `LAVD` compared to `CFS` or `BORE`. If you want to change the scheduler it can be modified in `rc.local` under the scheduler section.
