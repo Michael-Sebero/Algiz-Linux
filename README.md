@@ -11,7 +11,7 @@
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus)
 * [GameMode](https://github.com/FeralInteractive/gamemode)
 * [SCX](https://github.com/sched-ext/scx)
-* [Xanmod Kernel](https://xanmod.org/)
+* [Xanmod](https://xanmod.org/)
 
 ### **Security Software**
 * [AppArmor](https://en.wikipedia.org/wiki/AppArmor)
