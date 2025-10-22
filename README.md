@@ -28,7 +28,6 @@
 * [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary)
 * [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools)
 * [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools)
-* [Data Recovery Tools](https://github.com/Michael-Sebero/Data-Recovery-Tools)
 * [Document Tools](https://github.com/Michael-Sebero/Document-Tools)
 * [Earlyoom](https://github.com/rfjakob/earlyoom)
 * [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux)
