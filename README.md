@@ -11,6 +11,7 @@
 * [Earlyoom](https://github.com/rfjakob/earlyoom)
 * [GameMode](https://github.com/FeralInteractive/gamemode)
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus)
+* [Sched Ext](https://github.com/sched-ext/scx)
 
 ### **Security Software**
 * [AppArmor](https://en.wikipedia.org/wiki/AppArmor)
