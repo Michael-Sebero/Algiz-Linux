@@ -64,7 +64,7 @@ Algiz Linux implements comprehensive kernel hardening which increases security a
 The kernel which comes with the configuration is a custom build of XanMod which is tailored for x86-64-v3 CPU architecture. I've picked XanMod due to it's reliability and mature foundation, it performs more compared to baseline Linux. It's **CFS** scheduler is replaced with a different one via `sched-ext`.
 
 ### Kernel Scheduler
-The desktop scheduler is set to `RustLand` and laptops use `BPFLand` which provide high performance and low system latency. High intensity workloads and gaming is enhanced by these schedulers compared to **CFS** or **BORE**. If you want to change the scheduler it can be modified in `rc.local` under the scheduler section.
+The desktop scheduler is set to `RustLand` and laptops use `BPFLand` which provide high performance and low system latency. High intensity workloads and gaming are enhanced by these schedulers compared to **CFS** or **BORE**. If you want to change the scheduler it can be modified in `rc.local` under the scheduler section.
 
 ### Memory Management
 RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and fragmentation for large memory workloads.
