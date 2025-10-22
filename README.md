@@ -7,10 +7,9 @@
 ## **Includes:**
 
 ### **A Modified Kernel & Performance Utilities**
-* [Earlyoom](https://github.com/rfjakob/earlyoom)
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus)
 * [GameMode](https://github.com/FeralInteractive/gamemode)
-* [SCX](https://github.com/sched-ext/scx)
+* [SCX Schedulers](https://github.com/sched-ext/scx)
 * [Xanmod](https://xanmod.org/)
 
 ### **Security Software**
@@ -31,6 +30,7 @@
 * [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools)
 * [Data Recovery Tools](https://github.com/Michael-Sebero/Data-Recovery-Tools)
 * [Document Tools](https://github.com/Michael-Sebero/Document-Tools)
+* [Earlyoom](https://github.com/rfjakob/earlyoom)
 * [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux)
 * [Media Tools](https://github.com/Michael-Sebero/Media-Tools)
 
