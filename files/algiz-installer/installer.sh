@@ -3,17 +3,13 @@
 su -c '
 ### INIT SYSTEM DETECTION ###
 detect_init_system() {
-    if command -v sv >/dev/null 2>&1 && [ -d "/etc/runit" ]; then
-        echo "runit"
-    elif command -v s6-service >/dev/null 2>&1; then
+    if command -v s6-service >/dev/null 2>&1; then
         echo "s6"
     elif command -v rc-update >/dev/null 2>&1; then
         echo "openrc"
     else
         # Fallback detection methods
-        if [ -d "/etc/runit" ]; then
-            echo "runit"
-        elif [ -d "/etc/s6" ]; then
+        if [ -d "/etc/s6" ]; then
             echo "s6"
         elif [ -d "/etc/runlevels" ]; then
             echo "openrc"
@@ -117,11 +113,6 @@ retry() {
 add_service() {
     local service_name="$1"
     case "$INIT_SYSTEM" in
-        runit)
-            if [ -d "/etc/runit/sv/$service_name" ]; then
-                ln -sf "/etc/runit/sv/$service_name" "/run/runit/service/"
-            fi
-            ;;
         s6)
             s6-service add default "$service_name"
             ;;
@@ -200,9 +191,6 @@ retry 5 paru -S --noconfirm --needed --ignore=nvidia-390xx-utils,lib32-nvidia-39
 
 # INSTALL INIT PACKAGES
 case "$INIT_SYSTEM" in
-    runit)
-        retry 5 paru -S --noconfirm --needed dnscrypt-proxy-runit dnsmasq-runit apparmor-runit clamav-runit networkmanager-runit ufw-runit usbguard-runit earlyoom-runit
-        ;;
     s6)
         retry 5 paru -S --noconfirm --needed dnscrypt-proxy-s6 dnsmasq-s6 apparmor-s6 clamav-s6 networkmanager-s6 ufw-s6 usbguard-s6 earlyoom-s6
         ;;
@@ -292,10 +280,6 @@ add_service earlyoom
 
 # REMOVE CONNMAN & REFRESH
 case "$INIT_SYSTEM" in
-    runit)
-        unlink /run/runit/service/connmand 2>/dev/null || true
-        pacman -Rdd --noconfirm connman connman-runit connman-gtk
-        ;;
     s6)
         rm -f /etc/s6/adminsv/default/contents.d/connmand
         pacman -Rdd --noconfirm connman connman-s6 connman-gtk
@@ -328,27 +312,6 @@ fi
 usermod -aG realtime "$(logname)"
 
 # INSTALL UNIVERSAL RC.LOCAL
-
-# Runit
-if [ -d /etc/runit ]; then
-  mkdir -p /etc/runit/sv/rc.local
-  cat > /etc/runit/sv/rc.local/run << 'EOF'
-#!/bin/sh
-exec 2>&1
-/etc/rc.local
-exit 0
-EOF
-  chmod 755 /etc/runit/sv/rc.local/run
-  # Create a finish script to prevent restart
-  cat > /etc/runit/sv/rc.local/finish << 'EOF'
-#!/bin/sh
-# Prevent automatic restart for one-shot service
-exec 2>&1
-exit 0
-EOF
-  chmod 755 /etc/runit/sv/rc.local/finish
-  touch /etc/runit/sv/rc.local/down
-fi
 
 # S6
 if [ -d /etc/s6 ]; then
