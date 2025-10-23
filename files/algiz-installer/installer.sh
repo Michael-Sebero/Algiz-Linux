@@ -313,7 +313,7 @@ usermod -aG realtime "$(logname)"
 
 # INSTALL UNIVERSAL RC.LOCAL
 
-# S6
+# s6
 if [ -d /etc/s6 ]; then
   mv -f /etc/rc.local /etc/s6/rc.local
   chmod 755 /etc/s6/rc.local
