@@ -120,6 +120,6 @@ CPU architecture is automatically detected on installation to ensure optimal pac
 	<img src="https://i.postimg.cc/C53HDLTZ/ksnip-20240224-100057.png" />
 
 ## Donations and Contact
-* [PayPal](https://www.paypal.com/donate/?cmd=_donations&business=YYGU9JWJEE2AG)
 * [Email](michaelsebero@disroot.org)
 * [Matrix](https://matrix.to/#/#algiz-linux:matrix.org)
+* [PayPal](https://www.paypal.com/donate/?cmd=_donations&business=YYGU9JWJEE2AG)
