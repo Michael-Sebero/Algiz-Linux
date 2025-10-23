@@ -122,3 +122,4 @@ CPU architecture is automatically detected on installation to ensure optimal pac
 ## Donations and Contact
 * [PayPal](https://www.paypal.com/donate/?cmd=_donations&business=YYGU9JWJEE2AG)
 * [Email](michaelsebero@disroot.org)
+* [Matrix](https://matrix.to/#/#algiz-linux:matrix.org)
