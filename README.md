@@ -84,9 +84,9 @@ RAM usage has the highest priority over swapping, keeping active data in memory 
 - `/home/$USER/.cache/mesa_shader_cache`
 - `/home/$USER/.cache/mesa_shader_cache_db`
 
-**RAM overlay of root filesystem:**  
-- The root filesystem (`/`) is overlaid in RAM using an overlay filesystem.  
-- Changes made to files in the overlay are stored in RAM and synced back to disk on logout.  
+**RAM overlay of root filesystem:**
+- The root filesystem (`/`) is overlaid in RAM using an overlay filesystem.
+- Changes made to files in the overlay are stored in RAM and synced back to disk on shutdown.
 - Excluded directories remain on disk: `/home`, `/tmp`, `/var/tmp`, `/var/cache`, `/proc`, `/sys`, `/dev`, `/run`, `/mnt`, `/media`, `/boot`.
 
 **Specified directories can be added in** `/bin/ephemeral-overlay`
