@@ -154,7 +154,7 @@
 
  / KEYWORD SEARCH /
 
- . ks
+ . ks /example/directory keyword
  
  - This command finds keywords in a directory quickly.
 
@@ -262,19 +262,25 @@
 
 ..................................................................................................................................................
 
- / ARCHIVIST TOOLS COMMANDS /
+ / ARCHIVIST TOOLS /
+ 
+ . archivist-tools
  
  > https://github.com/Michael-Sebero/Archivist-Tools
 
 ..................................................................................................................................................
 
- / DOCUMENT TOOLS COMMANDS /
+ / DOCUMENT TOOLS /
+ 
+ . document-tools
  
  > https://github.com/Michael-Sebero/Document-Tools
  
 ..................................................................................................................................................
 
- / MEDIA TOOLS COMMANDS /
+ / MEDIA TOOLS /
+ 
+ . media-tools
  
  > https://github.com/Michael-Sebero/Media-Tools
  
@@ -344,22 +350,6 @@
  
 ..................................................................................................................................................
 
- / FORMAT TO XFS /
- 
- . format-to-xfs
- 
- - After formatting adjust the permissions of the newly formatted drive to sudo chmod 777 [ /dev/formatteddrive ]
-
-..................................................................................................................................................
-
- / FORMAT TO ZFS /
- 
- . format-to-zfs
- 
- - After formatting adjust the permissions of the newly formatted drive to sudo chmod 777 [ /dev/formatteddrive ]
- 
-..................................................................................................................................................
-
  / FIX CLOCK /
  
  . fix-clock
@@ -402,7 +392,9 @@
 
  / META /
  
- . meta
+ . meta /example/image.png
+ 
+ . meta /example/song.flac
  
  - This script takes a media file path (from an argument or user input) and outputs detailed metadata about the file using ffprobe.
  
