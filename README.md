@@ -54,7 +54,7 @@ Originally I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxy
 ## How Algiz Linux Works
 
 ### Kernel & Security Hardening
-Algiz Linux implements kernel hardening that enhances both security and performance through multiple layers of protection
+Algiz Linux implements kernel hardening that enhances both security and performance through multiple layers of protection.
 
 **Attack Surface Reduction:**
 - Restricted ptrace access prevents privilege escalation attacks
