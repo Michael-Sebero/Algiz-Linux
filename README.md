@@ -6,7 +6,7 @@
 
 ## **Includes:**
 
-### **A Modified Kernel & Performance Utilities**
+### **High Performance Kernel & Utilities**
 * [SCX](https://github.com/sched-ext/scx)
 * [XanMod](https://xanmod.org/)
 
@@ -21,15 +21,6 @@
 * [Lynis](https://github.com/CISOfy/lynis)
 * [USBGuard](https://github.com/USBGuard/usbguard)
 * [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall)
-
-### **Misc Tools & Utilities**
-* [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary)
-* [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools)
-* [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools)
-* [Document Tools](https://github.com/Michael-Sebero/Document-Tools)
-* [Earlyoom](https://github.com/rfjakob/earlyoom)
-* [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux)
-* [Media Tools](https://github.com/Michael-Sebero/Media-Tools)
 
 ### **Additional Features**
 * A comprehensive [manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual).
@@ -46,6 +37,10 @@
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**.
 * [GameMode](https://github.com/FeralInteractive/gamemode) is a performance on demand utility for games.
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus) kills the desktop and launches Steam.
+* [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary)
+* [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools) a suite of productivity tools.
+* [Earlyoom](https://github.com/rfjakob/earlyoom) Early OOM daemon.
+* [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux)
 
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known & esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
