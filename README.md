@@ -38,11 +38,7 @@
 * [GameMode](https://github.com/FeralInteractive/gamemode) - Performance on Demand Utility for Games.
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - A Command Which Kills Most System Processes and Launches Steam.
 * [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) - Pacman/AUR/Flatpak Search Tool.
-* **A Suite of Productivity Tools**
-- [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools)
-- [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools)
-- [Document Tools](https://github.com/Michael-Sebero/Document-Tools)
-- [Media Tools](https://github.com/Michael-Sebero/Media-Tools)
+* A Suite of Productivity Tools [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools).
 * [Earlyoom](https://github.com/rfjakob/earlyoom) - Early OOM Daemon.
 * [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) - Diagnostic Toolset.
 
