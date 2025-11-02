@@ -4,7 +4,7 @@
 
 <p align="center"><strong><font size="16">Algiz Linux</font></strong> is a High-Performance, Security-Focused Meta-Distribution of Artix Linux</p>
 
-## **Includes:**
+## **Core Components**
 
 ### **High Performance Kernel & Utilities**
 * [SCX](https://github.com/sched-ext/scx) - Dynamic Scheduler Extension Framework.
@@ -55,7 +55,15 @@ Originally I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxy
 ## How Algiz Linux Works
 
 ### Kernel & Security Hardening
-Algiz Linux implements comprehensive kernel hardening which increases security and performance. The system prevents privilege escalation attacks through restricted ptrace access and disabled unprivileged BPF operations, while eliminating core dump generation to prevent information leakage. Kernel debugging is restricted through pointer exposure protection and disabled SysRq functionality, with kexec disabled to prevent unauthorized kernel replacement. `ASLR` is enabled for memory protection against exploitation. NUMA balancing is disabled to eliminate automatic memory migration overhead.
+Algiz Linux implements kernel hardening that enhances both security and performance through multiple layers of protection.
+
+**Attack Surface Reduction:**
+- Restricted ptrace access prevents privilege escalation attacks.
+- Disabled unprivileged BPF operations eliminate potential exploitation vectors.
+- Core dump generation disabled to prevent information leakage.
+- Kernel debugging restricted through pointer exposure protection.
+- Disabled SysRq functionality and kexec to prevent unauthorized kernel replacement.
+- ASLR enabled for protection against exploitation.
 
 ### XanMod Kernel
 The kernel which comes with the configuration is a custom build of XanMod which is tailored for x86-64-v3 CPU architecture. I've picked XanMod due to it's reliability, it also [outperforms](https://www.phoronix.com/review/xanmod-liquorix-510/5) the standard Linux kernel. XanMod's default `CFS` scheduler is replaced with a SCX based scheduler for improved performance and responsiveness.
@@ -64,7 +72,7 @@ The kernel which comes with the configuration is a custom build of XanMod which 
 The desktop scheduler is set to `LAVD` and laptops use `BPFLand` which provide high performance and low system latency. `LAVD` is configured for high performance with dynamic 250 µs slicing (**1000 Hz+-equivalent responsiveness**) and `BPFLand` is left default for simplicity. If you want to change the scheduler it can be modified in `rc.local` under the scheduler section.
 
 ### Memory Management
-RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and fragmentation for large memory workloads.
+RAM usage has the highest priority over swapping, keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and fragmentation for large memory workloads. NUMA balancing is also disabled to eliminate automatic memory migration overhead.
 
 **Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. Zram allocation is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`.
 
@@ -105,9 +113,16 @@ Disk and SSD performance is tuned through scheduler and queue optimizations. SSD
 CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
 
 ### Hardware-Specific Presets
-* **AMD/Intel** - Configured for high performance and security. 
-* **NVIDIA** - Tweaked for maximum visual fidelity, high performance and security.
-* **Laptop** - Balanced between power saving, performance and security, at 85% battery + AC connection performance is increased and reduced at 10%.
+#### AMD/Intel
+Configured for high performance and security with optimizations for x86 processors.
+
+#### NVIDIA
+Tweaked for maximum visual fidelity, high performance, and security with GPU-specific optimizations.
+
+#### Laptop
+Balanced configuration between power saving, performance, and security:
+- Performance increased at 85%+ battery with AC connection
+- Power saving mode activated at 10% battery
 
 ### Optional Workload-Specific Presets
 * **Performance** - Maximum performance configuration with no security mitigations, CPU scheduling and expanded memory limits. 
