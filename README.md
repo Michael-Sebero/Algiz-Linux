@@ -1,46 +1,47 @@
 <p align="center">
-<img src="https://i.postimg.cc/TYCbKN6L/Life.png" width="25%" />
+	<img src="https://i.postimg.cc/TYCbKN6L/Life.png" width="25%" />
 </p>
 
-<h1 align="center">Algiz Linux</h1>
-<p align="center"><strong>High-Performance, Security-Focused Meta-Distribution of Artix Linux</strong></p>
+<p align="center"><strong><font size="12">Algiz Linux</font></strong> is a High-Performance, Security-Focused Meta-Distribution of Artix Linux</p>
 
-## **Includes**
+## **Includes:**
 
 ### **High Performance Kernel & Utilities**
-* [SCX](https://github.com/sched-ext/scx) – Dynamic Scheduler Extension Framework
-* [XanMod](https://xanmod.org/) – Custom Linux Kernel optimized for speed, responsiveness, and desktop performance
+* [SCX](https://github.com/sched-ext/scx) - Dynamic Scheduler Extension Framework.
+* [XanMod](https://xanmod.org/) - Custom Linux Kernel Optimized for Speed, Responsiveness and Desktop Performance.
 
 ### **Security Software**
-* [AppArmor](https://en.wikipedia.org/wiki/AppArmor) – Mandatory Access Control framework for process-level security
-* [Chkrootkit](https://en.wikipedia.org/wiki/Chkrootkit) – Rootkit detection tool that scans for signs of system compromise
-* [ClamAV](https://github.com/Cisco-Talos/clamav) – Antivirus engine for detecting malware and trojans
-* [DNSCrypt](https://github.com/DNSCrypt/dnscrypt-protocol) – Encrypts DNS traffic to prevent spoofing and eavesdropping
-* [DNSMasq](https://thekelleys.org.uk/dnsmasq/doc.html) – Lightweight DNS and DHCP server for local networks
-* [Fail2Ban](https://github.com/fail2ban/fail2ban) – Intrusion prevention tool that bans IPs showing malicious activity
-* [Linux Hardening Script](https://github.com/Michael-Sebero/Linux-Hardening-Script) – Automated system security and configuration hardening
-* [Lynis](https://github.com/CISOfy/lynis) – Security auditing and compliance tool (System hardening score: **80**)
-* [USBGuard](https://github.com/USBGuard/usbguard) – Framework for implementing USB device authorization policies
-* [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall) – GUI for managing iptables-based firewalls
+* [AppArmor](https://en.wikipedia.org/wiki/AppArmor) - Mandatory Access Control Framework for Process-Level Security.
+* [Chkrootkit](https://en.wikipedia.org/wiki/Chkrootkit) - Rootkit Detection Tool That Scans for Common Signs of System Compromise.
+* [ClamAV](https://github.com/Cisco-Talos/clamav) - Antivirus Engine for Detecting Malware and Trojans.
+* [DNSCrypt](https://github.com/DNSCrypt/dnscrypt-protocol) - Protocol That Encrypts DNS Traffic to Prevent Spoofing and DNS Eavesdropping.
+* [DNSMasq](https://thekelleys.org.uk/dnsmasq/doc.html) - Lightweight DNS and DHCP Server for Local Networks.
+* [Fail2Ban](https://github.com/fail2ban/fail2ban) - Intrusion Prevention Tool That Bans IPs Showing Malicious Signs.
+* [Linux Hardening Script](https://github.com/Michael-Sebero/Linux-Hardening-Script) - Automated System Security and Configuration Hardening Script.
+* [Lynis](https://github.com/CISOfy/lynis) - Security Auditing and Compliance Tool.
+* [USBGuard](https://github.com/USBGuard/usbguard) - Framework for Implementing USB Device Authorization Policies.
+* [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall) - GUI for Managing Iptables-Based Firewalls.
 
 ### **Additional Features**
-* Comprehensive [Manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual)
-* MAC address randomization via [Macchanger](https://www.kali.org/tools/macchanger/)
-* Low-latency [PipeWire](https://github.com/PipeWire/pipewire) audio processing
-* [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages), and [Flatpak](https://flatpak.org/) repositories
-* Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) prefix
-* [Booster](https://github.com/anatol/booster) – Faster mkinitcpio replacement
-* Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP)
-* [System Tuner](https://github.com/Michael-Sebero/System-Tuner) – Laptop performance manager
-* Some processes launched under [Mimalloc](https://github.com/microsoft/mimalloc) – high-performance memory allocator
-* [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) – Speeds up temporary/root directories and reduces disk I/O
-* [Real-time privileges](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) for audio
-* [GameMode](https://github.com/FeralInteractive/gamemode) – Performance-on-demand utility for games
-* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) – Command that kills most system processes and launches Steam
-* [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) – Pacman/AUR/Flatpak search tool
-* Suite of productivity tools: [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools)
-* [EarlyOOM](https://github.com/rfjakob/earlyoom) – Early OOM daemon
-* [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) – Diagnostic toolset
+* Includes a Comprehensive [Manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual).
+* MAC Address Randomization via [Macchanger](https://www.kali.org/tools/macchanger/).
+* Low Latency [PipeWire](https://github.com/PipeWire/pipewire) Audio Processing.
+* [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) and [Flatpak](https://flatpak.org/) Repositories.
+* Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) Prefix.
+* [Booster](https://github.com/anatol/booster) - Faster Mkinitcpio Replacement.
+* Battery Life Optimizations for Laptops via [TLP](https://github.com/linrunner/TLP).
+* [System Tuner](https://github.com/Michael-Sebero/System-Tuner) - Laptop Performance Manager.
+* Some Processes Are Launched Under [Mimalloc](https://github.com/microsoft/mimalloc) (High-Performance Memory Allocator Replacement).
+* [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) - Speeds Up Temporary/Root Directories and Reduces Disk I/O.
+* [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) Audio Processing.
+* A [Lynis](https://github.com/CISOfy/lynis) System Hardening Rating of **80**.
+* [GameMode](https://github.com/FeralInteractive/gamemode) - Performance on Demand Utility for Games.
+* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - A Command Which Kills Most System Processes and Launches Steam.
+* [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) - Pacman/AUR/Flatpak Search Tool.
+* A Suite of Productivity Tools [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools).
+* [Earlyoom](https://github.com/rfjakob/earlyoom) - Early OOM Daemon.
+* [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) - Diagnostic Toolset.
+
 
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known & esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
