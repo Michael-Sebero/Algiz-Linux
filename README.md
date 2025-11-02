@@ -7,7 +7,7 @@
 ## **Includes:**
 
 ### **High Performance Kernel & Utilities**
-* [SCX](https://github.com/sched-ext/scx) - Dynamic Scheduler Extension Framework.
+* **[SCX](https://github.com/sched-ext/scx)** - Dynamic Scheduler Extension Framework.
 * [XanMod](https://xanmod.org/) - Custom Linux Kernel Optimized for Speed, Responsiveness and Desktop Performance.
 
 ### **Security Software**
