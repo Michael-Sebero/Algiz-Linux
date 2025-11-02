@@ -42,7 +42,6 @@
 * [Earlyoom](https://github.com/rfjakob/earlyoom) - Early OOM Daemon
 * [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) - Diagnostic Toolset
 
-
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known & esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
 
@@ -55,15 +54,15 @@ Originally I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxy
 ## How Algiz Linux Works
 
 ### Kernel & Security Hardening
-Algiz Linux implements kernel hardening that enhances both security and performance through multiple layers of protection.
+Algiz Linux implements kernel hardening that enhances both security and performance through multiple layers of protection
 
 **Attack Surface Reduction:**
-- Restricted ptrace access prevents privilege escalation attacks.
-- Disabled unprivileged BPF operations eliminate potential exploitation vectors.
-- Core dump generation disabled to prevent information leakage.
-- Kernel debugging restricted through pointer exposure protection.
-- Disabled SysRq functionality and kexec to prevent unauthorized kernel replacement.
-- ASLR enabled for protection against exploitation.
+- Restricted ptrace access prevents privilege escalation attacks
+- Disabled unprivileged BPF operations eliminate potential exploitation vectors
+- Core dump generation disabled to prevent information leakage
+- Kernel debugging restricted through pointer exposure protection
+- Disabled SysRq functionality and kexec to prevent unauthorized kernel replacement
+- ASLR enabled for protection against exploitation
 
 ### XanMod Kernel
 The kernel which comes with the configuration is a custom build of XanMod which is tailored for x86-64-v3 CPU architecture. I've picked XanMod due to it's reliability, it also [outperforms](https://www.phoronix.com/review/xanmod-liquorix-510/5) the standard Linux kernel. XanMod's default `CFS` scheduler is replaced with a SCX based scheduler for improved performance and responsiveness.
@@ -90,16 +89,16 @@ RAM usage has the highest priority over swapping, keeping active data in memory 
 - `/home/$USER/.cache/mesa_shader_cache_db`
 
 **RAM overlay of root filesystem:**
-- The root filesystem (`/`) is overlaid in RAM using an overlay filesystem.
-- Changes made to files in the overlay are stored in RAM and synced back to disk on shutdown.
+- The root filesystem (`/`) is overlaid in RAM using an overlay filesystem
+- Changes made to files in the overlay are stored in RAM and synced back to disk on shutdown
 - Excluded directories remain on disk: `/home`, `/tmp`, `/var/tmp`, `/var/cache`, `/proc`, `/sys`, `/dev`, `/run`, `/mnt`, `/media`, `/boot`
 
 **Specified directories can be added in** `/bin/ephemeral-overlay`
 
 **Garbage Collection:**
-* Periodic cleanup: Removes files older than 10 minutes.
+* Periodic cleanup: Removes files older than 10 minutes
 
-* Safe removal: Ensures files in use are never deleted.
+* Safe removal: Ensures files in use are never deleted
 
 ### Network Management
 Network performance leverages `BBR` congestion control and `cake` queue management to improve performance and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is limited through restrictive ICMP and routing settings. NetworkManager is set to use `dhclient` for DHCP with hostname handling disabled along with DNS encryption via [Mullvad](https://mullvad.net/en).
@@ -113,14 +112,14 @@ Disk and SSD performance is tuned through scheduler and queue optimizations. SSD
 CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
 
 ### Hardware-Specific Presets
-* **AMD/Intel** - Configured for high performance and security. 
-* **NVIDIA** - Tweaked for maximum visual fidelity, high performance and security.
-* **Laptop** - Balanced between power saving, performance and security, at 85% battery + AC connection performance is increased and reduced at 10%.
+* **AMD/Intel** - Configured for high performance and security
+* **NVIDIA** - Tweaked for maximum visual fidelity, high performance and security
+* **Laptop** - Balanced between power saving, performance and security, at 85% battery + AC connection performance is increased and reduced at 10%
 
 ### Optional Workload-Specific Presets
-* **Performance** - Maximum performance configuration with no security mitigations, CPU scheduling and expanded memory limits. 
-* **Server** - The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million TIME_WAIT sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are both hardened with rate limiting for ICMP and disabled router advertisements. These settings balance low latency with resilience against network abuse patterns. 
-* **AI** - Specialized for AI workloads with larger HugePages allocation and no security mitigations.
+* **Performance** - Maximum performance configuration with no security mitigations, CPU scheduling and expanded memory limits
+* **Server** - The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million TIME_WAIT sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are both hardened with rate limiting for ICMP and disabled router advertisements. These settings balance low latency with resilience against network abuse patterns
+* **AI** - Specialized for AI workloads with larger HugePages allocation and no security mitigations
 
 <p align="center">
 	<img src="https://i.postimg.cc/C53HDLTZ/ksnip-20240224-100057.png" />
