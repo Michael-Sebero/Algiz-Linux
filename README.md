@@ -65,7 +65,7 @@ Algiz Linux implements kernel hardening that enhances both security and performa
 - ASLR enabled for protection against exploitation
 
 ### XanMod Kernel
-The kernel which comes with the configuration is a custom build of XanMod which is tailored for x86-64-v3 CPU architecture. I've picked XanMod due to it's reliability, it also [outperforms](https://www.phoronix.com/review/xanmod-liquorix-510/5) the standard Linux kernel. XanMod's default `CFS` scheduler is replaced with a SCX based scheduler for improved performance and responsiveness.
+The kernel which comes with the configuration is a custom build of XanMod which is tailored for (x86-64-v3)[https://en.wikipedia.org/wiki/X86-64#Microarchitecture_levels] CPU architecture. I've picked XanMod due to it's reliability, it also [outperforms](https://www.phoronix.com/review/xanmod-liquorix-510/5) the standard Linux kernel. XanMod's default `CFS` scheduler is replaced with a SCX based scheduler for improved performance and responsiveness.
 
 ### Kernel Scheduler
 The desktop scheduler is set to `LAVD` and laptops use `BPFLand` which provide high performance and low system latency. `LAVD` is configured for high performance with dynamic 250 µs slicing (**1000 Hz+-equivalent responsiveness**) and `BPFLand` is left default for simplicity. If you want to change the scheduler it can be modified in `rc.local` under the scheduler section.
