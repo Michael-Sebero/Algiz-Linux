@@ -33,7 +33,7 @@
 * [System Tuner](https://github.com/Michael-Sebero/System-Tuner) - laptop performance manager.
 * [Mimalloc](https://github.com/microsoft/mimalloc) - high-performance memory allocator.
 * [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) - speeds up temporary/root directories and reduces disk I/O.
-* [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) - audio processing.
+* [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**.
 * [GameMode](https://github.com/FeralInteractive/gamemode) - performance on demand utility for games.
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - command which kills the desktop and launches Steam.
