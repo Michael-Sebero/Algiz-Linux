@@ -7,20 +7,20 @@
 ## **Core Components**
 
 ### **High Performance Kernel & Utilities**
-* [SCX](https://github.com/sched-ext/scx) - Dynamic Scheduler Extension Framework.
-* [XanMod](https://xanmod.org/) - Custom Linux Kernel Optimized for Speed, Responsiveness and Desktop Performance.
+* [SCX](https://github.com/sched-ext/scx) - Dynamic Scheduler Extension Framework
+* [XanMod](https://xanmod.org/) - Custom Linux Kernel Optimized for Speed, Responsiveness and Desktop Performance
 
 ### **Security Software**
-* [AppArmor](https://en.wikipedia.org/wiki/AppArmor) - Mandatory Access Control Framework for Process-Level Security.
-* [Chkrootkit](https://en.wikipedia.org/wiki/Chkrootkit) - Rootkit Detection Tool That Scans for Common Signs of System Compromise.
-* [ClamAV](https://github.com/Cisco-Talos/clamav) - Antivirus Engine for Detecting Malware and Trojans.
-* [DNSCrypt](https://github.com/DNSCrypt/dnscrypt-protocol) - Protocol That Encrypts DNS Traffic to Prevent Spoofing and DNS Eavesdropping.
-* [DNSMasq](https://thekelleys.org.uk/dnsmasq/doc.html) - Lightweight DNS and DHCP Server for Local Networks.
-* [Fail2Ban](https://github.com/fail2ban/fail2ban) - Intrusion Prevention Tool That Bans IPs Showing Malicious Signs.
-* [Linux Hardening Script](https://github.com/Michael-Sebero/Linux-Hardening-Script) - Automated System Security and Configuration Hardening Script.
-* [Lynis](https://github.com/CISOfy/lynis) - Security Auditing and Compliance Tool.
-* [USBGuard](https://github.com/USBGuard/usbguard) - Framework for Implementing USB Device Authorization Policies.
-* [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall) - GUI for Managing Iptables-Based Firewalls.
+* [AppArmor](https://en.wikipedia.org/wiki/AppArmor) - Mandatory Access Control Framework for Process-Level Security
+* [Chkrootkit](https://en.wikipedia.org/wiki/Chkrootkit) - Rootkit Detection Tool That Scans for Common Signs of System Compromise
+* [ClamAV](https://github.com/Cisco-Talos/clamav) - Antivirus Engine for Detecting Malware and Trojans
+* [DNSCrypt](https://github.com/DNSCrypt/dnscrypt-protocol) - Protocol That Encrypts DNS Traffic to Prevent Spoofing and DNS Eavesdropping
+* [DNSMasq](https://thekelleys.org.uk/dnsmasq/doc.html) - Lightweight DNS and DHCP Server for Local Networks
+* [Fail2Ban](https://github.com/fail2ban/fail2ban) - Intrusion Prevention Tool That Bans IPs Showing Malicious Signs
+* [Linux Hardening Script](https://github.com/Michael-Sebero/Linux-Hardening-Script) - Automated System Security and Configuration Hardening Script
+* [Lynis](https://github.com/CISOfy/lynis) - Security Auditing and Compliance Tool
+* [USBGuard](https://github.com/USBGuard/usbguard) - Framework for Implementing USB Device Authorization Policies
+* [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall) - GUI for Managing Iptables-Based Firewalls
 
 ### **Additional Features**
 * Includes a Comprehensive [Manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual).
