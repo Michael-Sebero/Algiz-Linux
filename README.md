@@ -28,10 +28,10 @@
 * Low latency [PipeWire](https://github.com/PipeWire/pipewire) audio processing.
 * [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) and [Flatpak](https://flatpak.org/) repositories.
 * Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) prefix.
-* [Booster](https://github.com/anatol/booster) (mkinitcpio replacement).
+* [Booster](https://github.com/anatol/booster) - faster mkinitcpio replacement.
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP).
-* [System Tuner](https://github.com/Michael-Sebero/System-Tuner) (laptop performance manager).
-* [Mimalloc](https://github.com/microsoft/mimalloc) (high-performance memory allocator).
+* [System Tuner](https://github.com/Michael-Sebero/System-Tuner) - laptop performance manager.
+* [Mimalloc](https://github.com/microsoft/mimalloc) - high-performance memory allocator.
 * [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) speeds up temporary/root directories and reduces disk I/O.
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**.
