@@ -32,13 +32,13 @@
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP).
 * [System Tuner](https://github.com/Michael-Sebero/System-Tuner) - laptop performance manager.
 * [Mimalloc](https://github.com/microsoft/mimalloc) - high-performance memory allocator.
-* [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) speeds up temporary/root directories and reduces disk I/O.
-* [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
+* [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) - speeds up temporary/root directories and reduces disk I/O.
+* [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) - audio processing.
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**.
 * [GameMode](https://github.com/FeralInteractive/gamemode) - performance on demand utility for games.
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - command which kills the desktop and launches Steam.
 * [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) - Pacman/AUR/Flatpak search sytem.
-* [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools) - a suite of productivity tools.
+* A suite of productivity tools [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools).
 * [Earlyoom](https://github.com/rfjakob/earlyoom) - early OOM daemon.
 * [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) - diagnostic toolset.
 
