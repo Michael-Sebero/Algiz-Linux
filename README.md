@@ -106,7 +106,7 @@ CPU architecture is automatically detected on installation to ensure optimal pac
 
 ### Hardware-Specific Presets
 * **AMD/Intel** - Configured for high performance and security. 
-* ***NVIDIA** - Tweaked for maximum visual fidelity, high performance and security.
+* **NVIDIA** - Tweaked for maximum visual fidelity, high performance and security.
 * **Laptop** - Balanced between power saving, performance and security, at 85% battery + AC connection performance is increased and reduced at 10%.
 
 ### Optional Workload-Specific Presets * 
