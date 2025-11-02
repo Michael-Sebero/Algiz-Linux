@@ -105,24 +105,14 @@ Disk and SSD performance is tuned through scheduler and queue optimizations. SSD
 CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
 
 ### Hardware-Specific Presets
+* **AMD/Intel** - Configured for high performance and security. 
+* ***NVIDIA** - Tweaked for maximum visual fidelity, high performance and security.
+* **Laptop** - Balanced between power saving, performance and security, at 85% battery + AC connection performance is increased and reduced at 10%.
 
-| Preset |  |
-|---------|-------------|
-| **AMD / Intel** | Configured for high performance and security. |
-| **NVIDIA** | Tuned for maximum visual fidelity, performance, and stability. |
-| **Laptop** | Balanced between power efficiency, performance, and security. Performance scales up at 85% battery with AC power and scales down below 10%. |
-| **Performance** | Maximum performance configuration with all security mitigations disabled. |
-| **Server** | Network stack optimized for throughput, large buffer limits, and connection scalability. |
-| **AI** | Expanded HugePages allocation and mitigations disabled for computational workloads. |
-
-
-### Optional Workload-Specific Presets
-
-| Preset |  |
-|---------|-------------|
-| **Performance** | Maximum performance, mitigations disabled |
-| **Server** | Optimized network stack, large buffer limits, enhanced scalability |
-| **AI** | Expanded HugePages, security mitigations disabled |
+### Optional Workload-Specific Presets * 
+* **Performance** - Maximum performance configuration with no security mitigations, CPU scheduling and expanded memory limits. 
+* **Server** - The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million TIME_WAIT sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are both hardened with rate limiting for ICMP and disabled router advertisements. These settings balance low latency with resilience against network abuse patterns. 
+* **AI** - Specialized for AI workloads with larger HugePages allocation and no security mitigations.
 
 <p align="center">
 	<img src="https://i.postimg.cc/C53HDLTZ/ksnip-20240224-100057.png" />
