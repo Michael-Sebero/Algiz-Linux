@@ -36,8 +36,8 @@
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**.
 * [GameMode](https://github.com/FeralInteractive/gamemode) - performance on demand utility for games.
-* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - command which kills the desktop and launches Steam.
-* [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) - Pacman/AUR/Flatpak search sytem.
+* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - a command which kills the desktop and launches Steam.
+* [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) - Pacman/AUR/Flatpak search tool.
 * A suite of productivity tools [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools).
 * [Earlyoom](https://github.com/rfjakob/earlyoom) - early OOM daemon.
 * [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) - diagnostic toolset.
