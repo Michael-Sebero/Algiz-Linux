@@ -9,7 +9,7 @@
 ### **A Modified Kernel & Performance Utilities**
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus)
 * [GameMode](https://github.com/FeralInteractive/gamemode)
-* [SCX Schedulers](https://github.com/sched-ext/scx)
+* [Sched-Ext](https://github.com/sched-ext/scx)
 * [XanMod](https://xanmod.org/)
 
 ### **Security Software**
