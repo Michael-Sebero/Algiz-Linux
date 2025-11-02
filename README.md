@@ -7,8 +7,8 @@
 ## **Includes:**
 
 ### **High Performance Kernel & Utilities**
-* [SCX](https://github.com/sched-ext/scx) a dynamic next-generation Linux scheduler extension framework.
-* [XanMod](https://xanmod.org/) custom Linux kernel optimized for speed, responsiveness and desktop performance.
+* [SCX](https://github.com/sched-ext/scx) - dynamic next-generation Linux scheduler extension framework.
+* [XanMod](https://xanmod.org/) - custom Linux kernel optimized for speed, responsiveness and desktop performance.
 
 ### **Security Software**
 * [AppArmor](https://en.wikipedia.org/wiki/AppArmor) mandatory access control framework for process-level security.
