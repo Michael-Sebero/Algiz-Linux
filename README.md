@@ -108,8 +108,8 @@ Disk and SSD performance is tuned through scheduler and queue optimizations. Bot
 
 **F2FS:** Root and home partitions formatted with F2FS are optimized with background garbage collection enabled and tuned idle detection intervals to maintain flash-based storage performance consistency. To preserve SSD longevity and prevent write performance degradation, the system runs TRIM operations once every 7 days, reclaiming unused blocks. These processes ensure efficient resource use across F2FS filesystems.
 
-### CPU Architecture Detection & ALHP Repository Integration
-CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
+### CPU Architecture Detection & ALHP Package Integration
+CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's packages which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
 
 ### Hardware-Specific Presets
 * **AMD/Intel** - Configured for high performance and security
