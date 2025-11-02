@@ -7,13 +7,13 @@
 ## **Includes:**
 
 ### **High Performance Kernel & Utilities**
-* [SCX](https://github.com/sched-ext/scx) - dynamic next-generation Linux scheduler extension framework.
+* [SCX](https://github.com/sched-ext/scx) - dynamic scheduler extension framework.
 * [XanMod](https://xanmod.org/) - custom Linux kernel optimized for speed, responsiveness and desktop performance.
 
 ### **Security Software**
 * [AppArmor](https://en.wikipedia.org/wiki/AppArmor) - mandatory access control framework for process-level security.
 * [Chkrootkit](https://en.wikipedia.org/wiki/Chkrootkit) - rootkit detection tool that scans for common signs of system compromise.
-* [ClamAV](https://github.com/Cisco-Talos/clamav) - open-source antivirus engine for detecting malware and trojans.
+* [ClamAV](https://github.com/Cisco-Talos/clamav) - antivirus engine for detecting malware and trojans.
 * [DNSCrypt](https://github.com/DNSCrypt/dnscrypt-protocol) - protocol that encrypts DNS traffic to prevent spoofing and DNS eavesdropping.
 * [DNSMasq](https://thekelleys.org.uk/dnsmasq/doc.html) - lightweight DNS and DHCP server for local networks.
 * [Fail2Ban](https://github.com/fail2ban/fail2ban) - intrusion prevention tool that bans IPs showing malicious signs.
@@ -31,12 +31,12 @@
 * [Booster](https://github.com/anatol/booster) - faster mkinitcpio replacement.
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP).
 * [System Tuner](https://github.com/Michael-Sebero/System-Tuner) - laptop performance manager.
-* [Mimalloc](https://github.com/microsoft/mimalloc) - high-performance memory allocator.
+* Some processes are launched under [Mimalloc](https://github.com/microsoft/mimalloc) (high-performance memory allocator replacement).
 * [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) - speeds up temporary/root directories and reduces disk I/O.
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**.
 * [GameMode](https://github.com/FeralInteractive/gamemode) - performance on demand utility for games.
-* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - a command which kills the desktop and launches Steam.
+* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - a command which kills most system processes and launches Steam.
 * [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) - Pacman/AUR/Flatpak search tool.
 * A suite of productivity tools [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools).
 * [Earlyoom](https://github.com/rfjakob/earlyoom) - early OOM daemon.
