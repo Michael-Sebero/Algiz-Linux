@@ -11,19 +11,19 @@
 * [XanMod](https://xanmod.org/) - custom Linux kernel optimized for speed, responsiveness and desktop performance.
 
 ### **Security Software**
-* [AppArmor](https://en.wikipedia.org/wiki/AppArmor) mandatory access control framework for process-level security.
-* [Chkrootkit](https://en.wikipedia.org/wiki/Chkrootkit) rootkit detection tool that scans for common signs of system compromise.
-* [ClamAV](https://github.com/Cisco-Talos/clamav) open-source antivirus engine for detecting malware and trojans.
-* [DNSCrypt](https://github.com/DNSCrypt/dnscrypt-protocol) protocol that encrypts DNS traffic to prevent spoofing and DNS eavesdropping.
-* [DNSMasq](https://thekelleys.org.uk/dnsmasq/doc.html) lightweight DNS and DHCP server for local networks.
-* [Fail2Ban](https://github.com/fail2ban/fail2ban) intrusion prevention tool that bans IPs showing malicious signs.
-* [Linux Hardening Script](https://github.com/Michael-Sebero/Linux-Hardening-Script) automated system security and configuration hardening script.
-* [Lynis](https://github.com/CISOfy/lynis) security auditing and compliance tool for Linux systems.
-* [USBGuard](https://github.com/USBGuard/usbguard) framework for implementing USB device authorization policies.
-* [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall) front-end for managing iptables-based firewalls.
+* [AppArmor](https://en.wikipedia.org/wiki/AppArmor) - mandatory access control framework for process-level security.
+* [Chkrootkit](https://en.wikipedia.org/wiki/Chkrootkit) - rootkit detection tool that scans for common signs of system compromise.
+* [ClamAV](https://github.com/Cisco-Talos/clamav) - open-source antivirus engine for detecting malware and trojans.
+* [DNSCrypt](https://github.com/DNSCrypt/dnscrypt-protocol) - protocol that encrypts DNS traffic to prevent spoofing and DNS eavesdropping.
+* [DNSMasq](https://thekelleys.org.uk/dnsmasq/doc.html) - lightweight DNS and DHCP server for local networks.
+* [Fail2Ban](https://github.com/fail2ban/fail2ban) - intrusion prevention tool that bans IPs showing malicious signs.
+* [Linux Hardening Script](https://github.com/Michael-Sebero/Linux-Hardening-Script) - automated system security and configuration hardening script.
+* [Lynis](https://github.com/CISOfy/lynis) - security auditing and compliance tool.
+* [USBGuard](https://github.com/USBGuard/usbguard) - framework for implementing USB device authorization policies.
+* [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall) - GUI front-end for managing iptables-based firewalls.
 
 ### **Additional Features**
-* A comprehensive [manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual).
+* Includes a comprehensive [manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual).
 * MAC address randomization via [Macchanger](https://www.kali.org/tools/macchanger/).
 * Low latency [PipeWire](https://github.com/PipeWire/pipewire) audio processing.
 * [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) and [Flatpak](https://flatpak.org/) repositories.
@@ -35,12 +35,12 @@
 * [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) speeds up temporary/root directories and reduces disk I/O.
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**.
-* [GameMode](https://github.com/FeralInteractive/gamemode) is a performance on demand utility for games.
-* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) kills the desktop and launches Steam.
-* [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary)
-* [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools) a suite of productivity tools.
-* [Earlyoom](https://github.com/rfjakob/earlyoom) Early OOM daemon.
-* [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) diagnostic toolset.
+* [GameMode](https://github.com/FeralInteractive/gamemode) - performance on demand utility for games.
+* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - command which kills the desktop and launches Steam.
+* [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) - Pacman/AUR/Flatpak search sytem.
+* [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools) - a suite of productivity tools.
+* [Earlyoom](https://github.com/rfjakob/earlyoom) - early OOM daemon.
+* [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) - diagnostic toolset.
 
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known & esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
