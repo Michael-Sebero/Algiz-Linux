@@ -105,6 +105,8 @@ Disk and SSD performance is tuned through scheduler and queue optimizations. SSD
 CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's repositories which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
 
 ### Hardware-Specific Presets
+
+| Preset |  |
 |---------|-------------|
 | **AMD / Intel** | Configured for high performance and security. |
 | **NVIDIA** | Tuned for maximum visual fidelity, performance, and stability. |
@@ -116,6 +118,7 @@ CPU architecture is automatically detected on installation to ensure optimal pac
 
 ### Optional Workload-Specific Presets
 
+| Preset |  |
 |---------|-------------|
 | **Performance** | Maximum performance, mitigations disabled |
 | **Server** | Optimized network stack, large buffer limits, enhanced scalability |
