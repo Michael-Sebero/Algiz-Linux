@@ -23,24 +23,24 @@
 * [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall) - GUI for Managing Iptables-Based Firewalls
 
 ### **Additional Features**
-* Includes a Comprehensive [Manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual).
-* MAC Address Randomization via [Macchanger](https://www.kali.org/tools/macchanger/).
-* Low Latency [PipeWire](https://github.com/PipeWire/pipewire) Audio Processing.
-* [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) and [Flatpak](https://flatpak.org/) Repositories.
-* Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) Prefix.
-* [Booster](https://github.com/anatol/booster) - Faster Mkinitcpio Replacement.
+* Includes a Comprehensive [Manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual)
+* MAC Address Randomization via [Macchanger](https://www.kali.org/tools/macchanger/)
+* Low Latency [PipeWire](https://github.com/PipeWire/pipewire) Audio Processing
+* [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) and [Flatpak](https://flatpak.org/) Repositories
+* Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) Prefix
+* [Booster](https://github.com/anatol/booster) - Faster Mkinitcpio Replacement
 * Battery Life Optimizations for Laptops via [TLP](https://github.com/linrunner/TLP).
-* [System Tuner](https://github.com/Michael-Sebero/System-Tuner) - Laptop Performance Manager.
-* Some Processes Are Launched Under [Mimalloc](https://github.com/microsoft/mimalloc) (High-Performance Memory Allocator Replacement).
-* [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) - Speeds Up Temporary/Root Directories and Reduces Disk I/O.
-* [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) Audio Processing.
-* A [Lynis](https://github.com/CISOfy/lynis) System Hardening Rating of **80**.
-* [GameMode](https://github.com/FeralInteractive/gamemode) - Performance on Demand Utility for Games.
-* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - A Command Which Kills Most System Processes and Launches Steam.
-* [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) - Pacman/AUR/Flatpak Search Tool.
-* A Suite of Productivity Tools [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools).
-* [Earlyoom](https://github.com/rfjakob/earlyoom) - Early OOM Daemon.
-* [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) - Diagnostic Toolset.
+* [System Tuner](https://github.com/Michael-Sebero/System-Tuner) - Laptop Performance Manager
+* Some Processes Are Launched Under [Mimalloc](https://github.com/microsoft/mimalloc) (High-Performance Memory Allocator Replacement)
+* [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) - Speeds Up Temporary/Root Directories and Reduces Disk I/O
+* [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) Audio Processing
+* A [Lynis](https://github.com/CISOfy/lynis) System Hardening Rating of **80**
+* [GameMode](https://github.com/FeralInteractive/gamemode) - Performance on Demand Utility for Games
+* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - A Command Which Kills Most System Processes and Launches Steam
+* [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) - Pacman/AUR/Flatpak Search Tool
+* A Suite of Productivity Tools [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools)
+* [Earlyoom](https://github.com/rfjakob/earlyoom) - Early OOM Daemon
+* [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) - Diagnostic Toolset
 
 
 ## Summary / TLDR
