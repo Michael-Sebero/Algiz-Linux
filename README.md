@@ -2,8 +2,6 @@
 	<img src="https://i.postimg.cc/TYCbKN6L/Life.png" width="25%" />
 </p>
 
-<h1 align="center">Algiz Linux</h1>
-
 <br>
 
 ## **Core Components**
