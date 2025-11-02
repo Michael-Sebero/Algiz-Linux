@@ -2,6 +2,8 @@
 	<img src="https://i.postimg.cc/TYCbKN6L/Life.png" width="25%" />
 </p>
 
+<p align="center"><strong><font size="16">Algiz Linux</font></strong>
+
 ## **Core Components**
 
 ### **High Performance Kernel & Utilities**
