@@ -7,10 +7,9 @@
 ## **Includes:**
 
 ### **A Modified Kernel & Performance Utilities**
-* [Game Focus](https://github.com/Michael-Sebero/Game-Focus)
+* [XanMod](https://xanmod.org/)
 * [GameMode](https://github.com/FeralInteractive/gamemode)
 * [SCX](https://github.com/sched-ext/scx)
-* [XanMod](https://xanmod.org/)
 
 ### **Security Software**
 * [AppArmor](https://en.wikipedia.org/wiki/AppArmor)
@@ -47,6 +46,7 @@
 * [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) speeds up temporary/root directories and reduces disk I/O.
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**.
+* [Game Focus](https://github.com/Michael-Sebero/Game-Focus) kills the desktop and launches Steam.
 
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known & esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
