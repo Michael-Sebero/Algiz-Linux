@@ -7,9 +7,8 @@
 ## **Includes:**
 
 ### **A Modified Kernel & Performance Utilities**
-* [XanMod](https://xanmod.org/)
-* [GameMode](https://github.com/FeralInteractive/gamemode)
 * [SCX](https://github.com/sched-ext/scx)
+* [XanMod](https://xanmod.org/)
 
 ### **Security Software**
 * [AppArmor](https://en.wikipedia.org/wiki/AppArmor)
@@ -38,7 +37,6 @@
 * Low latency [PipeWire](https://github.com/PipeWire/pipewire) audio processing.
 * [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) and [Flatpak](https://flatpak.org/) repositories.
 * Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) prefix.
-* [ZFS](https://github.com/openzfs/zfs) compatiblity (for server preset only).
 * [Booster](https://github.com/anatol/booster) (mkinitcpio replacement).
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP).
 * [System Tuner](https://github.com/Michael-Sebero/System-Tuner) (laptop performance manager).
@@ -46,6 +44,7 @@
 * [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) speeds up temporary/root directories and reduces disk I/O.
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing.
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**.
+* [GameMode](https://github.com/FeralInteractive/gamemode) is a performance on demand utility for games.
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus) kills the desktop and launches Steam.
 
 ## Summary / TLDR
