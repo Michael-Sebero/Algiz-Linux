@@ -127,9 +127,9 @@ Balanced between power saving, performance and security. At 85% battery + AC con
 Maximum performance configuration with no security mitigations, CPU scheduling and expanded memory limits.
 
 ### Server
-The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million TIME_WAIT sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are both hardened with rate limiting for ICMP and disabled router advertisements. These settings balance low latency with resilience against network abuse patterns.
+The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million TIME_WAIT sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are hardened with rate limiting for ICMP and disabled router advertisements. These settings balance low latency with resilience against network abuse patterns.
 
-### AI 
+### AI
 Specialized for AI workloads with larger HugePages allocation and no security mitigations.
 
 <p align="center">
