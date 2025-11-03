@@ -110,26 +110,26 @@ Disk and SSD performance is tuned through scheduler and queue optimizations. Bot
 ### CPU Architecture Detection & ALHP Package Integration
 CPU architecture is automatically detected on installation to ensure optimal package installation. The system integrates some of ALHP's packages, which provide architecture-specific builds optimized for modern processor capabilities while keeping Artix's core system packages.
 
-### Hardware-Specific Presets
+## Hardware-Specific Presets
 
-#### AMD/Intel 
+### AMD/Intel 
 Configured for high performance and security.
 
-#### NVIDIA
+### NVIDIA
 Tweaked for maximum visual fidelity, high performance and security.
 
-#### Laptop
+### Laptop
 Balanced between power saving, performance and security. At 85% battery + AC connection, performance is increased and reduced at 10%.
 
-### Optional Workload-Specific Presets
+## Optional Workload-Specific Presets
 
-#### Performance
+### Performance
 Maximum performance configuration with no security mitigations, CPU scheduling and expanded memory limits.
 
-#### Server
+### Server
 The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million TIME_WAIT sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are both hardened with rate limiting for ICMP and disabled router advertisements. These settings balance low latency with resilience against network abuse patterns.
 
-#### AI 
+### AI 
 Specialized for AI workloads with larger HugePages allocation and no security mitigations.
 
 <p align="center">
