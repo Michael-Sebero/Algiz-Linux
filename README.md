@@ -6,9 +6,9 @@
 
 ## **Core Components**
 
-### **High Performance Kernel & Utilities**
-* [SCX](https://github.com/sched-ext/scx) - Dynamic scheduler extension framework
+### **High Performance Kernel & Schedulers**
 * [XanMod](https://xanmod.org/) - Custom Linux kernel optimized for speed, responsiveness, and desktop performance
+* [SCX](https://github.com/sched-ext/scx) - Dynamic scheduler extension framework
 
 ### **Security Software**
 * [AppArmor](https://en.wikipedia.org/wiki/AppArmor) - Mandatory access control framework for process-level security
