@@ -18,7 +18,7 @@
 * [DNSMasq](https://thekelleys.org.uk/dnsmasq/doc.html) - Lightweight DNS and DHCP server for local networks
 * [Fail2Ban](https://github.com/fail2ban/fail2ban) - Intrusion prevention tool that bans IPs showing malicious signs
 * [Linux Hardening Script](https://github.com/Michael-Sebero/Linux-Hardening-Script) - Automated system security and configuration hardening script
-* [Lynis](https://github.com/CISOfy/lynis) - Security auditing and compliance tool
+* [Lynis](https://github.com/CISOfy/lynis) - Security auditing tool
 * [USBGuard](https://github.com/USBGuard/usbguard) - Framework for implementing USB device authorization policies
 * [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall) - Interface for managing iptables-based firewalls
 
