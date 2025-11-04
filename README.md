@@ -20,7 +20,7 @@
 * [Linux Hardening Script](https://github.com/Michael-Sebero/Linux-Hardening-Script) - Automated system security and configuration hardening script
 * [Lynis](https://github.com/CISOfy/lynis) - Security auditing and compliance tool
 * [USBGuard](https://github.com/USBGuard/usbguard) - Framework for implementing USB device authorization policies
-* [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall) - GUI for managing iptables-based firewalls
+* [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall) - Interface for managing iptables-based firewalls
 
 ### **Additional Features**
 * Includes a comprehensive [manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual)
