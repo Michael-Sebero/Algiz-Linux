@@ -55,8 +55,6 @@
  
  - On laptops the maximum charge is 85% to preserve the battery.
  
- - Adjust your screen brightness to 60% to conserve battery life.
- 
  - When connecting a charger to a laptop, system performance will increase when the battery is at 85%.
 
  - Change shaders to Vulkan in Steam settings and enable Steam Play for Linux compatibility.
@@ -110,23 +108,21 @@
  
  - You can download multiple URLs if they're separated by spaces.
  
- . latest [ PACKAGE ]
+ OR
  
- - This command doesn't cycle, used for rare package version conflicts.
+ . steal package.deb
+ 
+ - Debian packages can be converted/installed.
+ 
+ . steal package.pkg.tar.zst
+ 
+ - PKG packages can be installed.
  
 ..................................................................................................................................................
 
  / UNINSTALL PACKAGES /
 
  . remove [ PACKAGE ]
-
-..................................................................................................................................................
-
- / FORCE PACKAGE INSTALL /
-
- . force [ PACKAGE ]
- 
- - This should only be used in rare circumstances.
 
 ..................................................................................................................................................
 
@@ -368,7 +364,7 @@
 
  / FIND FAST MIRRORLISTS /
  
- . fastlist
+ . fast-list
  
  - This command disables slow pacman mirrorlists and enables fast ones according to your location.
  
@@ -400,6 +396,24 @@
  
 ..................................................................................................................................................
 
+ / DEBTAP /
+ 
+ . sudo debtap -u
+ 
+ . debtap 'file.deb'
+ 
+ - This command converts .deb packages into .pkg.tar.zst files
+ 
+..................................................................................................................................................
+
+ / AUDIT /
+ 
+ . audit
+
+ - This command finds issues with permissions and reviews system integrity 
+
+.................................................................................................................................................. 
+ 
 ==================================================================================================================================================
 
 
@@ -495,7 +509,7 @@
 
  > SHAQ ( Shazam CLI Interface )
  
- . https://github.com/woodruffw/shaq
+ . https://github.com/Michael-Sebero/Shaq
 
 .................................................................................................................................................. 
 
@@ -739,9 +753,31 @@
   
 ..................................................................................................................................................
 
- > LAUNCH OPTIONS FOR SPECIFIC GAMES
+ > LINUX GAMING ADVICE
  
-  . Cyberpunk 2077: WINEDLLOVERRIDES="winmm=n,b;version=n,b" gamemoderun %command% --launcher-skip -modded
+  Cyberpunk 2077 Launch Options:
+ 
+  . WINEDLLOVERRIDES="winmm=n,b;version=n,b" gamemoderun %command% --launcher-skip -modded
+  
+  or if you have RDNA 4
+  
+  . AMD_VULKAN_ICD=RADV RADV_PERFTEST=gpl,ngg_streamout,transfer_queue PROTON_FSYNC=1 VKD3D_CONFIG=no_upload_hvv PROTON_FSR4_UPGRADE=1 WINEDLLOVERRIDES="winmm=n,b;version=n,b" gamemoderun %command% --launcher-skip -modded
+
+  - To install the needed DLLs run [ protontricks 1091500 -q vcrun2022 d3dcompiler_47 ]
+  
+  
+ 
+  Left 4 Dead 2 Launch Options:
+ 
+  . gamemoderun %command% -novid -nojoy +fps_max 120
+
+  - If you're on modern hardware use proton for Left 4 Dead 2.
+  
+  
+  
+  Vintage Story: 
+
+  - Edit the launcher's command to [ gamemoderun /usr/bin/vintagestory ]
  
 ..................................................................................................................................................
 

@@ -7,8 +7,8 @@
 ## **Core Components**
 
 ### **High Performance Kernel & Schedulers**
-* [XanMod](https://xanmod.org/) - Custom Linux kernel optimized for speed, responsiveness, and desktop performance
-* [SCX](https://github.com/sched-ext/scx) - Dynamic scheduler extension framework
+* [XanMod](https://xanmod.org/) - Custom Linux kernel optimized for speed, responsiveness and desktop performance
+* [SCX-IMPERATOR](https://github.com/Michael-Sebero/SCX-IMPERATOR) - Gaming CPU scheduler based off [scx_cake](https://github.com/RitzDaCat/scx_cake) and [scx_lavd](https://github.com/sched-ext/scx/tree/main/scheds/rust/scx_lavd)
 
 ### **Security Software**
 * [AppArmor](https://en.wikipedia.org/wiki/AppArmor) - Mandatory access control framework for process-level security
@@ -26,7 +26,7 @@
 * Includes a comprehensive [manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual)
 * MAC address randomization via [Macchanger](https://www.kali.org/tools/macchanger/)
 * Low latency [PipeWire](https://github.com/PipeWire/pipewire) audio processing
-* [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages), and [Flatpak](https://flatpak.org/) repositories
+* [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) and [Flatpak](https://flatpak.org/) repositories
 * Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) prefix
 * [Booster](https://github.com/anatol/booster) - Faster mkinitcpio replacement
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP)
@@ -36,6 +36,7 @@
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **80**
 * [GameMode](https://github.com/FeralInteractive/gamemode) - Performance on demand utility for games
+* [SCX](https://github.com/sched-ext/scx) - Dynamic scheduler extension framework
 * [Game Focus](https://github.com/Michael-Sebero/Game-Focus) - A command that kills most system processes and launches Steam
 * [Arch Package Dictionary](https://github.com/Michael-Sebero/Arch-Package-Dictionary) - Pacman/AUR/Flatpak search tool
 * A suite of productivity tools: [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools)
@@ -45,7 +46,7 @@
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known and esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
 
-The configuration files `sysctl.conf`, `limits.conf`, and `grub` are pre-configured for specific workloads. Depending on the variant chosen, there are specific changes tailored for each. These presets are **AMD/Intel**, **NVIDIA**, **Laptop**, **Performance**, **Server**, and **AI**. They can be chosen in the installer and by running the `optional` command post-installation.
+The configuration files `sysctl.conf`, `limits.conf` and `grub` are pre-configured for specific workloads. Depending on the variant chosen, there are specific changes tailored for each. These presets are **AMD/Intel**, **NVIDIA**, **Laptop**, **Performance**, **Low RAM**, **Server** and **LLM**. They can be chosen in the installer and by running the `optional` command post-installation.
 
 Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxyz/LARBS), which is why Algiz's installer is script-based rather than an ISO. This project is packaged similarly to an ISO due to the configurations and content being stored inside various archives. If you want to see what changes I've made, you can view them [here](https://github.com/Michael-Sebero/Algiz-Linux/tree/main/files/algiz-packages).
 
@@ -65,45 +66,52 @@ Algiz Linux implements kernel hardening that enhances both security and performa
 - ASLR enabled for protection against exploitation
 
 ### XanMod Kernel
-The kernel which comes with the configuration is a custom build of XanMod, tailored for the [x86-64-v3](https://en.wikipedia.org/wiki/X86-64#Microarchitecture_levels) CPU architecture. It also [outperforms](https://www.phoronix.com/review/xanmod-liquorix-510/5) the standard Linux kernel. XanMod's default `CFS` scheduler is replaced with an SCX-based scheduler for improved performance and responsiveness.
+The kernel which comes with the configuration is a custom build of XanMod, tailored for [x86-64-v3](https://en.wikipedia.org/wiki/X86-64#Microarchitecture_levels) CPU architecture. It also [outperforms](https://www.phoronix.com/review/xanmod-liquorix-510/5) the standard Linux kernel. XanMod's default `CFS` scheduler is replaced with a SCX-based scheduler for improved performance and responsiveness.
 
 ### Kernel Scheduler
-The desktop scheduler is set to `LAVD`, and laptops use `BPFLand`, which provide high performance and low system latency. `LAVD` is configured for high performance with dynamic 250 µs slicing (**1000 Hz+-equivalent responsiveness**), and `BPFLand` is left default for simplicity. If you want to change the scheduler, it can be modified in `rc.local` under the scheduler section.
+The desktop scheduler is set to `LAVD` and laptops use `BPFLand` which provide high performance and low system latency. When the performance preset is chosen the scheduler will utilize the `CAKE` scheduler which is specialized for new processors (Zen 4-5 or 3D V-Cache). If you want to change the scheduler, it can be modified in `rc.local` under the scheduler section.
 
 ### Memory Management
 RAM usage has the highest priority over swapping. Keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and fragmentation for large memory workloads. NUMA balancing is also disabled to eliminate automatic memory migration overhead.
 
-**Zram Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory. Zram allocation is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`.
+**ZRAM Integration:** The system configures a zram-based swap device `/dev/zram0` to provide fast, compressed virtual memory utilizing the [LZ4](https://lz4.org/) compression algorithm. ZRAM allocation is dynamically set to 25% of total RAM. The device is initialized with `mkswap` and immediately activated with `swapon`.
 
-**Tmpfs Overlay:** Temporary directories are mounted as tmpfs with the following size limits:
-- `/tmp` – 5 GB
-- `/var/tmp` – 1 GB
-- `/var/cache` – 2 GB
-- `/home/$USER/.cache` – 2 GB
+### Ephemeral Overlay System
 
-**Bind-mounted Directories:** Essential directories are bind-mounted and remain on local storage:
-- `/var/cache/pacman`
-- `/home/$USER/.cache/paru`
-- `/home/$USER/.cache/nvidia`
-- `/home/$USER/.cache/mesa_shader_cache`
-- `/home/$USER/.cache/mesa_shader_cache_db`
+**Tmpfs Mounts:**
+- `/tmp` - 5 GB
+- `/var/tmp` - 1 GB
+- `/var/cache` - 2 GB
+- `/home/$USER/.cache` - 2 GB
 
-**RAM overlay of root filesystem:**
-- The root filesystem (`/`) is overlaid in RAM using an overlay filesystem
-- Changes made to files in the overlay are stored in RAM and synced back to disk on shutdown
-- Excluded directories remain on disk: `/home`, `/tmp`, `/var/tmp`, `/var/cache`, `/proc`, `/sys`, `/dev`, `/run`, `/mnt`, `/media`, `/boot`
+**Persistent Cache Directories:**
+- `/var/cache/pacman` - Package manager cache
+- `/home/$USER/.cache/paru` - AUR helper cache
+- `/home/$USER/.cache/nvidia` - NVIDIA shader cache
+- `/home/$USER/.cache/mesa_shader_cache` - Mesa shader cache
+- `/home/$USER/.cache/mesa_shader_cache_db` - Mesa shader database
 
-**Specified directories can be added in** `/bin/ephemeral-overlay`
+*RAM Overlay of System Directories:*
+- `/etc` - System configuration files
+- `/var/log` - System logs
+- Changes are stored in RAM and automatically synced to disk on logout
 
-**Garbage Collection:**
-* Periodic cleanup: Removes files older than 10 minutes
-* Safe removal: Ensures files in use are never deleted
+*Excluded Directories:*
+- `/home` - User data
+- `/tmp`, `/var/tmp`, `/var/cache` - Already on tmpfs
+- `/proc`, `/sys`, `/dev`, `/run` - Virtual/runtime filesystems
+- `/mnt`, `/media`, `/boot` - Mount points and boot files
+
+**Automatic Garbage Collection:**
+* Periodic cleanup every 60 seconds removes stale files older than 10 minutes from temporary directories
+* File-in-use detection ensures active files are never deleted
+* Reduces RAM pressure and maintains optimal overlay performance
 
 ### Network Management
 Network performance leverages `BBR` congestion control and `cake` queue management to improve performance and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is limited through restrictive ICMP and routing settings. NetworkManager is set to use `dhclient` for DHCP with hostname handling disabled, along with DNS encryption via [Mullvad](https://mullvad.net/en).
 
 ### Filesystem & I/O Optimization
-Disk and SSD performance is tuned through scheduler and queue optimizations. Both NVMe and SATA SSDs use the `none` scheduler to eliminate scheduling overhead and maximize throughput, while HDDs use `bfq` for fairness under mixed workloads. Read-ahead is set to 512 KB for SSDs and 2048 KB for HDDs to improve sequential read performance. I/O queue depth is configured at 2048 for NVMe drives, 1024 for SATA SSDs, and 128 for HDDs, enabling optimal parallelism for each device type. I/O request merging is enabled to combine adjacent requests for improved efficiency.
+Disk and SSD performance is tuned through scheduler and queue optimizations. Both NVMe and SATA SSDs use the `none` scheduler to eliminate scheduling overhead and maximize throughput, while HDDs use `bfq` for fairness under mixed workloads. Read-ahead is set to 512 KB for SSDs and 2048 KB for HDDs to improve sequential read performance. I/O queue depth is configured at 2048 for NVMe drives, 1024 for SATA SSDs and 128 for HDDs, enabling optimal parallelism for each device type. I/O request merging is enabled to combine adjacent requests for improved efficiency.
 
 **F2FS:** Root and home partitions formatted with F2FS are optimized with background garbage collection enabled and tuned idle detection intervals to maintain flash-based storage performance consistency. To preserve SSD longevity and prevent write performance degradation, the system runs TRIM operations once every 7 days, reclaiming unused blocks. These processes ensure efficient resource use across F2FS filesystems.
 
@@ -121,6 +129,9 @@ Configured for NVIDIA hardware, tweaked for maximum visual fidelity, high perfor
 ### Laptop
 Balanced between power saving, performance and security. At 85% battery + AC connection, performance is increased and reduced at 10%.
 
+### Low RAM
+Focused on swapping and ZRAM generation. This can make a system with 8G function like it has 10-12G.
+
 ## Optional Workload-Specific Presets
 
 ### Performance
@@ -129,8 +140,8 @@ Maximum performance configuration with no security mitigations and expanded memo
 ### Server
 The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million TIME_WAIT sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are hardened with rate limiting for ICMP and disabled router advertisements.
 
-### AI
-Specialized for AI workloads with larger HugePages allocation and no security mitigations.
+### LLM
+Specialized for LLM workloads with larger HugePages allocation and no security mitigations.
 
 <p align="center">
 	<img src="https://i.postimg.cc/C53HDLTZ/ksnip-20240224-100057.png" />

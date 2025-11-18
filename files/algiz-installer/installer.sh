@@ -8,7 +8,6 @@ detect_init_system() {
     elif command -v rc-update >/dev/null 2>&1; then
         echo "openrc"
     else
-        # Fallback detection methods
         if [ -d "/etc/s6" ]; then
             echo "s6"
         elif [ -d "/etc/runlevels" ]; then
@@ -21,92 +20,34 @@ detect_init_system() {
 
 INIT_SYSTEM=$(detect_init_system)
 
-### RETRY LOGIC ###
-retry() {
-  local max_attempts="$1"
-  shift
-  local command="$@"
-  local attempt_num=1
-  
-  until $command
-  do
-    if (( attempt_num == max_attempts ))
-    then
-      echo "Attempt $attempt_num failed! Filtering out unavailable packages and retrying..." >&2
-      
-      # Extract package names and detect package manager
-      local pkg_list=""
-      local pkg_manager=""
-      local base_flags=""
-      
-      if echo "$command" | grep -q "paru.*-S"; then
-        pkg_manager="paru"
-        pkg_list=$(echo "$command" | sed -E "s/.*paru[[:space:]]+(-S[[:space:]]+[^[:space:]]*[[:space:]]+)*(--[^[:space:]]+[[:space:]]+)*//")
-        base_flags="-S --noconfirm --needed"
-      elif echo "$command" | grep -q "pacman.*-S"; then
-        pkg_manager="pacman"
-        pkg_list=$(echo "$command" | sed -E "s/.*pacman[[:space:]]+(-S[[:space:]]+[^[:space:]]*[[:space:]]+)*(--[^[:space:]]+[[:space:]]+)*//")
-        base_flags="-S --noconfirm --needed --overwrite='*'"
+### INSTALL PACKAGES ONE BY ONE WITH RETRIES ###
+careful_install() {
+  local failed_packages=()
+  for pkg in "$@"; do
+    local success=false
+    for attempt in $(seq 1 5); do
+      echo "Installing $pkg (attempt $attempt/5)..." >&2
+      if paru -S --noconfirm --needed --ignore=nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc,modemmanager "$pkg"; then
+        success=true
+        break
       else
-        echo "Unable to detect package manager (paru/pacman) from command, continuing..." >&2
-        return 0
-      fi
-      
-      # Extract additional flags (like --ignore)
-      local extra_flags=""
-      if echo "$command" | grep -q -- "--ignore="; then
-        extra_flags=$(echo "$command" | grep -o -- "--ignore=[^ ]*")
-      fi
-      if echo "$command" | grep -q -- "--overwrite="; then
-        local overwrite_flag=$(echo "$command" | grep -o -- "--overwrite=[^ ]*")
-        if [[ "$extra_flags" != *"--overwrite="* ]]; then
-          extra_flags="$extra_flags $overwrite_flag"
-        fi
-      fi
-      
-      # Get list of available packages
-      echo "Checking package availability with $pkg_manager..." >&2
-      local all_pkgs=($pkg_list)
-      local available_pkgs=""
-      local unavailable_pkgs=""
-      
-      for pkg in "${all_pkgs[@]}"; do
-        if [ -z "$pkg" ]; then continue; fi
-        
-        # Check if package exists in repositories
-        if $pkg_manager -Si "$pkg" &>/dev/null; then
-          available_pkgs="$available_pkgs $pkg"
+        if [ "$attempt" -lt 5 ]; then
+          echo "Attempt $attempt failed for $pkg, retrying in 5 seconds..." >&2
+          sleep 5
         else
-          unavailable_pkgs="$unavailable_pkgs $pkg"
+          echo "All 5 attempts failed for $pkg, skipping..." >&2
+          failed_packages+=("$pkg")
         fi
-      done
-      
-      # Trim whitespace
-      available_pkgs=$(echo "$available_pkgs" | sed "s/^[[:space:]]*//;s/[[:space:]]*$//")
-      unavailable_pkgs=$(echo "$unavailable_pkgs" | sed "s/^[[:space:]]*//;s/[[:space:]]*$//")
-      
-      if [ -n "$unavailable_pkgs" ]; then
-        echo "Skipping unavailable packages: $unavailable_pkgs" >&2
       fi
-      
-      if [ -n "$available_pkgs" ]; then
-        # Reconstruct the command with available packages only
-        local new_cmd="$pkg_manager $base_flags $extra_flags $available_pkgs"
-        echo "Installing available packages: $available_pkgs" >&2
-        echo "Executing: $new_cmd" >&2
-        
-        # Execute the modified command
-        eval "$new_cmd" && return 0 || return 1
-      else
-        echo "No available packages found, skipping installation..." >&2
-        return 0
-      fi
-    else
-      echo "Attempt $attempt_num failed! Retrying in 5 seconds..." >&2
-      sleep 5
-      attempt_num=$(( attempt_num + 1 ))
-    fi
+    done
   done
+
+  if [ "${#failed_packages[@]}" -gt 0 ]; then
+    echo -e "\e[1mThe following packages failed to install and were skipped:\e[0m" >&2
+    for pkg in "${failed_packages[@]}"; do
+      echo "  - $pkg" >&2
+    done
+  fi
 }
 
 ### SERVICE MANAGEMENT FUNCTIONS ###
@@ -137,10 +78,17 @@ read -p "Enter your choice (1-6): " choice
 # IMPORT KEYS
 echo -e "\e[1mImporting repository keys...\e[0m"
 
+# AUR
 curl -s https://raw.githubusercontent.com/chaotic-aur/.github/refs/heads/main/profile/README.md \
 | grep -Eo "pacman-key --recv-key [0-9A-F]+" \
 | sed "s/--recv-key \([0-9A-F]*\)/--recv-key \1; pacman-key --lsign-key \1/" \
 | bash
+
+# AURIS
+curl https://auris.artixlinux.org/api/packages/auris/arch/repository.key -o repository.key
+gpg --show-keys repository.key
+pacman-key --add repository.key
+pacman-key --lsign-key 74E5750C4A3C00F037070EF2357B525A97500B9F
 
 ### FIRST COMMANDS AND ALGIZ-LINUX IMPORT P1 ###
 killall xfce4-screensaver || true
@@ -175,59 +123,123 @@ echo -e "\e[1mFinding quickest mirrorlist, please wait...\e[0m"
 sh -c "rankmirrors -v -n 4 -m 2 /etc/pacman.d/mirrorlist > /etc/pacman.d/mirrorlist.new && mv /etc/pacman.d/mirrorlist.new /etc/pacman.d/mirrorlist && chmod 644 /etc/pacman.d/mirrorlist"
 
 ### FIRST COMMANDS AND ALGIZ-LINUX IMPORT P2 ###
-pacman -S paru --noconfirm --needed && retry 5 pacman -Syyu --noconfirm --needed --overwrite='*' --ignore=linux,linux-headers,nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc,modemmanager
+pacman -S paru --noconfirm --needed
+pacman -Syyu --noconfirm --needed --overwrite='*' --ignore=linux,linux-headers,nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc,modemmanager
 
 mv /home/algiz-files/files/algiz-manual/Manual /home/$USER/Desktop/
 
 # REMOVE PACKAGES
-for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme mpv mesa vulkan-intel vulkan-radeon vulkan-swrast nvidia-390xx-utils lib32-nvidia-390xx-utils vulkan-mesa-device-select epiphany xfce4-screensaver xfce4-terminal xfce4-screenshooter parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin modemmanager; do
+for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme mpv nvidia-390xx-utils lib32-nvidia-390xx-utils epiphany xfce4-screensaver xfce4-terminal parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin modemmanager; do
     if pacman -Qi "$pkg" &>/dev/null; then
         paru -Rdd --noconfirm "$pkg"
     fi
 done
 
 # INSTALL BASE PACKAGES
-retry 5 paru -S --noconfirm --needed --ignore=nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc,modemmanager lib32-artix-archlinux-support unrar flatpak kate librewolf tmux akregator ksnip kcalc font-manager pix gimp gamemode lib32-gamemode okular dnscrypt-proxy dnsmasq apparmor bleachbit konsole catfish clamav ark gufw macchanger networkmanager nm-connection-editor wine-git wine-mono winetricks-git steam lynis element-desktop rkhunter opendoas mate-system-monitor chrony downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber rust usbguard chkrootkit wget noto-fonts-emoji tauon-music-box freetube alsa-utils expect inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold lld protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse lib32-libdisplay-info mesa-tkg-git lib32-mesa-tkg-git linux-firmware realtime-privileges gallery-dl tesseract-data-eng scx-scheds
+careful_install \
+  lib32-artix-archlinux-support unrar flatpak kate librewolf tmux akregator kcalc \
+  font-manager pix gimp gamemode lib32-gamemode okular dnscrypt-proxy dnsmasq apparmor \
+  bleachbit konsole catfish clamav ark gufw macchanger networkmanager nm-connection-editor \
+  wine-git wine-mono winetricks-git steam lynis element-desktop rkhunter opendoas \
+  mate-system-monitor chrony downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber \
+  rust usbguard chkrootkit wget noto-fonts-emoji tauon-music-box freetube alsa-utils expect \
+  inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold \
+  lld protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse \
+  lib32-libdisplay-info linux-firmware realtime-privileges gallery-dl tesseract-data-eng \
+  scx-scheds debtap fwupd
 
 # INSTALL INIT PACKAGES
 case "$INIT_SYSTEM" in
     s6)
-        retry 5 paru -S --noconfirm --needed dnscrypt-proxy-s6 dnsmasq-s6 apparmor-s6 clamav-s6 networkmanager-s6 ufw-s6 usbguard-s6 earlyoom-s6
+        careful_install \
+          dnscrypt-proxy-s6 dnsmasq-s6 apparmor-s6 clamav-s6 \
+          networkmanager-s6 ufw-s6 usbguard-s6 earlyoom-s6
         ;;
     openrc)
-        retry 5 paru -S --noconfirm --needed dnscrypt-proxy-openrc dnsmasq-openrc apparmor-openrc clamav-openrc networkmanager-openrc ufw-openrc usbguard-openrc earlyoom-openrc
+        careful_install \
+          dnscrypt-proxy-openrc dnsmasq-openrc apparmor-openrc clamav-openrc \
+          networkmanager-openrc ufw-openrc usbguard-openrc earlyoom-openrc
         ;;
 esac
 
 # INSTALL PYTHON PACKAGES
-retry 5 paru -S --noconfirm --needed python-dateutil python-xlib python-psutil python-pyaudio python-pipenv python-matplotlib python-tqdm python-pillow python-mutagen python-magic python-piexif python-moviepy python-brotli python-websockets python-librosa python-audioread python-pypdf2 python-pytesseract
+careful_install \
+  python-dateutil python-xlib python-psutil python-pyaudio python-pipenv \
+  python-matplotlib python-tqdm python-pillow python-mutagen python-magic \
+  python-piexif python-moviepy python-brotli python-websockets python-librosa \
+  python-audioread python-pypdf2 python-pytesseract
 
 # INSTALL XFCE PACKAGES
-if pacman -Qq | grep -q '^thunar$'; then
-    echo "Thunar detected, installing extra XFCE packages..."
-    retry 5 paru -S --noconfirm --needed mugshot xfce4-panel-profiles xorg-xrandr redshift lightdm-gtk-greeter-settings gtk-engines xdg-desktop-portal-gtk gtk-engine-murrine
+if pacman -Qq | grep -q ''^thunar$''; then
+    careful_install \
+      mugshot xfce4-panel-profiles xorg-xrandr redshift \
+      lightdm-gtk-greeter-settings gtk-engines xdg-desktop-portal-gtk gtk-engine-murrine
 else
     echo "Thunar not detected, skipping XFCE packages."
 fi
 
-# AMD/INTEL-DESKTOP CHOICE
-if [ "$choice" = "1" ] || [ "$choice" = "3" ]; then
-  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers protonup-git vkbasalt lib32-vkbasalt fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM}
+# AMD-DESKTOP CHOICE
+if [ "$choice" = "1" ]; then
+  if pacman -Qq | grep -q ''^thunar$''; then
+    paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin
+  fi
+  careful_install \
+    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers mesa lib32-mesa \
+    vulkan-radeon lib32-vulkan-radeon protonup-git libva-utils \
+    fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM}
 fi
 
-# AMD/INTEL-LAPTOP CHOICE
-if [ "$choice" = "2" ] || [ "$choice" = "4" ]; then
-  retry 5 paru -S --noconfirm --needed linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers throttled tlp tlp-${INIT_SYSTEM} blueman bluez bluez-${INIT_SYSTEM} brightnessctl
+# AMD-LAPTOP CHOICE
+if [ "$choice" = "2" ]; then
+  careful_install \
+    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers mesa lib32-mesa \
+    vulkan-radeon lib32-vulkan-radeon libva-utils throttled \
+    tlp tlp-${INIT_SYSTEM} blueman bluez bluez-${INIT_SYSTEM} brightnessctl
+fi
+
+# INTEL-DESKTOP CHOICE
+if [ "$choice" = "3" ]; then
+  if pacman -Qq | grep -q ''^thunar$''; then
+    paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin
+  fi
+  careful_install \
+    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers mesa lib32-mesa \
+    vulkan-intel lib32-vulkan-intel protonup-git libva-utils \
+    fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM}
+fi
+
+# INTEL-LAPTOP CHOICE
+if [ "$choice" = "4" ]; then
+  careful_install \
+    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers mesa lib32-mesa \
+    vulkan-intel lib32-vulkan-intel libva-utils throttled \
+    tlp tlp-${INIT_SYSTEM} blueman bluez bluez-${INIT_SYSTEM} brightnessctl
 fi
 
 # NVIDIA-OPENSOURCE-DESKTOP CHOICE
 if [ "$choice" = "5" ]; then
-  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM} nvidia-open-dkms && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
+  if pacman -Qq | grep -q ''^thunar$''; then
+    paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin
+  fi
+  careful_install \
+    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers protonup-git \
+    nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings \
+    fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM} nvidia-open-dkms
+  # lib32 fallback: try lib32-nvidia-utils, fall back to lib32-vulkan-driver
+  careful_install lib32-nvidia-utils || careful_install lib32-vulkan-driver
 fi
 
 # NVIDIA-PROPRIETARY-DESKTOP CHOICE
 if [ "$choice" = "6" ]; then
-  paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin && retry 5 paru -S --noconfirm --needed linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers protonup-git nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM} nvidia-dkms && { paru -S --noconfirm --needed lib32-nvidia-utils || paru -S --noconfirm --needed lib32-vulkan-driver; }
+  if pacman -Qq | grep -q ''^thunar$''; then
+    paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin
+  fi
+  careful_install \
+    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers protonup-git \
+    nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings \
+    fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM} nvidia-dkms
+  # lib32 fallback: try lib32-nvidia-utils, fall back to lib32-vulkan-driver
+  careful_install lib32-nvidia-utils || careful_install lib32-vulkan-driver
 fi
 
 # INSTALL FLATPAK PACKAGES
@@ -329,10 +341,10 @@ fi
 reset-permissions
 
 # HARDENING SCRIPT
-sh /algiz/programs/hardening-script/hardening-script.sh && umask 027
-cd /
+hardening-script
 
 # EXIT
+cd /
 mv /etc/profile{,.old}
 grub-install || true
 s6-db-reload || true
