@@ -3,18 +3,14 @@
 su -c '
 ### INIT SYSTEM DETECTION ###
 detect_init_system() {
-    if command -v s6-service >/dev/null 2>&1; then
+    if [ -d "/etc/s6" ]; then
         echo "s6"
     elif command -v rc-update >/dev/null 2>&1; then
         echo "openrc"
+    elif [ -d "/etc/runlevels" ]; then
+        echo "openrc"
     else
-        if [ -d "/etc/s6" ]; then
-            echo "s6"
-        elif [ -d "/etc/runlevels" ]; then
-            echo "openrc"
-        else
-            echo "unknown"
-        fi
+        echo "unknown"
     fi
 }
 
@@ -55,12 +51,31 @@ add_service() {
     local service_name="$1"
     case "$INIT_SYSTEM" in
         s6)
-            s6-service add default "$service_name"
+            s6 set enable "$service_name"
             ;;
         openrc)
             rc-update add "$service_name" default
             ;;
     esac
+}
+
+remove_service() {
+    local service_name="$1"
+    case "$INIT_SYSTEM" in
+        s6)
+            s6 set disable "$service_name"
+            ;;
+        openrc)
+            rc-update del "$service_name" default || true
+            ;;
+    esac
+}
+
+# Commit and apply s6 service changes
+reload_s6_db() {
+    if [ "$INIT_SYSTEM" = "s6" ]; then
+        s6 repo sync && s6 set commit && s6 live install
+    fi
 }
 
 ### ALGIZ LINUX CHOICE SELECTION ###
@@ -119,17 +134,40 @@ pacman-key --populate archlinux artix alhp chaotic
 pacman -Syy
 
 # FIND QUICKEST MIRRORLIST
-echo -e "\e[1mFinding quickest mirrorlist, please wait...\e[0m"
-sh -c "rankmirrors -v -n 4 -m 2 /etc/pacman.d/mirrorlist > /etc/pacman.d/mirrorlist.new && mv /etc/pacman.d/mirrorlist.new /etc/pacman.d/mirrorlist && chmod 644 /etc/pacman.d/mirrorlist"
+(
+    set +m
+    echo -ne "\033[1mFinding quickest mirrorlist, please wait... 0s\033[0m"
+    seconds=0
+    sh -c "rankmirrors -n 5 -m 3 /etc/pacman.d/mirrorlist > /etc/pacman.d/mirrorlist.new && mv /etc/pacman.d/mirrorlist.new /etc/pacman.d/mirrorlist && chmod 644 /etc/pacman.d/mirrorlist" &>/dev/null &
+    RANK_PID=$!
+    while kill -0 $RANK_PID 2>/dev/null; do
+        sleep 1
+        seconds=$((seconds + 1))
+        echo -ne "\r\033[1mFinding quickest mirrorlist, please wait... ${seconds}s\033[0m"
+    done
+)
 
 ### FIRST COMMANDS AND ALGIZ-LINUX IMPORT P2 ###
 pacman -S paru --noconfirm --needed
-pacman -Syyu --noconfirm --needed --overwrite='*' --ignore=linux,linux-headers,nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc,modemmanager
+for attempt in $(seq 1 5); do
+  echo "Running full system update (attempt $attempt/5)..." >&2
+  if pacman -Syyu --noconfirm --needed --overwrite='*' --ignore=linux,linux-headers,nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc,modemmanager; then
+    echo "System update succeeded." >&2
+    break
+  else
+    if [ "$attempt" -lt 5 ]; then
+      echo "Attempt $attempt failed, retrying in 5 seconds..." >&2
+      sleep 5
+    else
+      echo "All 5 attempts failed for full system update. Continuing anyway..." >&2
+    fi
+  fi
+done
 
 mv /home/algiz-files/files/algiz-manual/Manual /home/$USER/Desktop/
 
 # REMOVE PACKAGES
-for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme mpv nvidia-390xx-utils lib32-nvidia-390xx-utils epiphany xfce4-screensaver xfce4-terminal parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin modemmanager; do
+for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme mpv nvidia-390xx-utils lib32-nvidia-390xx-utils epiphany xfce4-screensaver xfce4-terminal parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin modemmanager xf86-video-intel; do
     if pacman -Qi "$pkg" &>/dev/null; then
         paru -Rdd --noconfirm "$pkg"
     fi
@@ -138,16 +176,16 @@ done
 # INSTALL BASE PACKAGES
 careful_install \
   lib32-artix-archlinux-support unrar flatpak kate librewolf tmux akregator kcalc \
-  font-manager pix gimp gamemode lib32-gamemode okular dnscrypt-proxy dnsmasq apparmor \
+  font-manager gamemode lib32-gamemode dnscrypt-proxy apparmor \
   bleachbit konsole catfish clamav ark gufw macchanger networkmanager nm-connection-editor \
   wine-git wine-mono winetricks-git steam lynis element-desktop rkhunter opendoas \
-  mate-system-monitor chrony downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber \
-  rust usbguard chkrootkit wget noto-fonts-emoji tauon-music-box freetube alsa-utils expect \
+  mate-system-monitor downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber \
+  rust usbguard chkrootkit noto-fonts-emoji tauon-music-box freetube alsa-utils expect \
   inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold \
-  lld protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse \
+  protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse \
   lib32-libdisplay-info linux-firmware realtime-privileges gallery-dl tesseract-data-eng \
-  scx-scheds debtap fwupd
-
+  scx-scheds debtap fwupd pix okular gimp chrony dnsmasq
+  
 # INSTALL INIT PACKAGES
 case "$INIT_SYSTEM" in
     s6)
@@ -164,16 +202,16 @@ esac
 
 # INSTALL PYTHON PACKAGES
 careful_install \
-  python-dateutil python-xlib python-psutil python-pyaudio python-pipenv \
-  python-matplotlib python-tqdm python-pillow python-mutagen python-magic \
+  python-dateutil python-xlib python-pyaudio python-pipenv \
+  python-matplotlib python-tqdm python-magic \
   python-piexif python-moviepy python-brotli python-websockets python-librosa \
-  python-audioread python-pypdf2 python-pytesseract
+  python-pypdf2 python-pytesseract
 
 # INSTALL XFCE PACKAGES
 if pacman -Qq | grep -q ''^thunar$''; then
     careful_install \
-      mugshot xfce4-panel-profiles xorg-xrandr redshift \
-      lightdm-gtk-greeter-settings gtk-engines xdg-desktop-portal-gtk gtk-engine-murrine
+      mugshot xfce4-panel-profiles redshift \
+      lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine
 else
     echo "Thunar not detected, skipping XFCE packages."
 fi
@@ -192,7 +230,7 @@ fi
 # AMD-LAPTOP CHOICE
 if [ "$choice" = "2" ]; then
   careful_install \
-    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers mesa lib32-mesa \
+    linux-x64v3 linux-x64v3-headers mesa lib32-mesa \
     vulkan-radeon lib32-vulkan-radeon libva-utils throttled \
     tlp tlp-${INIT_SYSTEM} blueman bluez bluez-${INIT_SYSTEM} brightnessctl
 fi
@@ -211,7 +249,7 @@ fi
 # INTEL-LAPTOP CHOICE
 if [ "$choice" = "4" ]; then
   careful_install \
-    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers mesa lib32-mesa \
+    linux-x64v3 linux-x64v3-headers mesa lib32-mesa \
     vulkan-intel lib32-vulkan-intel libva-utils throttled \
     tlp tlp-${INIT_SYSTEM} blueman bluez bluez-${INIT_SYSTEM} brightnessctl
 fi
@@ -291,14 +329,27 @@ add_service ufw
 add_service earlyoom
 
 # REMOVE CONNMAN & REFRESH
+if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null; then
+    # connmand is the only valid registered service name (connman without -d is not valid)
+    s6 set disable connmand || true
+    rm -rf /etc/s6/repo/sources/current/usable/connmand-srv \
+           /etc/s6/repo/sources/current/usable/connmand-log
+    s6 repo sync && s6 set commit && s6 live install || true
+    CONNMAN_PKGS=()
+    for pkg in connman connman-s6 connman-openrc connman-gtk; do
+        pacman -Qi "$pkg" &>/dev/null && CONNMAN_PKGS+=("$pkg")
+    done
+    pacman -Rdd --noconfirm "${CONNMAN_PKGS[@]}" || true
+else
+    echo "connman not detected, skipping removal."
+fi
+# Always sync after regardless
 case "$INIT_SYSTEM" in
     s6)
-        rm -f /etc/s6/adminsv/default/contents.d/connmand
-        pacman -Rdd --noconfirm connman connman-s6 connman-gtk
+        reload_s6_db
         ;;
     openrc)
-        rc-update del connman default || true
-        pacman -Rdd --noconfirm connman connman-openrc connman-gtk
+        rc-update -u || true
         ;;
 esac
 
@@ -343,11 +394,13 @@ reset-permissions
 # HARDENING SCRIPT
 hardening-script
 
+# TEMP XLIBRE FIX
+find /usr/lib/xorg -name "intel_drv.so" -delete 2>/dev/null || true
+
 # EXIT
 cd /
 mv /etc/profile{,.old}
 grub-install || true
-s6-db-reload || true
 update-grub
 rm -rf /home/algiz-files/
 echo -e "\e[1mAlgiz Linux has been successfully installed\e[0m"

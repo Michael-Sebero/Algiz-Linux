@@ -226,9 +226,11 @@
 
  / ADD S6 SERVICES /
 
- . s6-service add default [ SERVICE ]
+ . s6 set enable [ SERVICE ]
 
- . s6-db-reload
+ . s6 set commit
+
+ . s6 live install
 
 ..................................................................................................................................................
 
@@ -240,7 +242,7 @@
 
  / RELOAD S6 /
 
- . s6-db-reload
+ . s6 repository sync && s6 set commit && s6 live install
  
 ..................................................................................................................................................
 
@@ -411,6 +413,14 @@
  . audit
 
  - This command finds issues with permissions and reviews system integrity 
+
+.................................................................................................................................................. 
+
+ / ROLLBACK UPDATE /
+ 
+ . sudo rollback-update
+ 
+ - This command reverts your system packages to how it was prior before an update.
 
 .................................................................................................................................................. 
  
