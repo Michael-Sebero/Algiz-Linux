@@ -8,6 +8,7 @@
 
 ### **High Performance Kernel & Schedulers**
 * [XanMod](https://xanmod.org/) - Custom Linux kernel optimized for speed, responsiveness and desktop performance
+* [SCX-AURA](https://github.com/Michael-Sebero/SCX-AURA) - Laptop CPU scheduler based off [scx_bpfland](https://github.com/sched-ext/scx/tree/main/scheds/rust/scx_bpfland)
 * [SCX-IMPERATOR](https://github.com/Michael-Sebero/SCX-IMPERATOR) - Gaming CPU scheduler based off [scx_cake](https://github.com/RitzDaCat/scx_cake) and [scx_lavd](https://github.com/sched-ext/scx/tree/main/scheds/rust/scx_lavd)
 
 ### **Security Software**
@@ -65,11 +66,11 @@ Algiz Linux implements kernel hardening that enhances both security and performa
 - Disabled SysRq functionality and kexec to prevent unauthorized kernel replacement
 - ASLR enabled for protection against exploitation
 
-### XanMod Kernel
-The kernel which comes with the configuration is a custom build of XanMod, tailored for [x86-64-v3](https://en.wikipedia.org/wiki/X86-64#Microarchitecture_levels) CPU architecture. It also [outperforms](https://www.phoronix.com/review/xanmod-liquorix-510/5) the standard Linux kernel. XanMod's default `CFS` scheduler is replaced with a SCX-based scheduler for improved performance and responsiveness.
+### Custom Kernel
+The kernel which comes with the desktop configuration is a custom build of XanMod tailored for [x86-64-v3](https://en.wikipedia.org/wiki/X86-64#Microarchitecture_levels) CPU architecture. For laptops the default kernel is default but tailored for [x86-64-v3](https://en.wikipedia.org/wiki/X86-64#Microarchitecture_levels), XanMod uses more energy which is why it's not used for this configuration. Linux's default `CFS` scheduler is replaced with a SCX-based scheduler for improved performance and responsiveness.
 
 ### Kernel Scheduler
-The desktop scheduler is set to `LAVD` and laptops use `BPFLand` which provide high performance and low system latency. When the performance preset is chosen the scheduler will utilize the `CAKE` scheduler which is specialized for new processors (Zen 4-5 or 3D V-Cache). If you want to change the scheduler, it can be modified in `rc.local` under the scheduler section.
+The desktop scheduler is set to `IMPERATOR` and laptops use `AURA`. `IMPERATOR` is specialized for new processors (Zen 4-5 or CPUs with 3D V-Cache) and `AURA` is specialized for low-latency/high-responsiveness. If you want to change the scheduler it can be modified in `rc.local` under the scheduler section.
 
 ### Memory Management
 RAM usage has the highest priority over swapping. Keeping active data in memory reduces wear on the drive and increases system responsiveness. Swapping is still possible but only used when RAM is nearly filled. The VM subsystem is configured to reduce unnecessary memory compaction overhead while maintaining balanced VFS cache pressure for responsive file operations. HugePages are dynamically allocated on demand, providing up to 3968 large pages to reduce overhead and fragmentation for large memory workloads. NUMA balancing is also disabled to eliminate automatic memory migration overhead.

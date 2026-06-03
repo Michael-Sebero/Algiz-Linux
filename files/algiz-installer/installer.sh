@@ -3,15 +3,17 @@
 su -c '
 ### INIT SYSTEM DETECTION ###
 detect_init_system() {
-    if [ -d "/etc/s6" ]; then
-        echo "s6"
-    elif command -v rc-update >/dev/null 2>&1; then
-        echo "openrc"
-    elif [ -d "/etc/runlevels" ]; then
-        echo "openrc"
-    else
-        echo "unknown"
-    fi
+    case "$(ps -p 1 -o comm=)" in
+        s6-svscan)
+            echo "s6"
+            ;;
+        openrc-init)
+            echo "openrc"
+            ;;
+        *)
+            echo "unknown"
+            ;;
+    esac
 }
 
 INIT_SYSTEM=$(detect_init_system)
@@ -23,7 +25,7 @@ careful_install() {
     local success=false
     for attempt in $(seq 1 5); do
       echo "Installing $pkg (attempt $attempt/5)..." >&2
-      if paru -S --noconfirm --needed --ignore=nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc,modemmanager "$pkg"; then
+      if paru -S --noconfirm --needed --ignore=nvidia-390xx-utils,lib32-nvidia-390xx-utils,modemmanager "$pkg"; then
         success=true
         break
       else
@@ -71,10 +73,17 @@ remove_service() {
     esac
 }
 
-# Commit and apply s6 service changes
+# Sync s6 repo after package installs/removals (requires root)
+sync_s6_repo() {
+    if [ "$INIT_SYSTEM" = "s6" ]; then
+        s6 repo sync
+    fi
+}
+
+# Commit and apply staged s6 set changes
 reload_s6_db() {
     if [ "$INIT_SYSTEM" = "s6" ]; then
-        s6 repo sync && s6 set commit && s6 live install
+        s6 set commit && s6 live install
     fi
 }
 
@@ -151,7 +160,7 @@ pacman -Syy
 pacman -S paru --noconfirm --needed
 for attempt in $(seq 1 5); do
   echo "Running full system update (attempt $attempt/5)..." >&2
-  if pacman -Syyu --noconfirm --needed --overwrite='*' --ignore=linux,linux-headers,nvidia-390xx-utils,lib32-nvidia-390xx-utils,vlc,modemmanager; then
+  if pacman -Syyu --noconfirm --needed --overwrite='*' --ignore=linux,linux-headers,nvidia-390xx-utils,lib32-nvidia-390xx-utils,modemmanager; then
     echo "System update succeeded." >&2
     break
   else
@@ -167,7 +176,7 @@ done
 mv /home/algiz-files/files/algiz-manual/Manual /home/$USER/Desktop/
 
 # REMOVE PACKAGES
-for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme mpv nvidia-390xx-utils lib32-nvidia-390xx-utils epiphany xfce4-screensaver xfce4-terminal parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin modemmanager xf86-video-intel; do
+for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme nvidia-390xx-utils lib32-nvidia-390xx-utils epiphany xfce4-screensaver xfce4-terminal parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin modemmanager xf86-video-intel vlc; do
     if pacman -Qi "$pkg" &>/dev/null; then
         paru -Rdd --noconfirm "$pkg"
     fi
@@ -184,7 +193,7 @@ careful_install \
   inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold \
   protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse \
   lib32-libdisplay-info linux-firmware realtime-privileges gallery-dl tesseract-data-eng \
-  scx-scheds debtap fwupd pix okular gimp chrony dnsmasq
+  scx-scheds debtap fwupd pix okular gimp chrony dnsmasq ffmpegthumbnailer haruna
   
 # INSTALL INIT PACKAGES
 case "$INIT_SYSTEM" in
@@ -280,9 +289,8 @@ if [ "$choice" = "6" ]; then
   careful_install lib32-nvidia-utils || careful_install lib32-vulkan-driver
 fi
 
-# INSTALL FLATPAK PACKAGES
+# IMPORT FLATPAK BETA REPO
 flatpak remote-add flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-flatpak install -y flathub org.kde.haruna
 
 # INSTALL PROTON-GE
 if pacman -Q protonup-git &>/dev/null; then
@@ -330,11 +338,9 @@ add_service earlyoom
 
 # REMOVE CONNMAN & REFRESH
 if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null; then
-    # connmand is the only valid registered service name (connman without -d is not valid)
     s6 set disable connmand || true
     rm -rf /etc/s6/repo/sources/current/usable/connmand-srv \
            /etc/s6/repo/sources/current/usable/connmand-log
-    s6 repo sync && s6 set commit && s6 live install || true
     CONNMAN_PKGS=()
     for pkg in connman connman-s6 connman-openrc connman-gtk; do
         pacman -Qi "$pkg" &>/dev/null && CONNMAN_PKGS+=("$pkg")
@@ -343,9 +349,10 @@ if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman
 else
     echo "connman not detected, skipping removal."
 fi
-# Always sync after regardless
+# Sync repo after all package installs/removals, then commit and apply set changes
 case "$INIT_SYSTEM" in
     s6)
+        sync_s6_repo
         reload_s6_db
         ;;
     openrc)

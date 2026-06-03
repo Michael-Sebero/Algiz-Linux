@@ -517,12 +517,6 @@
 
 ..................................................................................................................................................
 
- > SHAQ ( Shazam CLI Interface )
- 
- . https://github.com/Michael-Sebero/Shaq
-
-.................................................................................................................................................. 
-
 ==================================================================================================================================================
 
 
@@ -771,7 +765,7 @@
   
   or if you have RDNA 4
   
-  . AMD_VULKAN_ICD=RADV RADV_PERFTEST=gpl,ngg_streamout,transfer_queue PROTON_FSYNC=1 VKD3D_CONFIG=no_upload_hvv PROTON_FSR4_UPGRADE=1 WINEDLLOVERRIDES="winmm=n,b;version=n,b" gamemoderun %command% --launcher-skip -modded
+  . AMD_VULKAN_ICD=RADV RADV_PERFTEST=ngg_streamout PROTON_FSYNC=1 PROTON_FSR4_UPGRADE=1 WINEDLLOVERRIDES="winmm=n,b;version=n,b" gamemoderun %command% --launcher-skip -modded
 
   - To install the needed DLLs run [ protontricks 1091500 -q vcrun2022 d3dcompiler_47 ]
   
@@ -787,7 +781,11 @@
   
   > Wayland AMD
   
-  . RADV_PERFTEST=nggc MESA_VK_WSI_PRESENT_MODE=mailbox SDL_VIDEODRIVER=wayland gamemoderun %command% -novid -nojoy
+  . MESA_VK_WSI_PRESENT_MODE=mailbox SDL_VIDEODRIVER=wayland gamemoderun %command% -novid -nojoy +mat_queue_mode 2
+  
+  > High Refresh Rate
+  
+  . -refresh 120 ( or whatever your monitor's refresh rate is)
   
   Vintage Story: 
 
