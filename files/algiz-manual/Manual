@@ -783,7 +783,9 @@
 
   - If you're on modern hardware use proton for Left 4 Dead 2.
   
+  > WAYLAND
   
+  . RADV_PERFTEST=rt,nggc MESA_VK_WSI_PRESENT_MODE=mailbox SDL_VIDEODRIVER=wayland gamemoderun %command% -novid -nojoy
   
   Vintage Story: 
 
