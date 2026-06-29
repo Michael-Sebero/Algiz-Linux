@@ -493,10 +493,16 @@
  
 ..................................................................................................................................................
 
- > NEXUS MODS APP ( Linux Native Mod Installer )
+ > ANVIL ORGANIZER ( Linux Native Mod Installer )
  
- - https://github.com/Nexus-Mods/NexusMods.App/releases
+ - https://github.com/Marc1326/Anvil-Organizer
  
+..................................................................................................................................................
+
+ > LOOT ( Linux Mod Sorter )
+ 
+ . flatpak install flathub io.github.loot.loot
+
 ..................................................................................................................................................
 
  > PICARD ( Music Metadata Editor / Fetcher )
