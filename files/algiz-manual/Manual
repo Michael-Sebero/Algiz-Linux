@@ -793,6 +793,8 @@
   
   . -refresh 120 ( or whatever your monitor's refresh rate is)
   
+  
+  
   Vintage Story: 
 
   - Edit the launcher's command to [ gamemoderun /usr/bin/vintagestory ]
