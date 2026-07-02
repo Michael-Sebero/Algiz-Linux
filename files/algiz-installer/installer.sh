@@ -337,6 +337,10 @@ add_service ufw
 add_service earlyoom
 
 # REMOVE CONNMAN & REFRESH
+s6-rc -d change connmand || true
+s6 set disable connmand || true
+find /etc/s6 \( -iname '*connman*' -o -iname '*connmand*' \) || true
+
 if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null; then
     s6 set disable connmand || true
     rm -rf /etc/s6/repo/sources/current/usable/connmand-srv \
