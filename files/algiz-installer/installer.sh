@@ -338,7 +338,6 @@ add_service earlyoom
 
 # REMOVE CONNMAN & REFRESH
 if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null; then
-    s6-rc -d change connmand || true
     s6 set disable connmand || true
     find /etc/s6 \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
     CONNMAN_PKGS=()
