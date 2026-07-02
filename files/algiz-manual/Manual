@@ -787,7 +787,7 @@
   
   > Wayland AMD
   
-  . MESA_VK_WSI_PRESENT_MODE=mailbox SDL_VIDEODRIVER=wayland gamemoderun %command% -novid -nojoy +mat_queue_mode 2
+  . SDL_VIDEODRIVER=wayland gamemoderun %command% -novid -nojoy -vulkan -refresh 180 +mat_queue_mode 2
   
   > High Refresh Rate
   
