@@ -193,7 +193,7 @@ careful_install \
   inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold \
   protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse \
   lib32-libdisplay-info linux-firmware realtime-privileges gallery-dl tesseract-data-eng \
-  scx-scheds debtap fwupd pix okular gimp chrony dnsmasq ffmpegthumbnailer haruna
+  scx-scheds debtap fwupd pix okular gimp chrony dnsmasq ffmpegthumbnailer haruna mesa lib32-mesa
   
 # INSTALL INIT PACKAGES
 case "$INIT_SYSTEM" in
@@ -231,7 +231,7 @@ if [ "$choice" = "1" ]; then
     paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin
   fi
   careful_install \
-    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers mesa lib32-mesa \
+    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers \
     vulkan-radeon lib32-vulkan-radeon protonup-git libva-utils \
     fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM}
 fi
@@ -239,7 +239,7 @@ fi
 # AMD-LAPTOP CHOICE
 if [ "$choice" = "2" ]; then
   careful_install \
-    linux-x64v3 linux-x64v3-headers mesa lib32-mesa \
+    linux-x64v3 linux-x64v3-headers \
     vulkan-radeon lib32-vulkan-radeon libva-utils throttled \
     tlp tlp-${INIT_SYSTEM} blueman bluez bluez-${INIT_SYSTEM} brightnessctl
 fi
@@ -250,7 +250,7 @@ if [ "$choice" = "3" ]; then
     paru -Rdd --noconfirm xfce4-power-manager xfce4-battery-plugin
   fi
   careful_install \
-    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers mesa lib32-mesa \
+    linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers \
     vulkan-intel lib32-vulkan-intel protonup-git libva-utils \
     fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM}
 fi
@@ -258,7 +258,7 @@ fi
 # INTEL-LAPTOP CHOICE
 if [ "$choice" = "4" ]; then
   careful_install \
-    linux-x64v3 linux-x64v3-headers mesa lib32-mesa \
+    linux-x64v3 linux-x64v3-headers \
     vulkan-intel lib32-vulkan-intel libva-utils throttled \
     tlp tlp-${INIT_SYSTEM} blueman bluez bluez-${INIT_SYSTEM} brightnessctl
 fi
