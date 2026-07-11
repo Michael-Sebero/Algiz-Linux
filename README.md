@@ -1,6 +1,6 @@
-<p align="center">
+<div align="center">
 	<img src="https://i.postimg.cc/TYCbKN6L/Life.png" width="25%" />
-</p>
+</div>
 
 <br>
 
