@@ -398,9 +398,6 @@ fi
 # RESET PERMISSIONS
 reset-permissions
 
-# BACK UP THE STOCK /etc/profile BEFORE HARDENING REPLACES IT
-[ -f /etc/profile ] && cp -a /etc/profile /etc/profile.old
-
 # HARDENING SCRIPT
 hardening-script
 
