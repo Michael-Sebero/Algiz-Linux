@@ -398,6 +398,9 @@ fi
 # RESET PERMISSIONS
 reset-permissions
 
+# BACK UP THE STOCK /etc/profile BEFORE HARDENING REPLACES IT
+[ -f /etc/profile ] && cp -a /etc/profile /etc/profile.old
+
 # HARDENING SCRIPT
 hardening-script
 
@@ -406,7 +409,6 @@ find /usr/lib/xorg -name "intel_drv.so" -delete 2>/dev/null || true
 
 # EXIT
 cd /
-mv /etc/profile{,.old}
 grub-install || true
 update-grub
 rm -rf /home/algiz-files/
