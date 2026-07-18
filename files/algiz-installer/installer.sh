@@ -176,7 +176,7 @@ done
 mv /home/algiz-files/files/algiz-manual/Manual /home/$USER/Desktop/
 
 # REMOVE PACKAGES
-for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme nvidia-390xx-utils lib32-nvidia-390xx-utils epiphany xfce4-screensaver xfce4-terminal parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin modemmanager xf86-video-intel vlc; do
+for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf artix-branding-base artix-grub-theme nvidia-390xx-utils lib32-nvidia-390xx-utils epiphany xfce4-screensaver xfce4-terminal parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin modemmanager xf86-video-intel falkon vlc; do
     if pacman -Qi "$pkg" &>/dev/null; then
         paru -Rdd --noconfirm "$pkg"
     fi
@@ -184,16 +184,16 @@ done
 
 # INSTALL BASE PACKAGES
 careful_install \
-  lib32-artix-archlinux-support unrar flatpak kate librewolf tmux akregator kcalc \
+  lib32-artix-archlinux-support unrar flatpak librewolf tmux akregator \
   font-manager gamemode lib32-gamemode dnscrypt-proxy apparmor \
-  bleachbit konsole catfish clamav ark gufw macchanger networkmanager nm-connection-editor \
+  bleachbit catfish clamav gufw macchanger networkmanager nm-connection-editor \
   wine-git wine-mono winetricks-git steam lynis element-desktop rkhunter opendoas \
-  mate-system-monitor downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber \
+  downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber \
   rust usbguard chkrootkit noto-fonts-emoji tauon-music-box freetube alsa-utils expect \
   inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold \
-  protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp seahorse \
+  protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp \
   lib32-libdisplay-info linux-firmware realtime-privileges gallery-dl tesseract-data-eng \
-  scx-scheds debtap fwupd pix okular gimp chrony dnsmasq ffmpegthumbnailer haruna mesa lib32-mesa
+  scx-scheds debtap fwupd gimp chrony dnsmasq haruna mesa lib32-mesa
   
 # INSTALL INIT PACKAGES
 case "$INIT_SYSTEM" in
@@ -219,7 +219,8 @@ careful_install \
 # INSTALL XFCE PACKAGES
 if pacman -Qq | grep -q ''^thunar$''; then
     careful_install \
-      mugshot xfce4-panel-profiles redshift \
+      kate konsole kcalc \
+      mugshot xfce4-panel-profiles redshift mate-system-monitor pix seahorse ffmpegthumbnailer okular ark \
       lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine
 else
     echo "Thunar not detected, skipping XFCE packages."
