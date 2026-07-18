@@ -192,7 +192,7 @@ careful_install \
   rust usbguard chkrootkit noto-fonts-emoji tauon-music-box freetube alsa-utils expect \
   inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold \
   protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp \
-  lib32-libdisplay-info linux-firmware realtime-privileges gallery-dl tesseract-data-eng \
+  lib32-libdisplay-info realtime-privileges gallery-dl tesseract-data-eng \
   scx-scheds debtap fwupd gimp chrony dnsmasq haruna mesa lib32-mesa
   
 # INSTALL INIT PACKAGES
