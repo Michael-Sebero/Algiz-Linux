@@ -186,7 +186,7 @@ done
 careful_install \
   lib32-artix-archlinux-support unrar flatpak librewolf tmux akregator \
   font-manager gamemode lib32-gamemode dnscrypt-proxy apparmor \
-  bleachbit catfish clamav gufw macchanger networkmanager nm-connection-editor \
+  bleachbit catfish clamav gufw macchanger \
   wine-git wine-mono winetricks-git steam lynis element-desktop rkhunter opendoas \
   downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber \
   rust usbguard chkrootkit noto-fonts-emoji tauon-music-box freetube alsa-utils expect \
@@ -194,7 +194,24 @@ careful_install \
   protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp \
   lib32-libdisplay-info realtime-privileges gallery-dl tesseract-data-eng \
   scx-scheds debtap fwupd gimp chrony dnsmasq haruna mesa lib32-mesa
-  
+
+# INSTALL PYTHON PACKAGES
+careful_install \
+  python-dateutil python-xlib python-pyaudio python-pipenv \
+  python-matplotlib python-tqdm python-magic \
+  python-piexif python-moviepy python-brotli python-websockets python-librosa \
+  python-pypdf2 python-pytesseract
+
+# INSTALL XFCE PACKAGES
+if pacman -Qq | grep -q ''^thunar$''; then
+    careful_install \
+      kate konsole kcalc networkmanager \
+      mugshot xfce4-panel-profiles redshift mate-system-monitor pix seahorse ffmpegthumbnailer okular ark \
+      lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine
+else
+    echo "Thunar not detected, skipping XFCE packages."
+fi
+
 # INSTALL INIT PACKAGES
 case "$INIT_SYSTEM" in
     s6)
@@ -208,23 +225,6 @@ case "$INIT_SYSTEM" in
           networkmanager-openrc ufw-openrc usbguard-openrc earlyoom-openrc
         ;;
 esac
-
-# INSTALL PYTHON PACKAGES
-careful_install \
-  python-dateutil python-xlib python-pyaudio python-pipenv \
-  python-matplotlib python-tqdm python-magic \
-  python-piexif python-moviepy python-brotli python-websockets python-librosa \
-  python-pypdf2 python-pytesseract
-
-# INSTALL XFCE PACKAGES
-if pacman -Qq | grep -q ''^thunar$''; then
-    careful_install \
-      kate konsole kcalc \
-      mugshot xfce4-panel-profiles redshift mate-system-monitor pix seahorse ffmpegthumbnailer okular ark \
-      lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine
-else
-    echo "Thunar not detected, skipping XFCE packages."
-fi
 
 # AMD-DESKTOP CHOICE
 if [ "$choice" = "1" ]; then
