@@ -207,7 +207,15 @@ if pacman -Qq | grep -q ''^thunar$''; then
     careful_install \
       kate konsole kcalc networkmanager \
       mugshot xfce4-panel-profiles redshift mate-system-monitor pix seahorse ffmpegthumbnailer okular ark \
-      lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine networkmanager-s6 networkmanager-openrc akregator
+      lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine akregator
+    case "$INIT_SYSTEM" in
+        s6)
+            careful_install networkmanager-s6
+            ;;
+        openrc)
+            careful_install networkmanager-openrc
+            ;;
+    esac
 else
     echo "Thunar not detected, skipping XFCE packages."
 fi
@@ -394,6 +402,7 @@ fi
 if [ -d /etc/runlevels ]; then
   mv -f /etc/rc.local /etc/local.d/rc.start
   chmod 755 /etc/local.d/rc.start
+  add_service local
 fi
 
 # RESET PERMISSIONS
