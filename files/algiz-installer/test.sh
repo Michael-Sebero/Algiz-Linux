@@ -402,6 +402,9 @@ reset-permissions
 # HARDENING SCRIPT
 hardening-script
 
+# TEMP XLIBRE FIX
+find /usr/lib/xorg -name "intel_drv.so" -delete 2>/dev/null || true
+
 # EXIT
 cd /
 grub-install || true
