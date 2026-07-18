@@ -213,7 +213,7 @@ if pacman -Qq | grep -q ''^thunar$''; then
             careful_install networkmanager-s6
             ;;
         openrc)
-            careful_install networkmanager-openrc openresolv
+            careful_install networkmanager-openrc
             ;;
     esac
 else
