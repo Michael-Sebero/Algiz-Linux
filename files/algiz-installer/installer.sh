@@ -339,11 +339,14 @@ fi
 
 # ADD SERVICES
 add_service apparmor
-add_service NetworkManager
 add_service dnscrypt-proxy
 add_service dnsmasq
 add_service ufw
 add_service earlyoom
+
+if pacman -Qq | grep -q ''^thunar$''; then
+    add_service NetworkManager
+fi
 
 # REMOVE CONNMAN & REFRESH
 if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null; then
