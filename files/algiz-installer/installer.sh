@@ -7,7 +7,7 @@ detect_init_system() {
         s6-svscan)
             echo "s6"
             ;;
-        openrc-init)
+        init|openrc-init)
             echo "openrc"
             ;;
         *)
@@ -134,8 +134,8 @@ elif [ "$arch_support" = "x86-64-v4" ]; then
     unzip -o algiz-pacman-v4.zip -d /etc
 fi
 
-# TEMP FIX
-pacman -Rdd --noconfirm linux-firmware || true && find /etc/pacman.conf -type f -exec sed -i 's/#//g' {} +
+# ACTIVATE REPOS
+find /etc/pacman.conf -type f -exec sed -i 's/#//g' {} +
 
 # POPULATE & REFRESH
 pacman-key --init
@@ -192,7 +192,7 @@ careful_install \
   rust usbguard chkrootkit noto-fonts-emoji tauon-music-box freetube alsa-utils expect \
   inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold \
   protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp \
-  lib32-libdisplay-info linux-firmware realtime-privileges gallery-dl tesseract-data-eng \
+  lib32-libdisplay-info realtime-privileges gallery-dl tesseract-data-eng \
   scx-scheds debtap fwupd gimp chrony dnsmasq haruna mesa lib32-mesa
   
 # INSTALL INIT PACKAGES
@@ -273,7 +273,7 @@ if [ "$choice" = "5" ]; then
     linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers protonup-git \
     nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings \
     fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM} nvidia-open-dkms
-  # lib32 fallback: try lib32-nvidia-utils, fall back to lib32-vulkan-driver
+  # lib32 NVIDIA / Vulkan fallback
   careful_install lib32-nvidia-utils || careful_install lib32-vulkan-driver
 fi
 
@@ -286,7 +286,7 @@ if [ "$choice" = "6" ]; then
     linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers protonup-git \
     nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings \
     fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM} nvidia-dkms
-  # lib32 fallback: try lib32-nvidia-utils, fall back to lib32-vulkan-driver
+  # lib32 NVIDIA / Vulkan fallback
   careful_install lib32-nvidia-utils || careful_install lib32-vulkan-driver
 fi
 
