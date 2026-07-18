@@ -207,7 +207,7 @@ if pacman -Qq | grep -q ''^thunar$''; then
     careful_install \
       kate konsole kcalc networkmanager \
       mugshot xfce4-panel-profiles redshift mate-system-monitor pix seahorse ffmpegthumbnailer okular ark \
-      lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine
+      lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine networkmanager-s6 networkmanager-openrc
 else
     echo "Thunar not detected, skipping XFCE packages."
 fi
@@ -217,12 +217,12 @@ case "$INIT_SYSTEM" in
     s6)
         careful_install \
           dnscrypt-proxy-s6 dnsmasq-s6 apparmor-s6 clamav-s6 \
-          networkmanager-s6 ufw-s6 usbguard-s6 earlyoom-s6
+          ufw-s6 usbguard-s6 earlyoom-s6
         ;;
     openrc)
         careful_install \
           dnscrypt-proxy-openrc dnsmasq-openrc apparmor-openrc clamav-openrc \
-          networkmanager-openrc ufw-openrc usbguard-openrc earlyoom-openrc
+          ufw-openrc usbguard-openrc earlyoom-openrc
         ;;
 esac
 
