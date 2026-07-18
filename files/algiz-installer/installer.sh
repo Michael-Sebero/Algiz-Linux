@@ -184,7 +184,7 @@ done
 
 # INSTALL BASE PACKAGES
 careful_install \
-  lib32-artix-archlinux-support unrar flatpak librewolf tmux akregator \
+  lib32-artix-archlinux-support unrar flatpak librewolf tmux \
   font-manager gamemode lib32-gamemode dnscrypt-proxy apparmor \
   bleachbit catfish clamav gufw macchanger \
   wine-git wine-mono winetricks-git steam lynis element-desktop rkhunter opendoas \
@@ -207,7 +207,7 @@ if pacman -Qq | grep -q ''^thunar$''; then
     careful_install \
       kate konsole kcalc networkmanager \
       mugshot xfce4-panel-profiles redshift mate-system-monitor pix seahorse ffmpegthumbnailer okular ark \
-      lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine networkmanager-s6 networkmanager-openrc
+      lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine networkmanager-s6 networkmanager-openrc akregator
 else
     echo "Thunar not detected, skipping XFCE packages."
 fi
