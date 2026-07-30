@@ -791,7 +791,7 @@
   
   > High Refresh Rate
   
-  . -refresh 120 -maxfps 120 ( or whatever your monitor's refresh rate is)
+  . -refresh 120 +fps_max 120 ( or whatever your monitor's refresh rate is)
   
   
   
