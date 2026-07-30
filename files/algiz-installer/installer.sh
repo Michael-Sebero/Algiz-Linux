@@ -10,6 +10,9 @@ detect_init_system() {
         init|openrc-init)
             echo "openrc"
             ;;
+        runit-init)
+            echo "runit"
+            ;;
         *)
             echo "unknown"
             ;;
@@ -58,6 +61,9 @@ add_service() {
         openrc)
             rc-update add "$service_name" default
             ;;
+        runit)
+            ln -sf "/etc/runit/sv/$service_name" /etc/runit/runsvdir/default/
+            ;;
     esac
 }
 
@@ -69,6 +75,9 @@ remove_service() {
             ;;
         openrc)
             rc-update del "$service_name" default || true
+            ;;
+        runit)
+            unlink "/etc/runit/runsvdir/default/$service_name" 2>/dev/null || true
             ;;
     esac
 }
@@ -215,6 +224,9 @@ if pacman -Qq | grep -q ''^thunar$''; then
         openrc)
             careful_install networkmanager-openrc
             ;;
+        runit)
+            careful_install networkmanager-runit
+            ;;
     esac
 else
     echo "Thunar not detected, skipping XFCE packages."
@@ -231,6 +243,11 @@ case "$INIT_SYSTEM" in
         careful_install \
           dnscrypt-proxy-openrc dnsmasq-openrc apparmor-openrc clamav-openrc \
           ufw-openrc usbguard-openrc earlyoom-openrc
+        ;;
+    runit)
+        careful_install \
+          dnscrypt-proxy-runit dnsmasq-runit apparmor-runit clamav-runit \
+          ufw-runit usbguard-runit earlyoom-runit
         ;;
 esac
 
@@ -349,12 +366,13 @@ if pacman -Qq | grep -q ''^thunar$''; then
 fi
 
 # REMOVE CONNMAN & REFRESH
-if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null; then
+if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null || pacman -Qi connman-runit &>/dev/null; then
     s6-rc -d change connmand || true
     s6 set disable connmand || true
     find /etc/s6 \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
+    find /etc/runit \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
     CONNMAN_PKGS=()
-    for pkg in connman connman-s6 connman-openrc connman-gtk; do
+    for pkg in connman connman-s6 connman-openrc connman-runit connman-gtk; do
         pacman -Qi "$pkg" &>/dev/null && CONNMAN_PKGS+=("$pkg")
     done
     pacman -Rdd --noconfirm "${CONNMAN_PKGS[@]}" || true
@@ -369,6 +387,9 @@ case "$INIT_SYSTEM" in
         ;;
     openrc)
         rc-update -u || true
+        ;;
+    runit)
+        # runsvdir polls /etc/runit/runsvdir/default automatically; no explicit reload step needed
         ;;
 esac
 
@@ -406,6 +427,14 @@ if [ -d /etc/runlevels ]; then
   mv -f /etc/rc.local /etc/local.d/rc.start
   chmod 755 /etc/local.d/rc.start
   add_service local
+fi
+
+# runit (assumes a rc-local service dir ships in the dotfiles bundle whose
+# run script execs /etc/runit/rc.local, since runit has no built-in local.d runner)
+if [ -d /etc/runit ]; then
+  mv -f /etc/rc.local /etc/runit/rc.local
+  chmod 755 /etc/runit/rc.local
+  add_service rc-local
 fi
 
 # RESET PERMISSIONS
