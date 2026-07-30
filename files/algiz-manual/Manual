@@ -787,11 +787,11 @@
   
   > Wayland AMD
   
-  . SDL_VIDEODRIVER=wayland gamemoderun %command% -novid -nojoy -vulkan -refresh 180 +mat_queue_mode 2
+  . SDL_VIDEODRIVER=wayland gamemoderun %command% -novid -nojoy -vulkan +mat_queue_mode 2
   
   > High Refresh Rate
   
-  . -refresh 120 ( or whatever your monitor's refresh rate is)
+  . -refresh 120 -maxfps 120 ( or whatever your monitor's refresh rate is)
   
   
   
