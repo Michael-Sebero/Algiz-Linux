@@ -182,6 +182,23 @@ for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth p
     fi
 done
 
+# BOOTSTRAP S6 REPO/LIVE DATABASE
+# Every *-s6 package ships a pacman hook that runs s6-rc-repo-sync and
+# s6-rc-set-install against /etc/s6/repo the moment it is installed. On a
+# freshly keyed chroot that repo has never been created yet, so the hook
+# on the first -s6 package installed (and every one after it) dies with:
+#   s6-rc-repo-sync: fatal: unable to check service type of .../default
+#   s6-rc-set-install: fatal: set current does not exist in repository ...
+# Per the Artix wiki, "s6 repo sync" must be run at least once, followed by
+# "s6 set commit && s6 live install", before those hooks have anything to
+# work with. Doing that once here (using the exact same functions already
+# called at the end of this script) creates /etc/s6/repo up front so the
+# hook on every later -s6 package succeeds on its own instead of failing.
+if [ "$INIT_SYSTEM" = "s6" ]; then
+    sync_s6_repo
+    reload_s6_db
+fi
+
 # INSTALL BASE PACKAGES
 careful_install \
   lib32-artix-archlinux-support unrar flatpak librewolf tmux \
