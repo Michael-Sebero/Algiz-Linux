@@ -102,6 +102,17 @@ reload_s6_db() {
 # controlled conditions so later per-package hook runs, and the sync/commit
 # calls further below, have a current set to work from.
 if [ "$INIT_SYSTEM" = "s6" ]; then
+    # The "s6" frontend command (used here and by add_service/remove_service
+    # below) comes from the s6-base package, not from s6/s6-linux-init/s6-rc
+    # themselves. Those three are already running as PID 1 by the time this
+    # script executes, but s6-base is otherwise only pulled in transitively
+    # as a dependency of *-s6 service packages -- none of which are installed
+    # yet at this point in the script. Install it explicitly first, or every
+    # call below fails with "s6: command not found".
+    if ! command -v s6 &>/dev/null; then
+        echo -e "\e[1mInstalling s6-base (provides the s6 command)...\e[0m"
+        pacman -Sy --noconfirm --needed s6-base
+    fi
     echo -e "\e[1mBootstrapping s6-rc repository...\e[0m"
     sync_s6_repo
     reload_s6_db
