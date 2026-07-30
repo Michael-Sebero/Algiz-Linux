@@ -350,9 +350,11 @@ fi
 
 # REMOVE CONNMAN & REFRESH
 if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null; then
-    s6-rc -d change connmand || true
-    s6 set disable connmand || true
-    find /etc/s6 \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
+    if [ "$INIT_SYSTEM" = "s6" ]; then
+        s6-rc -d change connmand || true
+        find /etc/s6 \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
+    fi
+    remove_service connmand
     CONNMAN_PKGS=()
     for pkg in connman connman-s6 connman-openrc connman-gtk; do
         pacman -Qi "$pkg" &>/dev/null && CONNMAN_PKGS+=("$pkg")
