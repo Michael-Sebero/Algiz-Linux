@@ -76,47 +76,16 @@ remove_service() {
 # Sync s6 repo after package installs/removals (requires root)
 sync_s6_repo() {
     if [ "$INIT_SYSTEM" = "s6" ]; then
-        if ! s6 repo sync; then
-            echo -e "\e[1mWarning: s6 repo sync failed. Newly installed services may not be committed; you may need to run it again manually after reboot.\e[0m" >&2
-            return 1
-        fi
+        s6 repo sync
     fi
 }
 
 # Commit and apply staged s6 set changes
 reload_s6_db() {
     if [ "$INIT_SYSTEM" = "s6" ]; then
-        if ! { s6 set commit && s6 live install; }; then
-            echo -e "\e[1mWarning: s6 set commit and s6 live install failed. Enabled services such as fail2ban, ufw, and apparmor may not be active until you run this again manually.\e[0m" >&2
-            return 1
-        fi
+        s6 set commit && s6 live install
     fi
 }
-
-# Bootstrap the s6-rc repository once, before any packages change.
-# On a freshly imaged system /etc/s6/repo has often never been synced, so the
-# first automatic sync that the pacman post-transaction hook runs later (when
-# the first *-s6 package gets installed) fails with errors like set current
-# does not exist in repository /etc/s6/repo. Syncing and committing here,
-# before anything else touches services, creates that baseline under
-# controlled conditions so later per-package hook runs, and the sync/commit
-# calls further below, have a current set to work from.
-if [ "$INIT_SYSTEM" = "s6" ]; then
-    # The "s6" frontend command (used here and by add_service/remove_service
-    # below) comes from the s6-base package, not from s6/s6-linux-init/s6-rc
-    # themselves. Those three are already running as PID 1 by the time this
-    # script executes, but s6-base is otherwise only pulled in transitively
-    # as a dependency of *-s6 service packages -- none of which are installed
-    # yet at this point in the script. Install it explicitly first, or every
-    # call below fails with "s6: command not found".
-    if ! command -v s6 &>/dev/null; then
-        echo -e "\e[1mInstalling s6-base (provides the s6 command)...\e[0m"
-        pacman -Sy --noconfirm --needed s6-base
-    fi
-    echo -e "\e[1mBootstrapping s6-rc repository...\e[0m"
-    sync_s6_repo
-    reload_s6_db
-fi
 
 ### ALGIZ LINUX CHOICE SELECTION ###
 
@@ -265,13 +234,6 @@ case "$INIT_SYSTEM" in
         ;;
 esac
 
-# Sync and commit the newly installed *-s6 service definitions right away,
-# instead of only at the very end of the script.
-if [ "$INIT_SYSTEM" = "s6" ]; then
-    sync_s6_repo
-    reload_s6_db
-fi
-
 # AMD-DESKTOP CHOICE
 if [ "$choice" = "1" ]; then
   if pacman -Qq | grep -q ''^thunar$''; then
@@ -390,12 +352,7 @@ fi
 if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null; then
     s6-rc -d change connmand || true
     s6 set disable connmand || true
-    # Scoped to the known service-definition directories only, so unrelated
-    # files under /etc/s6 (including the repo directory used above) are not
-    # touched by this cleanup.
-    for svdir in /etc/s6/sv /etc/s6/adminsv; do
-        find "$svdir" -maxdepth 1 -iname '\''connman*'\'' -print -exec rm -rf {} + 2>/dev/null || true
-    done
+    find /etc/s6 \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
     CONNMAN_PKGS=()
     for pkg in connman connman-s6 connman-openrc connman-gtk; do
         pacman -Qi "$pkg" &>/dev/null && CONNMAN_PKGS+=("$pkg")
