@@ -430,14 +430,6 @@ if [ -d /etc/runlevels ]; then
   add_service local
 fi
 
-# runit (assumes a rc-local service dir ships in the dotfiles bundle whose
-# run script execs /etc/runit/rc.local, since runit has no built-in local.d runner)
-if [ -d /etc/runit ]; then
-  mv -f /etc/rc.local /etc/runit/rc.local
-  chmod 755 /etc/runit/rc.local
-  add_service rc-local
-fi
-
 # RESET PERMISSIONS
 reset-permissions
 
