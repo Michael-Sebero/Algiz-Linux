@@ -1,0 +1,707 @@
+==================================================================================================================================================
+
+ - FEATURES AND IMPORTANT INFORMATION - !                                                                                         - ULU MANUAL ***
+
+==================================================================================================================================================
+
+..................................................................................................................................................
+
+ - In Konsole there's a list of quick commands provided in [ - Commands - ]
+ 
+ - The command [ optional ] installs optional packages and programs for ULU.
+ 
+ - Enter the command [ nmtui ] to connect to wifi.
+
+ - To update all of your system's packages at once run the command [ update ]
+
+ - If you want to update ULU to the newest version, run the command [ upgrade ]
+
+ - ULU uses a machine ID and MAC address randomizer upon login.
+
+ - All DNS traffic is encrypted through [ dnscrypt-proxy ] via LibreDNS which prevents DNS leaks.
+
+ - The [ steal ] command installs packages from the default repo, AUR and Flatpak. It can also download videos.
+ 
+ - On laptops the maximum charge is 85% to preserve the battery.
+ 
+ - When connecting a charger to a laptop, system performance will increase when the battery is at 85%.
+
+ - To get more FPS for games copy & paste [ gamemoderun %command% ] in launch options which is found through properties in Steam.
+
+..................................................................................................................................................
+
+==================================================================================================================================================
+
+
+
+
+
+
+==================================================================================================================================================
+
+ - COMMANDS AND WHAT THEY MEAN - !
+
+==================================================================================================================================================
+
+..................................................................................................................................................
+
+ / SUPER USER /
+
+ . su
+
+..................................................................................................................................................
+
+ / PACKAGE DICTIONARY /
+ 
+ . pd
+
+ - This command searches Pacman, AUR and Flatpak for specific packages based off keywords.
+ 
+ - Press Q to leave the enviroment.
+
+..................................................................................................................................................
+
+ / INSTALL PACKAGES AND DOWNLOAD VIDEOS /
+
+ . steal [ PACKAGE ]
+ 
+ OR
+ 
+ . steal [URL1] [URL2]
+
+ - This command will download system packages, music, videos and livestreams. 
+ 
+ - You can download multiple URLs if they're separated by spaces.
+ 
+ OR
+ 
+ . steal package.deb
+ 
+ - Debian packages can be converted/installed.
+ 
+ . steal package.pkg.tar.zst
+ 
+ - PKG packages can be installed.
+ 
+..................................................................................................................................................
+
+ / UNINSTALL PACKAGES /
+
+ . remove [ PACKAGE ]
+
+..................................................................................................................................................
+
+ / ROLLBACK PACKAGE /
+
+ . rollback [ PACKAGE ]
+
+..................................................................................................................................................
+
+ / UPDATE SYSTEM /
+
+ . update
+
+ - This command updates the system's packages.
+ 
+..................................................................................................................................................
+
+ / UPGRADE ULU /
+
+ . upgrade
+ 
+ - This command updates ULU to it's newest configuration.
+
+..................................................................................................................................................
+
+ / KEYWORD SEARCH /
+
+ . ks /example/directory keyword
+ 
+ - This command finds keywords in a directory quickly.
+
+..................................................................................................................................................
+
+ / CHECK VERSION /
+
+ . version [ PACKAGE ]
+ 
+ - This command is used to check the version of a package.
+
+..................................................................................................................................................
+
+ / CLEAN UNUSED & OLD PACKAGES /
+
+ . clean
+
+..................................................................................................................................................
+
+ / CHANGE DIRECTORY /
+
+ . cd [ /EXAMPLE/EXAMPLE ]
+ 
+ - If the directory has a space [ /EXAMPLE/EXAMPLE FOLDER ] use
+ 
+ . cd [ '/EXAMPLE/EXAMPLE FOLDER' ]
+
+..................................................................................................................................................
+
+ / LOAD PYTHON SCRIPT /
+ 
+ . p [ DIRECTORY TO .py FILE ]
+ 
+ - Example: p /home/1.py
+
+..................................................................................................................................................
+
+ / DEFINE COMMAND /
+
+ . man [ COMMAND ]
+
+..................................................................................................................................................
+
+ / ACCESS ADMIN FILE MANAGER /
+
+ . su -c'thunar'
+
+..................................................................................................................................................
+
+ / LIST ATTACHED DRIVES /
+
+ . lsblk
+
+..................................................................................................................................................
+
+ / FIND UUID /
+ 
+ . doas lsblk -f
+
+..................................................................................................................................................
+
+ / VIEW COMPUTER SPECS /
+
+ . neofetch
+
+..................................................................................................................................................
+
+ / LIST MAC ADDRESSES AND NETWORK DEVICES /
+
+ . ip link show
+
+..................................................................................................................................................
+
+ / LIST INSTALLED PACKAGES /
+
+ . doas pacman -Qe
+
+..................................................................................................................................................
+
+ / ANTIVIRUS /
+ 
+ . av
+ 
+ - This command uses ClamAV to scan your whole system and automatically removes suspected malware.
+
+..................................................................................................................................................
+
+ / TOOL SUITE /
+ 
+ . tool-suite
+ 
+ - Contains all of the tools from the tools series.
+ 
+ > https://github.com/Michael-Sebero/Archivist-Tools
+ 
+ > https://github.com/Michael-Sebero/Document-Tools
+ 
+ > https://github.com/Michael-Sebero/Media-Tools
+
+ > https://github.com/Michael-Sebero/Audio-Frequency-Tools
+ 
+..................................................................................................................................................
+
+ / GAME FOCUS /
+ 
+ . game-focus
+
+ - The command [ game-focus ] kills your desktop environment and launches Steam in big picture mode.
+  
+..................................................................................................................................................
+
+ / TIMED SHUTOFF /
+ 
+ . timed-shutoff
+ 
+ - This command shuts off your PC in a specified amount of time.
+
+..................................................................................................................................................
+
+ / REFRESH KEYRING /
+
+ . refresh-keyring
+ 
+ - This command refreshes your pacman keyring.
+
+..................................................................................................................................................
+
+ / WINEDIR /
+ 
+ . winedir
+
+ - This command converts a Linux directory into to a Wine directory.
+ 
+ - Example: home/frank/folder > z:\home\frank\folder\
+ 
+..................................................................................................................................................
+
+ / DISABLE IPV6 /
+ 
+ . disable-ipv6
+
+..................................................................................................................................................
+
+ / ALARM /
+ 
+ . alarm
+ 
+..................................................................................................................................................
+
+ / REPAIR SYSTEM /
+ 
+ . repair-system
+ 
+ - This command is a troubleshooting tool for ULU.
+ 
+..................................................................................................................................................
+
+ / PLAN S /
+ 
+ . plan-s
+ 
+ - This command deletes all of your system files and makes them mostly unrecoverable.
+ 
+..................................................................................................................................................
+
+ / META /
+ 
+ . meta /example/image.png
+ 
+ . meta /example/song.flac
+ 
+ - This script takes a media file path (from an argument or user input) and outputs detailed metadata about the file using ffprobe.
+ 
+..................................................................................................................................................
+
+ / TIMER /
+
+ . timer
+ 
+ - This command displays a timer since the start of program.
+ 
+.................................................................................................................................................. 
+
+ / COMPARE OBJECTS /
+
+ . compare-objects
+ 
+ - This command compares sizes of different objects based off of XYZ values in a 3D interactive space.
+
+.................................................................................................................................................. 
+
+ / FIX XFS /
+ 
+ . fix-xfs
+ 
+ - This command detects any XFS drives connected to the system and repairs them automatically.
+  
+..................................................................................................................................................
+
+==================================================================================================================================================
+
+
+
+
+
+
+==================================================================================================================================================
+
+ / USEFUL PACKAGES AND PROGRAMS TO INSTALL /
+
+==================================================================================================================================================
+
+..................................................................................................................................................
+
+ > CORECTRL ( Hardware Controller )
+
+ . steal corectrl
+
+..................................................................................................................................................
+
+ > HAGUICHI ( Hamachi )
+ 
+ . flatpak install flathub com.github.ztefn.haguichi
+ 
+ . steal logmein-hamachi
+ 
+ . sudo /etc/init.d/logmein-hamachi start
+
+ - Run Haguichi.
+
+..................................................................................................................................................
+
+ > GITHUB DESKTOP 
+ 
+ . steal github-desktop
+ 
+..................................................................................................................................................
+
+ > LMMS ( Digital Audio Workstation )
+
+ . steal lmms
+  
+..................................................................................................................................................
+
+ > GPU SCREEN RECORDER
+
+ . steal gpu-screen-recorder-gtk-git
+
+..................................................................................................................................................
+
+ > ANACONDA
+ 
+ . steal anaconda
+
+..................................................................................................................................................
+ 
+ > NICOTINE+ ( Music Sharing Client )
+ 
+ . steal nicotine+
+ 
+..................................................................................................................................................
+
+ > ORCASLICER ( 3D G-code Generator )
+ 
+ - https://github.com/SoftFever/OrcaSlicer/releases
+ 
+..................................................................................................................................................
+
+ > AMETHYST ( Linux Native Mod Installer )
+ 
+ - https://www.nexusmods.com/site/mods/1714?file_id=7274
+ 
+..................................................................................................................................................
+
+ > LOOT ( Linux Mod Sorter )
+ 
+ . flatpak install flathub io.github.loot.loot
+
+..................................................................................................................................................
+
+ > PICARD ( Music Metadata Editor / Fetcher )
+ 
+ . steal picard
+ 
+..................................................................................................................................................
+
+ > ANYTHING LLM ( Multi LLM Interface )
+
+ . https://docs.anythingllm.com/installation-desktop/linux#install-using-the-installer-script
+
+..................................................................................................................................................
+
+ > WINBOAT ( Run Virtualized Windows Applications)
+
+ - https://github.com/TibixDev/winboat
+
+..................................................................................................................................................
+
+ > DEBTAP  (Debian to Pacman converter)
+ 
+ . sudo pacman -S debtap
+ 
+ . sudo debtap -u
+ 
+ . debtap 'file.deb'
+ 
+ - This command converts .deb packages into .pkg.tar.zst files.
+ 
+..................................................................................................................................................
+
+==================================================================================================================================================
+
+
+
+
+
+
+==================================================================================================================================================
+
+ - TROUBLESHOOTING - !
+
+==================================================================================================================================================
+
+.................................................................................................................................................
+
+ > I BROKE MY SYSTEM! WHAT CAN I DO?
+
+ . Flash your OS ISO on a flashdrive.
+
+ . Boot into live environment but don't install a new instance.
+
+ . Connect to the internet in the top right if you have a Wi-Fi reciever.
+
+ . Locate the file manager and find your previous install's directory.
+
+ . Copy the directory from the top bar.
+
+ . Open a terminal and type sudo chroot [ DIRECTORY ]
+
+ . Apply whatever fix you find online through this environment.
+ 
+ - You can transplant files or directories from the live environment into your system which are missing or corrupted.
+ 
+ - If you login and see no GUI, type [ root ] as the user and then your password. Apply your fix from there.
+
+..................................................................................................................................................
+
+ > HOW TO FIX STEAM GAMES NOT LOADING ON EXTERNAL DRIVE
+
+ - Add [ defaults,nosuid,nodev,uid=1000,gid=1000 ] to edit mount options under system icon name.
+
+..................................................................................................................................................
+
+ > WHAT FILES ARE BEING MODIFIED CURRENTLY?
+
+ - Enter the command [ stalk ] to see what files on the system are actively being modified.
+ 
+..................................................................................................................................................
+
+ > MISC ADVICE
+ 
+ . CTRL + ALT + F1 will bring you into a virtual terminal if needed.
+ 
+..................................................................................................................................................
+
+  > RESOURCES
+  
+  - https://wiki.artixlinux.org/
+  
+  - https://wiki.archlinux.org/title/Main_page
+  
+  - https://docs.voidlinux.org/
+  
+..................................................................................................................................................
+ 
+==================================================================================================================================================
+
+
+
+
+
+
+==================================================================================================================================================
+
+ - USEFUL INFO - 
+ 
+==================================================================================================================================================
+
+..................................................................................................................................................
+
+ > WHAT IS ANACONDA? 
+
+ . Anaconda simplifies the process of installing and managing Python presets (environments) and their dependencies.
+ 
+ - Example: | machine-learning-environment | data-analysis-environment | video-subtitle-remover-environment |
+
+..................................................................................................................................................
+
+ > HOW TO CREATE ENVIRONMENT IN ANACONDA
+ 
+ . conda create -n [ NAME OF ENVIRONMENT OF YOUR CHOOSING ] python=[ PYTHON VERSION ]
+ 
+ - Example: conda create -n test python=3.11
+ 
+ . conda activate [ NAME OF ENVIRONMENT OF YOUR CHOOSING ]
+
+..................................................................................................................................................
+
+ > HOW TO CHANGE ENVIRONMENT IN ANACONDA
+ 
+ . conda env list
+ 
+ . conda activate [ NAME OF ENVIRONMENT ]
+ 
+..................................................................................................................................................
+
+ > HOW TO LEAVE ANACONDA ENVIRONMENT
+ 
+ . conda deactivate
+ 
+..................................................................................................................................................
+
+ > HOW TO DELETE ANACONDA ENVIRONMENT
+ 
+ . conda remove --name [ NAME OF ENVIRONMENT ] --all
+ 
+..................................................................................................................................................
+
+ > HOW TO SEE ANACONDA ENVIRONMENT'S PYTHON VERSION 
+ 
+ . python --version
+
+..................................................................................................................................................
+
+ > HOW TO OVERCLOCK NVIDIA GRAPHIC CARDS
+ 
+ - Launch GreenWithEnvy.
+ 
+ . Make an overclock profile.
+ 
+ . Close the program through the System Monitor.
+ 
+ . Start GreenWithEnvy and apply the overclocking profile.
+ 
+..................................................................................................................................................
+ 
+ > HOW TO INSTALL PKGBUILD PACKAGES FROM GITHUB
+
+ . git clone ( URL )
+
+ . cd ( DIRECTORY )
+
+ . makepkg -sirc
+ 
+..................................................................................................................................................
+
+ > HOW TO INSTALL PYTHON PACKAGES FROM GITHUB
+
+ . git clone ( URL )
+
+ . cd ( DIRECTORY )
+
+ . pip install -r requirements.txt --break-system-packages
+
+..................................................................................................................................................
+
+ > HOW TO INSTALL RUST PACKAGES FROM GITHUB
+
+ . cargo install --git 'https://github.com/Test/Test.git'
+ 
+ OR
+ 
+ . git clone ( URL )
+
+ . cd ( DIRECTORY )
+
+ . cargo build --release
+
+..................................................................................................................................................
+
+ > HOW TO INSTALL PACMAN PACKAGES FROM FILE
+ 
+ . cd ( DIRECTORY )
+ 
+ . sudo pacman -U your-file-0.1-amd64.pacman
+
+.................................................................................................................................................. 
+
+ > WINE COMMANDS AND HOW TO USE WINE
+ 
+ . wine cmd = Wine CMD emulator
+
+ . wine regedit = Windows registry edit
+ 
+ OR
+ 
+ . regedit
+
+..................................................................................................................................................
+
+ > CLEANING SETTINGS
+
+ - Use BleachBit
+
+ OR
+
+ . doas pacman -Sc
+
+..................................................................................................................................................
+
+ > HOW TO USE ANTIVIRUS
+
+ - CLAMAV ( Antivirus Toolkit )
+ 
+ . av
+ 
+ OR
+
+ . doas freshclam - TO UPDATE
+
+ . doas clamscan -r / - TO SCAN
+
+ . doas clamdscan --remove - REMOVE VIRUS
+
+ - CHKROOTKIT ( Rootkit Detector )
+ 
+ . doas chkrootkit
+
+..................................................................................................................................................
+
+ > HOW TO PORT FORWARD
+ 
+ . Disable firewall [ gufw ]
+ 
+ . Go into your router settings and open a port which isn't reserved already, I recommend port 6881:6889.
+ 
+ . In the section of [ Internal IP Address ] make it your computer's internal IP address and set the [ Protocol ] to TCP.
+ 
+..................................................................................................................................................
+
+ > DPI SCALING
+ 
+  . You might want to adjust your DPI, calculate your screen's resolution and size to determine it's value 
+  
+  . EX: 2k 27 inch screen is 109 DPI.
+  
+  . This setting can be found in Appearance > Fonts
+  
+..................................................................................................................................................
+
+ > LINUX GAMING ADVICE
+ 
+  Cyberpunk 2077 Launch Options:
+ 
+  . WINEDLLOVERRIDES="winmm=n,b;version=n,b" gamemoderun %command% --launcher-skip -modded
+  
+  or if you have RDNA 4
+  
+  . AMD_VULKAN_ICD=RADV RADV_PERFTEST=ngg_streamout PROTON_FSYNC=1 PROTON_FSR4_UPGRADE=1 WINEDLLOVERRIDES="winmm=n,b;version=n,b" gamemoderun %command% --launcher-skip -modded
+
+  - To install the needed DLLs run [ protontricks 1091500 -q vcrun2022 d3dcompiler_47 ]
+  
+  
+ 
+  Left 4 Dead 2 Launch Options:
+ 
+  . gamemoderun %command% -novid -nojoy +fps_max 120
+
+  - If you're on modern hardware use proton for Left 4 Dead 2.
+  
+  - You'll need this package also [ steal lib32-openal ]
+  
+  > Wayland AMD
+  
+  . SDL_VIDEODRIVER=wayland gamemoderun %command% -novid -nojoy -vulkan +mat_queue_mode 2
+  
+  > High Refresh Rate
+  
+  . -refresh 120 +fps_max 120 ( or whatever your monitor's refresh rate is)
+  
+  
+  
+  Vintage Story: 
+
+  - Edit the launcher's command to [ gamemoderun /usr/bin/vintagestory ]
+ 
+..................................................................................................................................................
+
+==================================================================================================================================================
