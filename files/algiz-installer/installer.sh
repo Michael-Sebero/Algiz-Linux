@@ -3,15 +3,16 @@
 su -c '
 ### INIT SYSTEM DETECTION ###
 detect_init_system() {
+    if pacman -Qi runit &>/dev/null; then
+        echo "runit"
+        return
+    fi
     case "$(ps -p 1 -o comm=)" in
         s6-svscan)
             echo "s6"
             ;;
         init|openrc-init)
             echo "openrc"
-            ;;
-        runit-init)
-            echo "runit"
             ;;
         *)
             echo "unknown"
