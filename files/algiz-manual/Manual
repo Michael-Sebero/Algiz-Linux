@@ -540,7 +540,7 @@
 
  > UNIVERSAL ADVICE
 
- . The command [ repair-system ] might fix your problem.
+ . The command [ repair-system ] might fix your problem and the command [ errors ] can help detect it.
  
  . CTRL + ALT + F1 will bring you into a virtual terminal if needed.
 
