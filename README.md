@@ -139,7 +139,7 @@ Focused on swapping and ZRAM generation. This can make a system with 8G function
 Maximum performance configuration with no security mitigations and expanded memory limits.
 
 ### Server
-The system expands TCP/UDP buffer sizes up to 16MB for high-performance connections. TCP stack handling is tuned for scalability with up to 2 million TIME_WAIT sockets, window scaling and reuse enabled for faster turnaround. Security and stability are reinforced with SYN cookies, strict reverse path filtering, martian packet logging, disabled source routing and ICMP redirects. IPv4/IPv6 are hardened with rate limiting for ICMP and disabled router advertisements.
+Small-scale NAS configuration for file sharing and hosting.
 
 ### LLM
 Specialized for LLM workloads with larger HugePages allocation and no security mitigations.
