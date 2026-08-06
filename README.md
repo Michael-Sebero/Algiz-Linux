@@ -109,7 +109,7 @@ RAM usage has the highest priority over swapping. Keeping active data in memory 
 * Reduces RAM pressure and maintains optimal overlay performance
 
 ### Network Management
-Network performance leverages `BBR` congestion control and `cake` queue management to improve performance and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is limited through restrictive ICMP and routing settings. NetworkManager is set to use `dhclient` for DHCP with hostname handling disabled, along with DNS encryption via [Mullvad](https://mullvad.net/en).
+Network performance leverages `BBR` congestion control and `cake` queue management to improve performance and reduce latency. The TCP stack uses expanded buffer sizes and enables fast connection establishment. IPv6 is limited through restrictive ICMP and routing settings. NetworkManager is set to use `dhclient` for DHCP with hostname handling disabled, along with DNS encryption via [LibreDNS](https://libredns.gr/).
 
 ### Filesystem & I/O Optimization
 Disk and SSD performance is tuned through scheduler and queue optimizations. Both NVMe and SATA SSDs use the `none` scheduler to eliminate scheduling overhead and maximize throughput, while HDDs use `bfq` for fairness under mixed workloads. Read-ahead is set to 512 KB for SSDs and 2048 KB for HDDs to improve sequential read performance. I/O queue depth is configured at 2048 for NVMe drives, 1024 for SATA SSDs and 128 for HDDs, enabling optimal parallelism for each device type. I/O request merging is enabled to combine adjacent requests for improved efficiency.
