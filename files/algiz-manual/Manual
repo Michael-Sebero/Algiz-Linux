@@ -428,7 +428,7 @@
 
  . compare-objects
  
- - This command compare sizes of different objects based off of XYZ values in a 3D interactive space.
+ - This command compares sizes of different objects based off of XYZ values in a 3D interactive space.
 
 .................................................................................................................................................. 
  
