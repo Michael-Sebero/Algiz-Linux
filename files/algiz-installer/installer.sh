@@ -203,7 +203,7 @@ careful_install \
   inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold \
   protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp \
   lib32-libdisplay-info realtime-privileges gallery-dl tesseract-data-eng \
-  scx-scheds debtap fwupd gimp chrony dnsmasq haruna mesa lib32-mesa
+  scx-scheds debtap fwupd gimp chrony dnsmasq haruna mesa lib32-mesa tk
 
 # INSTALL PYTHON PACKAGES
 careful_install \
