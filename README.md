@@ -25,8 +25,8 @@
 
 ### **Additional Features**
 * Includes a comprehensive [manual](https://raw.githubusercontent.com/Michael-Sebero/Algiz-Linux/refs/heads/main/files/algiz-manual/Manual)
+* Machine ID randomization
 * MAC address randomization via [Macchanger](https://www.kali.org/tools/macchanger/)
-* Low latency [PipeWire](https://github.com/PipeWire/pipewire) audio processing
 * [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) and [Flatpak](https://flatpak.org/) repositories
 * Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) prefix
 * [Booster](https://github.com/anatol/booster) - Faster mkinitcpio replacement
