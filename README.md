@@ -16,8 +16,8 @@ The configuration files `sysctl.conf`, `limits.conf` and `grub` are pre-configur
 Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxyz/LARBS), which is why ULU's installer is script-based rather than an ISO. This project is packaged similarly to an ISO due to the configurations and content being stored inside various archives. If you want to see what changes I've made, you can view them [here](https://github.com/Michael-Sebero/ULU/tree/main/files/ulu-packages).
 
 ## Compatibility
-* Artix Linux 100%
-* Void Linux 100%
+* Artix Linux **100%**
+* Void Linux **100%**
 * Linux Mint
 * Ubuntu
 * Fedora
