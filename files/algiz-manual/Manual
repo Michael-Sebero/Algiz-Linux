@@ -47,9 +47,9 @@
 
  - If you want to update Algiz to the newest version, run the command [ update-algiz ]
 
- - Algiz uses an automatic MAC address changer upon login.
+ - Algiz uses a machine ID and MAC address randomizer upon login.
 
- - All DNS traffic is encrypted through [ dnscrypt-proxy ] via Mullvad which prevents DNS leaks.
+ - All DNS traffic is encrypted through [ dnscrypt-proxy ] via LibreDNS which prevents DNS leaks.
 
  - The [ steal ] command installs packages from the default repo, AUR and Flatpak. It can also download videos.
  
@@ -404,7 +404,7 @@
  
  . debtap 'file.deb'
  
- - This command converts .deb packages into .pkg.tar.zst files
+ - This command converts .deb packages into .pkg.tar.zst files.
  
 ..................................................................................................................................................
 
@@ -412,7 +412,7 @@
  
  . audit
 
- - This command finds issues with permissions and reviews system integrity 
+ - This command finds issues with permissions and reviews system integrity.
 
 .................................................................................................................................................. 
 
@@ -431,7 +431,15 @@
  - This command compares sizes of different objects based off of XYZ values in a 3D interactive space.
 
 .................................................................................................................................................. 
+
+ / FIX XFS /
  
+ . fix-xfs
+ 
+ - This command detects any XFS drives connected to the system and repairs them automatically.
+  
+..................................................................................................................................................
+
 ==================================================================================================================================================
 
 
