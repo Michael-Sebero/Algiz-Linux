@@ -325,14 +325,6 @@
 
 ..................................................................................................................................................
 
- / REINSTALL-ALL /
- 
- . reinstall-all
-
- - This command reinstalls all packages in the system.
-
-..................................................................................................................................................
-
  / FIND FAST MIRRORLISTS /
  
  . fast-list
@@ -348,14 +340,6 @@
  . meta /example/song.flac
  
  - This script takes a media file path (from an argument or user input) and outputs detailed metadata about the file using ffprobe.
- 
-..................................................................................................................................................
-
- / FORCE UPDATE /
- 
- . force-update
- 
- - This command forces a system update without dependency checks.
  
 ..................................................................................................................................................
 
