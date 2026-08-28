@@ -8,8 +8,12 @@
 	<img src="https://i.postimg.cc/fbvDJcnG/740019dcf9a94a804d725079cedf0e2f250ea164da39a3ee5e6b4b0d3255bfef95601890afd80709da39a3ee5e6b4b0d3255.png" width="65%" />
 </p>
 
-## Description
-This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known and esoteric Linux performance tweaks along with some original implementations. The philosophy behind this configuration is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
+## Summary / TLDR
+This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known and esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
+
+The configuration files `sysctl.conf`, `limits.conf` and `grub` are pre-configured for specific workloads. Depending on the variant chosen, there are specific changes tailored for each. These presets are **AMD/Intel**, **NVIDIA**, **Laptop**, **Performance**, **Low RAM**, **Server** and **LLM**. They can be chosen in the installer and by running the `optional` command post-installation.
+
+Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxyz/LARBS), which is why ULU's installer is script-based rather than an ISO. This project is packaged similarly to an ISO due to the configurations and content being stored inside various archives. If you want to see what changes I've made, you can view them [here](https://github.com/Michael-Sebero/ULU/tree/main/files/ulu-packages).
 
 ## Compatibility
 * Artix Linux 100%
@@ -58,13 +62,6 @@ This project is a combination of significant upgrades and micro-optimizations. I
 * [Earlyoom](https://github.com/rfjakob/earlyoom) - Early OOM daemon
 * [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) - Diagnostic toolset
 * [Nix](https://nixos.org/) - universal package manager.
-
-## Summary / TLDR
-This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known and esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
-
-The configuration files `sysctl.conf`, `limits.conf` and `grub` are pre-configured for specific workloads. Depending on the variant chosen, there are specific changes tailored for each. These presets are **AMD/Intel**, **NVIDIA**, **Laptop**, **Performance**, **Low RAM**, **Server** and **LLM**. They can be chosen in the installer and by running the `optional` command post-installation.
-
-Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxyz/LARBS), which is why ULU's installer is script-based rather than an ISO. This project is packaged similarly to an ISO due to the configurations and content being stored inside various archives. If you want to see what changes I've made, you can view them [here](https://github.com/Michael-Sebero/ULU/tree/main/files/ulu-packages).
 
 ---
 
