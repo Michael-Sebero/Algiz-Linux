@@ -61,7 +61,7 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 * A suite of productivity tools: [Archivist Tools](https://github.com/Michael-Sebero/Archivist-Tools), [Audio Frequency Tools](https://github.com/Michael-Sebero/Audio-Frequency-Tools), [Document Tools](https://github.com/Michael-Sebero/Document-Tools), [Media Tools](https://github.com/Michael-Sebero/Media-Tools)
 * [Earlyoom](https://github.com/rfjakob/earlyoom) - Early OOM daemon
 * [Fix Arch Linux](https://github.com/Michael-Sebero/Fix-Arch-Linux) - Diagnostic toolset
-* [Nix](https://nixos.org/) - universal package manager.
+* [Nix](https://nixos.org/) - Universal package manager.
 
 ---
 
