@@ -17,7 +17,7 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 
 ## Compatibility
 * Artix Linux **100%**
-* Void Linux **100%**
+* Void Linux -
 * Linux Mint
 * Ubuntu
 * Fedora
