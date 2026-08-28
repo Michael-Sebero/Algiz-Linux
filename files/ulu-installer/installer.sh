@@ -103,7 +103,7 @@ reload_s6_db() {
 
 ### ULU LINUX CHOICE SELECTION ###
 
-echo -e "\e[1mSelect a ULU Linux Variant\e[0m"
+echo -e "\e[1mSelect a ULU Variant\e[0m"
 echo "1. AMD-DESKTOP"
 echo "2. AMD-LAPTOP"
 echo "3. INTEL-DESKTOP"
