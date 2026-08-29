@@ -1,7 +1,6 @@
 <p align="center">
 	<img src="https://i.postimg.cc/90gfzGTT/tux-glasses.png" width="25%" />
 </p>
-
 <br>
 
 <p align="center">
