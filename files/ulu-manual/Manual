@@ -105,9 +105,9 @@
  
 ..................................................................................................................................................
 
- / UPDATE ULU /
+ / UPGRADE ULU /
 
- . update-ulu
+ . upgrade
  
  - This command updates ULU to it's newest configuration.
 
