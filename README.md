@@ -155,6 +155,6 @@ Small-scale NAS configuration for file sharing and hosting.
 ### LLM
 Specialized for LLM workloads with larger HugePages allocation and no security mitigations.
 
-## Donations and Contact
+## Contact and Donations
 * [Email](michaelsebero@disroot.org)
 * [PayPal](https://www.paypal.com/donate/?cmd=_donations&business=YYGU9JWJEE2AG)
