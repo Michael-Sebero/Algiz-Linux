@@ -197,7 +197,7 @@
 
  / ANTIVIRUS /
  
- . antivirus
+ . AV
  
  - This command uses ClamAV to scan your whole system and automatically removes suspected malware.
 
@@ -297,22 +297,6 @@
   
 ..................................................................................................................................................
 
- / FIX CORRUPT /
- 
- . fix-corrupt
-
- - This command fixes corrupt packages in the system.
-
-..................................................................................................................................................
-
- / FIND FAST MIRRORLISTS /
- 
- . fast-list
- 
- - This command disables slow pacman mirrorlists and enables fast ones according to your location.
- 
-.................................................................................................................................................. 
-
  / META /
  
  . meta /example/image.png
@@ -330,14 +314,6 @@
  - This command displays a timer since the start of program.
  
 ..................................................................................................................................................
-
- / AUDIT /
- 
- . audit
-
- - This command finds issues with permissions and reviews system integrity.
-
-.................................................................................................................................................. 
 
  / ROLLBACK UPDATE /
  
@@ -680,7 +656,7 @@
 
  - CLAMAV ( Antivirus Toolkit )
  
- . antivirus
+ . av
  
  OR
 
