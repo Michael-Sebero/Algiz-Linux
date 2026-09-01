@@ -137,7 +137,7 @@ Configured for AMD hardware, tweaked for high performance and security.
 Configured for NVIDIA hardware, tweaked for maximum visual fidelity, high performance and security.
 
 ### Laptop
-Balanced between power saving, performance and security. At 85% battery + AC connection, performance is increased and reduced at 10%.
+Balanced between power saving, performance and security. At 85% battery + AC connection, performance is comparable to desktop. 
 
 ### Low RAM
 Focused on swapping and ZRAM generation. This can make a system with 8G function like it has 10-12G.
