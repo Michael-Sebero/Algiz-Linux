@@ -48,7 +48,7 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 * Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) prefix
 * [Booster](https://github.com/anatol/booster) - Faster mkinitcpio replacement
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP)
-* Some processes are launched under [Mimalloc](https://github.com/microsoft/mimalloc), a high-performance memory allocator replacement
+* Some processes are enhanced by [Mimalloc](https://github.com/microsoft/mimalloc), a high-performance memory allocator replacement
 * [Ephemeral Overlay](https://github.com/Michael-Sebero/Ephemeral-Overlay) - Speeds up temporary/root directories and reduces disk I/O
 * [Real-time](https://gitlab.archlinux.org/archlinux/packaging/packages/realtime-privileges) audio processing
 * A [Lynis](https://github.com/CISOfy/lynis) system hardening rating of **82**
