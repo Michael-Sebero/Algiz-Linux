@@ -197,7 +197,7 @@
 
  / ANTIVIRUS /
  
- . AV
+ . av
  
  - This command uses ClamAV to scan your whole system and automatically removes suspected malware.
 
