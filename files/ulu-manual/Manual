@@ -8,7 +8,7 @@
 
  - In Konsole there's a list of quick commands provided in [ - Commands - ]
  
- - The command [ optional ] installs optional packages for ULU.
+ - The command [ optional ] installs optional packages and programs for ULU.
  
  - Enter the command [ nmtui ] to connect to wifi.
 
@@ -203,27 +203,19 @@
 
 ..................................................................................................................................................
 
- / ARCHIVIST TOOLS /
+ / TOOL SUITE /
  
- . archivist-tools
+ . tool-suite
+ 
+ - Contains all of the tools from the tools series.
  
  > https://github.com/Michael-Sebero/Archivist-Tools
-
-..................................................................................................................................................
-
- / DOCUMENT TOOLS /
- 
- . document-tools
  
  > https://github.com/Michael-Sebero/Document-Tools
  
-..................................................................................................................................................
-
- / MEDIA TOOLS /
- 
- . media-tools
- 
  > https://github.com/Michael-Sebero/Media-Tools
+
+ > https://github.com/Michael-Sebero/Audio-Frequency-Tools
  
 ..................................................................................................................................................
 
@@ -287,14 +279,6 @@
  
  - This command deletes all of your system files and makes them mostly unrecoverable.
  
-..................................................................................................................................................
-
-  / AUDIO FREQUENCY TOOLS /
-
-  . audio-frequency-tools
-  
-  - This command lets you generate, detect audio frequencies and much more.
-  
 ..................................................................................................................................................
 
  / META /
