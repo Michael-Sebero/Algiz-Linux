@@ -14,7 +14,7 @@
 
  - To update all of your system's packages at once run the command [ update ]
 
- - If you want to update ULU to the newest version, run the command [ update-ulu ]
+ - If you want to update ULU to the newest version, run the command [ upgrade ]
 
  - ULU uses a machine ID and MAC address randomizer upon login.
 
@@ -308,19 +308,11 @@
 ..................................................................................................................................................
 
  / TIMER /
- 
+
  . timer
  
  - This command displays a timer since the start of program.
  
-..................................................................................................................................................
-
- / ROLLBACK UPDATE /
- 
- . sudo rollback-update
- 
- - This command reverts your system packages to how it was prior before an update.
-
 .................................................................................................................................................. 
 
  / COMPARE OBJECTS /
@@ -463,15 +455,7 @@
 
 ==================================================================================================================================================
 
-..................................................................................................................................................
-
- > UNIVERSAL ADVICE
-
- . The command [ repair-system ] might fix your problem and the command [ errors ] can help detect it.
- 
- . CTRL + ALT + F1 will bring you into a virtual terminal if needed.
-
-..................................................................................................................................................
+.................................................................................................................................................
 
  > I BROKE MY SYSTEM! WHAT CAN I DO?
 
@@ -504,6 +488,12 @@
  > WHAT FILES ARE BEING MODIFIED CURRENTLY?
 
  - Enter the command [ stalk ] to see what files on the system are actively being modified.
+ 
+..................................................................................................................................................
+
+ > MISC ADVICE
+ 
+ . CTRL + ALT + F1 will bring you into a virtual terminal if needed.
  
 ..................................................................................................................................................
 
