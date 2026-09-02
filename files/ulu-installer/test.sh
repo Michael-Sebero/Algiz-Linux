@@ -546,7 +546,6 @@ echo "6. NVIDIA-PROPRIETARY-DESKTOP"
 read -p "Enter your choice (1-6): " choice
 
 ### FIRST COMMANDS AND ULU-LINUX IMPORT P1 ###
-killall xfce4-screensaver || true
 xbps-install -Syu 7zip unzip git xbps
 mkdir -p /home/ulu-files/
 git clone https://github.com/Michael-Sebero/ULU /home/ulu-files/
