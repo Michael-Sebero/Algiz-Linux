@@ -202,12 +202,10 @@ done
 careful_install \
   lib32-artix-archlinux-support unrar flatpak librewolf tmux \
   font-manager gamemode lib32-gamemode dnscrypt-proxy apparmor \
-  bleachbit catfish clamav gufw macchanger \
-  wine-git wine-mono winetricks-git steam lynis element rkhunter opendoas \
-  downgrade libreoffice pipewire-pulse pipewire-alsa wireplumber \
-  rust usbguard chkrootkit noto-fonts-emoji tauon-music-box freetube alsa-utils expect \
+  bleachbit catfish clamav gufw macchanger wine-git wine-mono winetricks-git steam lynis element rkhunter opendoas \
+  downgrade libreoffice rust usbguard chkrootkit noto-fonts-emoji tauon-music-box freetube alsa-utils expect \
   inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold \
-  protontricks-git poetry pyenv python-pip hunspell-en_us ccache yt-dlp-git \
+  protontricks-git poetry pyenv python-pip ccache yt-dlp-git \
   lib32-libdisplay-info realtime-privileges gallery-dl tesseract-data-eng \
   scx-scheds debtap fwupd gimp chrony dnsmasq haruna mesa lib32-mesa tk nix
 
@@ -463,24 +461,6 @@ elif command -v xbps-install &>/dev/null; then
 # VOID LINUX SECTION #
 ######################
 
-### NOTES ON THIS SECTION ###
-# - Void has one init system (runit), so there is no per-init detection/branching like the
-#   Artix section needs. Void packages that run as daemons ship their runit service
-#   directly (e.g. "tlp" already provides /etc/sv/tlp), so there is no need for the
-#   "<pkg>-runit"-style sub-packages Artix requires.
-# - Naming differences from Arch/AUR that matter below:
-#     1. 32-bit/multilib packages are suffixed "-32bit" (e.g. mesa-dri-32bit) instead of
-#        prefixed "lib32-".
-#     2. Python library packages are prefixed "python3-" instead of "python-".
-#     3. There is no AUR, no ALHP, and no official XanMod build for Void. Packages that only
-#        exist as Chaotic-AUR/AUR builds in the Artix section (linux-xanmod-*, booster,
-#        downgrade, debtap, the -git/-mono-git/-tricks-git flavors, tauon-music-box,
-#        scx-scheds, throttled) either have a plain Void package, go through Nix instead
-#        (per the design note at the bottom of this file), or are dropped where nothing
-#        sensible applies. Void keeps its stock kernel here, since there is no reliable
-#        always-current XanMod package to swap in, and hard-coding a version would go stale.
-# - Assumes a glibc Void install (musl has known gaps with Steam, NVIDIA, and Wine).
-
 ### SERVICE MANAGEMENT FUNCTIONS (runit is the only init system Void uses) ###
 add_service() {
     local service_name="$1"
@@ -583,8 +563,6 @@ for pkg in pulseaudio nvidia390 nvidia470 nvidia470-libs-32bit epiphany xfce4-sc
 done
 
 # INSTALL BASE PACKAGES
-# librewolf: void-packages rejects browser forks upstream (issue #32914); needs a
-# third-party repo (e.g. index-0/librewolf-void) if you want it on Void.
 careful_install \
   unrar flatpak tmux \
   fontmanager gamemode dnscrypt-proxy apparmor \
@@ -595,7 +573,7 @@ careful_install \
   inotify-tools preload dialog tree parallel sof-firmware Vulkan-Tools mimalloc mold \
   protontricks python3-pip ccache yt-dlp \
   libdisplay-info-32bit gallery-dl tesseract-ocr tesseract-ocr-eng \
-  fwupd gimp chrony dnsmasq haruna mesa mesa-32bit tk nix
+  fwupd gimp chrony dnsmasq mesa mesa-32bit tk nix
 
 # Headers for the currently running/installed kernel (needed by DKMS drivers like NVIDIA).
 # Void keeps its own stock kernel here - see the note at the top of this section for why we
@@ -617,8 +595,7 @@ su - "$USER" -c "nix-channel --add https://nixos.org/channels/nixpkgs-unstable n
 careful_install \
   python3-dateutil python3-xlib python3-PyAudio python3-pipenv \
   python3-matplotlib python3-tqdm python3-magic \
-  python3-piexif python3-Brotli python3-websockets \
-  python3-pypdf
+  python3-piexif python3-websockets \
 
 # INSTALL XFCE PACKAGES
 if xbps-query thunar &>/dev/null; then
