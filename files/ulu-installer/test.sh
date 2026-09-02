@@ -547,7 +547,7 @@ read -p "Enter your choice (1-6): " choice
 
 ### FIRST COMMANDS AND ULU-LINUX IMPORT P1 ###
 killall xfce4-screensaver || true
-xbps-install -Sy p7zip unzip git
+xbps-install -Sy 7zip unzip git
 mkdir -p /home/ulu-files/
 git clone https://github.com/Michael-Sebero/ULU /home/ulu-files/
 cd /home/ulu-files/files/ulu-packages/
@@ -577,23 +577,25 @@ xbps-install -Suy || true
 mv /home/ulu-files/files/ulu-manual/Manual /home/$USER/Desktop/
 
 # REMOVE PACKAGES
-for pkg in pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf nvidia390 nvidia390-libs-32bit nvidia470 nvidia470-libs-32bit epiphany xfce4-screensaver xfce4-terminal parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-notes-plugin xfce4-dict xfce4-weather-plugin ModemManager xf86-video-intel falkon vlc; do
+for pkg in pulseaudio nvidia390 nvidia470 nvidia470-libs-32bit epiphany xfce4-screensaver xfce4-terminal parole xfce4-taskmanager mousepad leafpad xfburn ristretto xfce4-appfinder atril xfce4-sensors-plugin xfce4-dict xfce4-weather-plugin ModemManager xf86-video-intel falkon vlc; do
     if xbps-query "$pkg" &>/dev/null; then
         xbps-remove -y "$pkg" || true
     fi
 done
 
 # INSTALL BASE PACKAGES
+# librewolf: void-packages rejects browser forks upstream (issue #32914); needs a
+# third-party repo (e.g. index-0/librewolf-void) if you want it on Void.
 careful_install \
-  unrar flatpak librewolf tmux \
-  font-manager gamemode gamemode-32bit dnscrypt-proxy apparmor \
+  unrar flatpak tmux \
+  fontmanager gamemode dnscrypt-proxy apparmor \
   bleachbit catfish clamav ufw gufw macchanger \
   wine wine-mono winetricks steam lynis element-desktop rkhunter opendoas \
-  libreoffice pipewire-pulse pipewire-alsa wireplumber \
+  libreoffice pipewire alsa-pipewire wireplumber \
   rust usbguard chkrootkit noto-fonts-emoji alsa-utils expect \
-  inotify-tools preload dialog tree parallel sof-firmware vulkan-tools mimalloc mold \
-  protontricks python3-poetry pyenv python3-pip hunspell-en_US ccache yt-dlp \
-  libdisplay-info-32bit realtime-privileges gallery-dl tesseract-ocr tesseract-ocr-eng \
+  inotify-tools preload dialog tree parallel sof-firmware Vulkan-Tools mimalloc mold \
+  protontricks python3-pip ccache yt-dlp \
+  libdisplay-info-32bit gallery-dl tesseract-ocr tesseract-ocr-eng \
   fwupd gimp chrony dnsmasq haruna mesa mesa-32bit tk nix
 
 # Headers for the currently running/installed kernel (needed by DKMS drivers like NVIDIA).
@@ -614,17 +616,17 @@ su - "$USER" -c "nix-channel --add https://nixos.org/channels/nixpkgs-unstable n
 
 # INSTALL PYTHON PACKAGES
 careful_install \
-  python3-dateutil python3-xlib python3-pyaudio python3-pipenv \
+  python3-dateutil python3-xlib python3-PyAudio python3-pipenv \
   python3-matplotlib python3-tqdm python3-magic \
-  python3-piexif python3-moviepy python3-brotli python3-websockets python3-librosa \
-  python3-pypdf2 python3-pytesseract
+  python3-piexif python3-Brotli python3-websockets \
+  python3-pypdf
 
 # INSTALL XFCE PACKAGES
 if xbps-query thunar &>/dev/null; then
     careful_install \
       kate konsole kcalc NetworkManager \
-      mugshot xfce4-panel-profiles redshift mate-system-monitor pix seahorse ffmpegthumbnailer okular ark \
-      lightdm-gtk-greeter-settings gtk-engines gtk-engine-murrine akregator
+      mugshot xfce4-panel-profiles redshift mate-system-monitor seahorse ffmpegthumbnailer okular ark \
+      lightdm-gtk-greeter-settings gtk-engine-murrine akregator
 else
     echo "Thunar not detected, skipping XFCE packages."
 fi
@@ -638,7 +640,7 @@ if [ "$choice" = "1" ]; then
     xbps-remove -y xfce4-power-manager xfce4-battery-plugin || true
   fi
   careful_install \
-    mesa-vulkan-radeon mesa-vulkan-radeon-32bit protonup-ng libva-utils \
+    mesa-vulkan-radeon mesa-vulkan-radeon-32bit libva-utils \
     fail2ban cpupower
 fi
 
@@ -656,7 +658,7 @@ if [ "$choice" = "3" ]; then
     xbps-remove -y xfce4-power-manager xfce4-battery-plugin || true
   fi
   careful_install \
-    mesa-vulkan-intel mesa-vulkan-intel-32bit protonup-ng libva-utils \
+    mesa-vulkan-intel mesa-vulkan-intel-32bit libva-utils \
     fail2ban cpupower
 fi
 
@@ -677,7 +679,7 @@ if [ "$choice" = "5" ]; then
     xbps-remove -y xfce4-power-manager xfce4-battery-plugin || true
   fi
   careful_install \
-    protonup-ng nvidia nvidia-libs-32bit nvidia-settings \
+    nvidia nvidia-libs-32bit \
     fail2ban cpupower
 fi
 
@@ -689,7 +691,7 @@ if [ "$choice" = "6" ]; then
     xbps-remove -y xfce4-power-manager xfce4-battery-plugin || true
   fi
   careful_install \
-    protonup-ng nvidia580 nvidia580-libs-32bit nvidia-settings \
+    nvidia580 nvidia580-libs-32bit \
     fail2ban cpupower
 fi
 
@@ -697,6 +699,8 @@ fi
 flatpak remote-add flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 
 # INSTALL PROTON-GE
+# protonup-ng is PyPI-only on Void (no xbps package), so this never fires as written.
+# Install via 'pip install protonup-ng --break-system-packages' first if you want this step.
 if xbps-query protonup-ng &>/dev/null; then
     su - "$USER" -c "protonup -d /home/$USER/.local/share/Steam/compatibilitytools.d/ && protonup -y"
 fi
