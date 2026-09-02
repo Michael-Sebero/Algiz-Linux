@@ -647,9 +647,6 @@ if [ "$choice" = "4" ]; then
 fi
 
 # NVIDIA-OPENSOURCE-DESKTOP CHOICE
-# The Void "nvidia" package moved to NVIDIA open-source-published DKMS kernel modules as of
-# the 595.xx driver series (Turing and newer); userspace bits stay proprietary either way.
-# This is the closest match to the Artix section nvidia-open-dkms package.
 if [ "$choice" = "5" ]; then
   if xbps-query thunar &>/dev/null; then
     xbps-remove -y xfce4-power-manager xfce4-battery-plugin || true
