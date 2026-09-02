@@ -700,7 +700,7 @@ flatpak remote-add flathub-beta https://flathub.org/beta-repo/flathub-beta.flatp
 
 # INSTALL PROTON-GE
 # protonup-ng is PyPI-only on Void (no xbps package), so this never fires as written.
-# Install via 'pip install protonup-ng --break-system-packages' first if you want this step.
+# Install via: pip install protonup-ng --break-system-packages (first, if you want this step)
 if xbps-query protonup-ng &>/dev/null; then
     su - "$USER" -c "protonup -d /home/$USER/.local/share/Steam/compatibilitytools.d/ && protonup -y"
 fi
