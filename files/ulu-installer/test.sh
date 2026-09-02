@@ -1,14 +1,7 @@
 #!/bin/bash
 
 su -c '
-### DETECT DISTRO (reads ID from /etc/os-release in a subshell so NAME, VERSION_ID,
-### PRETTY_NAME, etc. do not leak into the surrounding shell) ###
-DISTRO_ID="unknown"
-if [ -f /etc/os-release ]; then
-    DISTRO_ID=$(. /etc/os-release && echo "$ID")
-fi
-
-if [ "$DISTRO_ID" = "artix" ]; then
+if command -v pacman &>/dev/null; then
 
 #######################
 # ARTIX LINUX SECTION #
@@ -464,7 +457,7 @@ rm -rf /home/ulu-files/
 echo -e "\e[1mULU Linux has been successfully installed\e[0m"
 reboot
 
-elif [ "$DISTRO_ID" = "void" ]; then
+elif command -v xbps-install &>/dev/null; then
 
 ######################
 # VOID LINUX SECTION #
@@ -824,8 +817,8 @@ else
 
 ### Detect OS > if Ubuntu/Debian = nix, if Fedora = nix, if OpenSUSE = nix, if Void Linux = nix + xbps, if Arch = pacman, if Artix = pacman + detect init for services > unpack zip files into directories but move specific files depending how each OS does it
 
-    echo "No installer branch for this distro yet (detected ID: $DISTRO_ID)." >&2
-    echo "Debian/Ubuntu/openSUSE/Fedora/Arch support is not implemented in this script." >&2
+    echo "No supported package manager found (expected pacman for Artix or xbps-install for Void)." >&2
+    echo "Debian/Ubuntu/openSUSE/Fedora support is not implemented in this script." >&2
     exit 1
 
 fi
