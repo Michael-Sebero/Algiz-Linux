@@ -1,6 +1,15 @@
 #!/bin/bash
 
 su -c '
+### DETECT DISTRO (reads ID from /etc/os-release in a subshell so NAME, VERSION_ID,
+### PRETTY_NAME, etc. do not leak into the surrounding shell) ###
+DISTRO_ID="unknown"
+if [ -f /etc/os-release ]; then
+    DISTRO_ID=$(. /etc/os-release && echo "$ID")
+fi
+
+if [ "$DISTRO_ID" = "artix" ]; then
+
 #######################
 # ARTIX LINUX SECTION #
 #######################
@@ -455,6 +464,8 @@ rm -rf /home/ulu-files/
 echo -e "\e[1mULU Linux has been successfully installed\e[0m"
 reboot
 
+elif [ "$DISTRO_ID" = "void" ]; then
+
 ######################
 # VOID LINUX SECTION #
 ######################
@@ -803,6 +814,8 @@ rm -rf /home/ulu-files/
 echo -e "\e[1mULU Linux has been successfully installed\e[0m"
 reboot
 
+else
+
 ###############################################
 # DEBIAN/UBUNTU/OPENSUSE/FEDORA LINUX SECTION #
 ###############################################
@@ -810,4 +823,10 @@ reboot
 ## use unified configs for all without redundancy, from void to debian, ubuntu, opensuse and fedora itll use nix but void will mostly use its own packages, this is done to make package name management easier. Note: from debian to fedora itll only use nix packages and not their own package manager to install packages for convenience.
 
 ### Detect OS > if Ubuntu/Debian = nix, if Fedora = nix, if OpenSUSE = nix, if Void Linux = nix + xbps, if Arch = pacman, if Artix = pacman + detect init for services > unpack zip files into directories but move specific files depending how each OS does it
+
+    echo "No installer branch for this distro yet (detected ID: $DISTRO_ID)." >&2
+    echo "Debian/Ubuntu/openSUSE/Fedora/Arch support is not implemented in this script." >&2
+    exit 1
+
+fi
 '
