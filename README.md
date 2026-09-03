@@ -8,7 +8,7 @@
 </p>
 
 ## Summary / TLDR
-This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known and esoteric Linux performance tweaks along with some original implementations. The philosophy behind this "meta-distribution" is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
+This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known and esoteric Linux performance tweaks along with some original implementations. The philosophy behind this configuration set is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
 
 The configuration files `sysctl.conf`, `limits.conf` and `grub` are pre-configured for specific workloads. Depending on the variant chosen, there are specific changes tailored for each. These presets are **AMD/Intel**, **NVIDIA**, **Laptop**, **Performance**, **Low RAM**, **Server** and **LLM**. They can be chosen in the installer and by running the `optional` command post-installation.
 
