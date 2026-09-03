@@ -219,7 +219,8 @@ careful_install \
 # INSTALL XFCE PACKAGES
 if pacman -Qq | grep -q ''^thunar$''; then
     careful_install \
-      networkmanager seahorse ffmpegthumbnailer \
+      networkmanager seahorse ffmpegthumbnailer
+
     case "$INIT_SYSTEM" in
         s6)
             careful_install networkmanager-s6
