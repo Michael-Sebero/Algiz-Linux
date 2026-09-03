@@ -203,7 +203,7 @@ careful_install \
   lib32-artix-archlinux-support unrar flatpak \
   gamemode lib32-gamemode dnscrypt-proxy apparmor \
   clamav gufw macchanger wine-git wine-mono winetricks-git steam lynis rkhunter opendoas \
-  downgrade rust usbguard chkrootkit expect \
+  downgrade rust usbguard chkrootkit expect earlyoom \
   inotify-tools preload dialog tree parallel sof-firmware booster vulkan-tools mimalloc mold \
   protontricks-git poetry pyenv python-pip ccache yt-dlp-git \
   lib32-libdisplay-info realtime-privileges gallery-dl tesseract-data-eng \
@@ -561,7 +561,7 @@ done
 careful_install \
   unrar flatpak tmux \
   gamemode dnscrypt-proxy apparmor \
-  clamav ufw gufw macchanger \
+  clamav ufw gufw macchanger earlyoom \
   wine wine-mono winetricks steam lynis rkhunter opendoas \
   pipewire alsa-pipewire wireplumber \
   rust usbguard chkrootkit alsa-utils expect \
@@ -578,7 +578,7 @@ if [ -n "$KVER" ]; then
   careful_install "linux${KVER}-headers"
 fi
 
-### SET UP NIX (must come after "nix" is installed above, before anything below uses it) ###
+### SET UP NIX
 add_service nix-daemon
 sv up nix-daemon &>/dev/null || true
 source /etc/profile &>/dev/null || true
@@ -595,9 +595,7 @@ careful_install \
 # INSTALL XFCE PACKAGES
 if xbps-query thunar &>/dev/null; then
     careful_install \
-      kate konsole kcalc NetworkManager \
-      mugshot xfce4-panel-profiles redshift mate-system-monitor seahorse ffmpegthumbnailer okular ark \
-      lightdm-gtk-greeter-settings gtk-engine-murrine akregator
+      NetworkManager seahorse ffmpegthumbnailer \
 else
     echo "Thunar not detected, skipping XFCE packages."
 fi
