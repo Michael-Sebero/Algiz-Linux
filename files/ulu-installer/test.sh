@@ -675,7 +675,12 @@ HELPEREOF
   rm -rf "$build_dir"
 
   if [ "$result" -eq 0 ]; then
-    echo -e "\e[1mXanMod kernel installed alongside the stock kernel; pick it from the GRUB menu at boot.\e[0m" >&2
+    echo -e "\e[1mXanMod kernel installed; removing the stock kernel so XanMod takes priority...\e[0m" >&2
+    if [ -n "$KVER" ] && xbps-remove -y "linux${KVER}" "linux${KVER}-headers"; then
+      echo -e "\e[1mStock kernel linux${KVER} removed; XanMod is now the only installed kernel.\e[0m" >&2
+    else
+      echo -e "\e[1mCould not remove stock kernel linux${KVER}; both kernels remain installed, pick XanMod from the GRUB menu.\e[0m" >&2
+    fi
   else
     echo -e "\e[1mXanMod conversion failed, continuing with the stock kernel only.\e[0m" >&2
   fi
@@ -744,9 +749,11 @@ careful_install \
   libdisplay-info-32bit gallery-dl tesseract-ocr tesseract-ocr-eng \
   fwupd chrony dnsmasq mesa mesa-32bit tk nix
 
-# Headers for the currently running/installed kernel (needed by DKMS drivers like NVIDIA).
-# This always targets the stock kernel; the optional XanMod build below (desktop choices
-# only) installs alongside it rather than replacing it - see install_xanmod_void() above.
+# Headers for the currently running/installed kernel (needed by DKMS drivers like NVIDIA
+# to build their initial module before XanMod is in place). install_xanmod_void() above
+# removes this exact stock kernel and its headers once the XanMod build succeeds, so
+# XanMod takes priority as the only installed kernel; if the conversion fails, this stock
+# kernel is left alone as the fallback.
 KVER=$(uname -r | cut -d. -f1-2)
 if [ -n "$KVER" ]; then
   careful_install "linux${KVER}-headers"
@@ -790,6 +797,7 @@ fi
 
 # AMD-LAPTOP CHOICE
 if [ "$choice" = "2" ]; then
+  install_xanmod_void
   careful_install \
     mesa-vulkan-radeon mesa-vulkan-radeon-32bit libva-utils \
     tlp blueman bluez brightnessctl
@@ -809,6 +817,7 @@ fi
 
 # INTEL-LAPTOP CHOICE
 if [ "$choice" = "4" ]; then
+  install_xanmod_void
   careful_install \
     mesa-vulkan-intel mesa-vulkan-intel-32bit libva-utils \
     tlp blueman bluez brightnessctl
