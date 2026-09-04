@@ -526,7 +526,14 @@ nix_install() {
 # wrong, this backs out and the stock kernel installed elsewhere in this script is never
 # touched.
 CHAOTIC_MIRROR_URL="https://builds.garudalinux.org/repos/chaotic-aur/x86_64"
-CHAOTIC_SIGNING_KEY="FBA220DFC880C036"
+# Chaotic-AUR rotates their signing key from time to time (the old FBA220DFC880C036 key
+# is dead - keyservers reject fetching it - and packages are now signed with a newer key).
+# Scrape the current key from their own README, the same way the Artix section above does
+# via pacman-key, instead of trusting a value that will eventually go stale again. Falls
+# back to the key that is current as of this writing if the scrape itself fails.
+CHAOTIC_SIGNING_KEY=$(curl -fsSL https://raw.githubusercontent.com/chaotic-aur/.github/refs/heads/main/profile/README.md 2>/dev/null \
+  | grep -oE "pacman-key --recv-key [0-9A-Fa-f]+" | head -n1 | awk '{print $NF}')
+CHAOTIC_SIGNING_KEY="${CHAOTIC_SIGNING_KEY:-3056513887B78AEB}"
 
 install_xanmod_void() {
   echo -e "\e[1mFetching XanMod from Chaotic-AUR and converting it for Void...\e[0m" >&2
@@ -557,7 +564,18 @@ install_xanmod_void() {
       curl -fsSL "$CHAOTIC_MIRROR_URL/$f.sig" -o "$f.sig"
     done
 
-    timeout 30 gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$CHAOTIC_SIGNING_KEY"
+    key_fetched=false
+    for ks in keyserver.ubuntu.com keys.openpgp.org pgp.mit.edu; do
+      if timeout 30 gpg --batch --keyserver "$ks" --recv-keys "$CHAOTIC_SIGNING_KEY"; then
+        key_fetched=true
+        break
+      fi
+      echo "Keyserver $ks failed for key $CHAOTIC_SIGNING_KEY, trying next..." >&2
+    done
+    if [ "$key_fetched" != true ]; then
+      echo "Could not fetch Chaotic-AUR signing key $CHAOTIC_SIGNING_KEY from any keyserver" >&2
+      exit 1
+    fi
     for f in "$base_pkg" "$headers_pkg"; do
       gpg --batch --verify "$f.sig" "$f"
     done
