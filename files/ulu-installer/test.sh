@@ -532,7 +532,7 @@ CHAOTIC_MIRROR_URL="https://builds.garudalinux.org/repos/chaotic-aur/x86_64"
 # via pacman-key, instead of trusting a value that will eventually go stale again. Falls
 # back to the key that is current as of this writing if the scrape itself fails.
 CHAOTIC_SIGNING_KEY=$(curl -fsSL https://raw.githubusercontent.com/chaotic-aur/.github/refs/heads/main/profile/README.md 2>/dev/null \
-  | grep -oE "pacman-key --recv-key [0-9A-Fa-f]+" | head -n1 | awk '{print $NF}')
+  | grep -oE "pacman-key --recv-key [0-9A-Fa-f]+" | head -n1 | awk '\''{print $NF}'\'')
 CHAOTIC_SIGNING_KEY="${CHAOTIC_SIGNING_KEY:-3056513887B78AEB}"
 
 install_xanmod_void() {
