@@ -559,7 +559,7 @@ careful_install \
   inotify-tools preload dialog tree parallel sof-firmware Vulkan-Tools mimalloc mold \
   protontricks python3-pip ccache yt-dlp \
   libdisplay-info-32bit gallery-dl tesseract-ocr tesseract-ocr-eng \
-  fwupd chrony dnsmasq mesa mesa-32bit tk scx
+  fwupd chrony dnsmasq mesa mesa-32bit tk scx libgamemode-32bit
 
 # Headers for the currently running/installed kernel (needed by DKMS drivers like NVIDIA).
 if [ -n "$KVER" ]; then
