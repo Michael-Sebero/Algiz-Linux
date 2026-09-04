@@ -499,16 +499,6 @@ careful_install() {
   fi
 }
 
-### INSTALL PACKAGES VIA NIX (fallback for what Void does not package natively) ###
-nix_install() {
-  for pkg in "$@"; do
-    echo "Installing $pkg via Nix..." >&2
-    if ! su - "$USER" -c "nix-env -iA nixpkgs.$pkg"; then
-      echo "Failed to install $pkg via Nix, skipping..." >&2
-    fi
-  done
-}
-
 ### ULU LINUX CHOICE SELECTION ###
 
 echo -e "\e[1mSelect a ULU Variant\e[0m"
@@ -569,15 +559,7 @@ careful_install \
   inotify-tools preload dialog tree parallel sof-firmware Vulkan-Tools mimalloc mold \
   protontricks python3-pip ccache yt-dlp \
   libdisplay-info-32bit gallery-dl tesseract-ocr tesseract-ocr-eng \
-  fwupd chrony dnsmasq mesa mesa-32bit tk nix
-
-### SET UP NIX
-add_service nix-daemon
-sv up nix-daemon &>/dev/null || true
-source /etc/profile &>/dev/null || true
-nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs &>/dev/null || true
-nix-channel --update &>/dev/null || true
-su - "$USER" -c "nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs && nix-channel --update" &>/dev/null || true
+  fwupd chrony dnsmasq mesa mesa-32bit tk scx
 
 # INSTALL PYTHON PACKAGES
 careful_install \
@@ -592,9 +574,6 @@ if xbps-query thunar &>/dev/null; then
 else
     echo "Thunar not detected, skipping XFCE packages."
 fi
-
-# NIX PACKAGES
-nix_install scx
 
 # AMD-DESKTOP CHOICE
 if [ "$choice" = "1" ]; then
@@ -611,7 +590,6 @@ if [ "$choice" = "2" ]; then
   careful_install \
     mesa-vulkan-radeon mesa-vulkan-radeon-32bit libva-utils \
     tlp blueman bluez brightnessctl
-  nix_install throttled
 fi
 
 # INTEL-DESKTOP CHOICE
@@ -629,7 +607,6 @@ if [ "$choice" = "4" ]; then
   careful_install \
     mesa-vulkan-intel mesa-vulkan-intel-32bit libva-utils \
     tlp blueman bluez brightnessctl
-  nix_install throttled
 fi
 
 # NVIDIA-OPENSOURCE-DESKTOP CHOICE
