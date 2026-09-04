@@ -509,107 +509,6 @@ nix_install() {
   done
 }
 
-### INSTALL A KERNEL FROM CHAOTIC AUR AS A REAL XBPS PACKAGE ###
-# Extracts the kernel + modules from an Arch package (Chaotic AUR) and repackages
-# them with xbps-create, so xbps genuinely owns this kernel: it shows up in
-# xbps-query, xbps-remove cleans it up, and preserve keeps xbps-install -Suy from
-# ever touching its files. It is added alongside the xbps-managed stock kernel,
-# which stays installed as the tracked fallback.
-# This is not built through xbps-src, so the template-only xbps triggers do not
-# fire on install: dracut and grub-mkconfig are invoked explicitly below instead
-# of relying on kernel-hooks, and a DKMS module (e.g. NVIDIA) still needs its own
-# manual rebuild against this kernel version, since the automatic dkms trigger is
-# also template-only.
-install_chaotic_kernel() {
-  local pkgname="$1"
-  local mirror="https://cdn-mirror.chaotic.cx/chaotic-aur/x86_64"
-  local workdir
-  workdir=$(mktemp -d) || return 1
-
-  careful_install zstd gnupg
-
-  echo -e "\e[1mResolving $pkgname from Chaotic AUR...\e[0m"
-  curl -sL "$mirror/chaotic-aur.db" -o "$workdir/chaotic-aur.db" || { rm -rf "$workdir"; return 1; }
-
-  local pkgdir
-  pkgdir=$(tar -tf "$workdir/chaotic-aur.db" | grep -E "^${pkgname}-[0-9]" | head -1 | cut -d/ -f1)
-  if [ -z "$pkgdir" ]; then
-    echo "$pkgname not found in the Chaotic AUR database, skipping." >&2
-    rm -rf "$workdir"
-    return 1
-  fi
-
-  tar -xOf "$workdir/chaotic-aur.db" "$pkgdir/desc" > "$workdir/desc.txt"
-  local filename pgpsig
-  filename=$(awk "/%FILENAME%/{getline; print; exit}" "$workdir/desc.txt")
-  pgpsig=$(awk "/%PGPSIG%/{getline; print; exit}" "$workdir/desc.txt")
-  if [ -z "$filename" ]; then
-    echo "Could not read the package filename for $pkgname, skipping." >&2
-    rm -rf "$workdir"
-    return 1
-  fi
-
-  echo -e "\e[1mDownloading $filename...\e[0m"
-  curl -sL "$mirror/$filename" -o "$workdir/$filename" || { rm -rf "$workdir"; return 1; }
-
-  # Verify against the Chaotic AUR signing key before touching anything
-  echo "$pgpsig" | base64 -d > "$workdir/$filename.sig"
-  gpg --keyserver keyserver.ubuntu.com --recv-keys 3056513887B78AEB &>/dev/null
-  if ! gpg --verify "$workdir/$filename.sig" "$workdir/$filename" &>/dev/null; then
-    echo "Signature verification failed for $filename, skipping." >&2
-    rm -rf "$workdir"
-    return 1
-  fi
-
-  mkdir "$workdir/extracted"
-  tar --zstd -xf "$workdir/$filename" -C "$workdir/extracted" || { rm -rf "$workdir"; return 1; }
-
-  local kver
-  kver=$(find "$workdir/extracted/usr/lib/modules" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2>/dev/null | head -1)
-  if [ -z "$kver" ]; then
-    echo "Could not determine the kernel version in $filename, skipping." >&2
-    rm -rf "$workdir"
-    return 1
-  fi
-
-  local vmlinuz_src
-  vmlinuz_src=$(find "$workdir/extracted" -type f -iname "vmlinuz*" | head -1)
-  if [ -z "$vmlinuz_src" ]; then
-    echo "No vmlinuz found in $filename, skipping." >&2
-    rm -rf "$workdir"
-    return 1
-  fi
-
-  # Lay out a destdir matching the target filesystem, then package it for xbps
-  echo -e "\e[1mPackaging kernel $kver for xbps...\e[0m"
-  local destdir="$workdir/destdir"
-  mkdir -p "$destdir/usr/lib/modules" "$destdir/boot"
-  cp -a "$workdir/extracted/usr/lib/modules/$kver" "$destdir/usr/lib/modules/"
-  cp "$vmlinuz_src" "$destdir/boot/vmlinuz-$kver"
-
-  local pkgver_str="${kver//[-_]/.}"
-  local pkgver="${pkgname}-${pkgver_str}_1"
-  if ! ( cd "$workdir" && xbps-create -A x86_64 -n "$pkgver" -p \
-      -s "XanMod kernel $kver, repackaged from Chaotic AUR" destdir ); then
-    echo "xbps-create failed for $pkgver, skipping." >&2
-    rm -rf "$workdir"
-    return 1
-  fi
-
-  xbps-rindex -a "$workdir/$pkgver".*.xbps
-  if ! xbps-install --repository="$workdir" -y "$pkgname"; then
-    echo "xbps-install failed to register $pkgver, skipping." >&2
-    rm -rf "$workdir"
-    return 1
-  fi
-
-  depmod "$kver"
-  dracut --force --kver "$kver" "/boot/initramfs-$kver.img"
-
-  rm -rf "$workdir"
-  echo -e "\e[1m$pkgver installed and tracked by xbps, will appear as its own GRUB entry.\e[0m"
-}
-
 ### ULU LINUX CHOICE SELECTION ###
 
 echo -e "\e[1mSelect a ULU Variant\e[0m"
@@ -672,14 +571,6 @@ careful_install \
   libdisplay-info-32bit gallery-dl tesseract-ocr tesseract-ocr-eng \
   fwupd chrony dnsmasq mesa mesa-32bit tk nix
 
-# Headers for the currently running/installed kernel (needed by DKMS drivers like NVIDIA).
-# Void keeps its own stock kernel here - see the note at the top of this section for why we
-# do not swap in a XanMod-style kernel the way the Artix section does.
-KVER=$(uname -r | cut -d. -f1-2)
-if [ -n "$KVER" ]; then
-  careful_install "linux${KVER}-headers"
-fi
-
 ### SET UP NIX
 add_service nix-daemon
 sv up nix-daemon &>/dev/null || true
@@ -713,7 +604,6 @@ if [ "$choice" = "1" ]; then
   careful_install \
     mesa-vulkan-radeon mesa-vulkan-radeon-32bit libva-utils \
     fail2ban cpupower
-  install_chaotic_kernel linux-xanmod-edge
 fi
 
 # AMD-LAPTOP CHOICE
@@ -732,7 +622,6 @@ if [ "$choice" = "3" ]; then
   careful_install \
     mesa-vulkan-intel mesa-vulkan-intel-32bit libva-utils \
     fail2ban cpupower
-  install_chaotic_kernel linux-xanmod-edge
 fi
 
 # INTEL-LAPTOP CHOICE
@@ -751,9 +640,6 @@ if [ "$choice" = "5" ]; then
   careful_install \
     nvidia nvidia-libs-32bit \
     fail2ban cpupower
-  # the nvidia kernel module is only built against the xbps-managed stock kernel;
-  # booting the xanmod entry needs a manual DKMS rebuild against xanmod headers first.
-  install_chaotic_kernel linux-xanmod-edge
 fi
 
 # NVIDIA-PROPRIETARY-DESKTOP CHOICE
@@ -764,9 +650,6 @@ if [ "$choice" = "6" ]; then
   careful_install \
     nvidia580 nvidia580-libs-32bit \
     fail2ban cpupower
-  # the nvidia kernel module is only built against the xbps-managed stock kernel;
-  # booting the xanmod entry needs a manual DKMS rebuild against xanmod headers first.
-  install_chaotic_kernel linux-xanmod-edge
 fi
 
 # IMPORT FLATPAK BETA REPO
