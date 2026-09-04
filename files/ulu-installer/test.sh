@@ -633,6 +633,28 @@ install_xanmod_void() {
       exit 1
     fi
 
+    # xbps-create has no flag for the kernel_hooks_version metadata that a native
+    # kernel template gets from xbps-src, so xbps-reconfigure will not automatically
+    # re-run the hooks above for this package later (e.g. after a future nvidia
+    # update adds a new DKMS module). Leave a small standalone helper that does the
+    # same depmod-and-hooks sequence on demand, so that gap has a real fix instead
+    # of just a warning.
+    mkdir -p /usr/local/bin
+    cat > /usr/local/bin/xanmod-reconfigure <<HELPEREOF
+#!/bin/bash
+# Rebuilds DKMS modules and regenerates the initramfs for the XanMod kernel
+# converted from Chaotic-AUR (release $krelease). Run this after installing or
+# updating a DKMS driver such as nvidia if it has not picked up this kernel.
+set -e
+depmod "$krelease"
+export VERSION="$krelease" ACTION="post" UPDATE="no"
+for hook in /etc/kernel.d/post-install/*; do
+  [ -x "\$hook" ] && "\$hook"
+done
+echo "Reconfigured $krelease"
+HELPEREOF
+    chmod +x /usr/local/bin/xanmod-reconfigure
+
     # Fold the now-generated initramfs into the tracked package files too, so
     # xbps-remove cleans it up like it would for any other kernel package. This is
     # a finishing touch, not core functionality - the kernel above already works,
