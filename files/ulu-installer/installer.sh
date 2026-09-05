@@ -192,7 +192,7 @@ done
 mv /home/ulu-files/files/ulu-manual/Manual /home/$USER/Desktop/
 
 # REMOVE PACKAGES
-for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf nvidia-390xx-utils lib32-nvidia-390xx-utils modemmanager xf86-video-intel lib32-nvidia-580xx-utils; do
+for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-zeroconf nvidia-390xx-utils lib32-nvidia-390xx-utils modemmanager lib32-nvidia-580xx-utils; do
     if pacman -Qi "$pkg" &>/dev/null; then
         paru -Rdd --noconfirm "$pkg"
     fi
@@ -542,7 +542,7 @@ xbps-install -Suy || true
 mv /home/ulu-files/files/ulu-manual/Manual /home/$USER/Desktop/
 
 # REMOVE PACKAGES
-for pkg in pulseaudio nvidia390 nvidia470 nvidia470-libs-32bit ModemManager xf86-video-intel; do
+for pkg in pulseaudio nvidia390 nvidia470 nvidia470-libs-32bit ModemManager; do
     if xbps-query "$pkg" &>/dev/null; then
         xbps-remove -y "$pkg" || true
     fi
