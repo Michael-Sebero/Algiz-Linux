@@ -17,10 +17,10 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 ## Feature Coverage
 * Artix Linux - **100%**
 * Void Linux - **96%**
-* Linux Mint
-* Ubuntu
-* Fedora
-* OpenSUSE
+* Linux Mint -
+* Ubuntu -
+* Fedora -
+* OpenSUSE -
 
 ## **Core Components**
 
