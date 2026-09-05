@@ -1233,9 +1233,23 @@ if check_kernel_version; then
         dnf)
             dnf copr enable -y bieszczaders/kernel-cachyos-addons 2>/dev/null || true
             careful_install_raw scx-scheds
+            # This COPR package can enable a default sched-ext scheduler on
+            # install. sched-ext schedulers run at the kernel scheduling
+            # level and are experimental - an incompatible one can hang the
+            # whole machine (not just a graphical session), so make sure
+            # nothing auto-starts and leave it strictly opt-in.
+            for scx_unit in scx.service scx_loader.service; do
+                systemctl disable --now "$scx_unit" 2>/dev/null || true
+            done
+            echo "scx-scheds installed but left disabled; enable a specific scx_* scheduler yourself if you want one running." >&2
             ;;
         zypper)
             careful_install_raw scx
+            # Same precaution as above: do not let any scheduler auto-start.
+            for scx_unit in scx.service scx_loader.service; do
+                systemctl disable --now "$scx_unit" 2>/dev/null || true
+            done
+            echo "scx-scheds installed but left disabled; enable a specific scx_* scheduler yourself if you want one running." >&2
             ;;
     esac
 else
@@ -1455,7 +1469,10 @@ case "$PKG_MANAGER" in
     apt)        RC_LOCAL_PATH="/etc/rc.local" ;;
 esac
 
-if [ -f /etc/rc.local ] && [ "/etc/rc.local" != "$RC_LOCAL_PATH" ]; then
+# Only move a real file, never a symlink - Fedora/OpenSUSE already ship
+# /etc/rc.local as a symlink to /etc/rc.d/rc.local, and mv-ing a symlink
+# onto its own target destroys the real file underneath it.
+if [ -f /etc/rc.local ] && [ ! -L /etc/rc.local ] && [ "/etc/rc.local" != "$RC_LOCAL_PATH" ]; then
     mkdir -p "$(dirname "$RC_LOCAL_PATH")"
     mv /etc/rc.local "$RC_LOCAL_PATH"
 fi
@@ -1466,7 +1483,11 @@ if [ -f "$RC_LOCAL_PATH" ]; then
         echo "exit 0" >> "$RC_LOCAL_PATH"
     fi
 
-    if [ ! -f /etc/systemd/system/rc-local.service ]; then
+    # Fedora and OpenSUSE already ship an rc-local.service (from the
+    # systemd package itself) at /usr/lib/systemd/system/ or
+    # /lib/systemd/system/. Only create our own if none exists anywhere,
+    # so we never shadow/duplicate the distro built-in unit.
+    if ! systemctl list-unit-files rc-local.service 2>/dev/null | grep -q rc-local.service; then
 cat > /etc/systemd/system/rc-local.service <<EOF
 [Unit]
 Description=/etc/rc.local Compatibility
@@ -1476,7 +1497,7 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=$RC_LOCAL_PATH start
+ExecStart=$RC_LOCAL_PATH
 TimeoutSec=0
 StandardOutput=journal+console
 StandardError=journal+console
@@ -1485,9 +1506,9 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 EOF
+        systemctl daemon-reload
     fi
 
-    systemctl daemon-reload
     add_service rc-local
 fi
 
