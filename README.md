@@ -23,7 +23,7 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 * OpenSUSE -
 
 > [!IMPORTANT]
-> The only distro that contains the x86-64-v3 XanMod kernel is Artix Linux. All variants contain the same security and performance enhancements.
+> The only distro that contains the x86-64-v3 XanMod kernel is Artix Linux.
 
 ## **Core Components**
 
