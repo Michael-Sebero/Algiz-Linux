@@ -457,7 +457,7 @@ elif command -v xbps-install &>/dev/null; then
 # VOID LINUX SECTION #
 ######################
 
-### SERVICE MANAGEMENT FUNCTIONS (runit is the only init system Void uses) ###
+### SERVICE MANAGEMENT FUNCTIONS ###
 add_service() {
     local service_name="$1"
     ln -sf "/etc/sv/$service_name" /var/service/
@@ -720,17 +720,6 @@ fi
 # ADD USER TO REALTIME
 groupadd -f realtime
 usermod -aG realtime "$(logname)"
-
-# INSTALL UNIVERSAL RC.LOCAL
-mkdir -p /etc/sv/rc-local
-cat > /etc/sv/rc-local/run << EOF
-#!/bin/sh
-[ -x /etc/rc.local ] && /etc/rc.local
-exec chpst -b rc-local pause
-EOF
-chmod 755 /etc/sv/rc-local/run
-chmod 755 /etc/rc.local 2>/dev/null || true
-add_service rc-local
 
 # RESET PERMISSIONS
 reset-permissions
