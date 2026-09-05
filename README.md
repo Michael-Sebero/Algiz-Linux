@@ -12,7 +12,7 @@ This project is a combination of significant upgrades and micro-optimizations. I
 
 The configuration files `sysctl.conf`, `limits.conf` and `grub` are pre-configured for specific workloads. Depending on the variant chosen, there are specific changes tailored for each. These presets are **AMD/Intel**, **NVIDIA**, **Laptop**, **Performance**, **Server** and **LLM**. They can be chosen in the installer and by running the `optional` command post-installation.
 
-Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxyz/LARBS), which is why ULU's installer is script-based rather than an ISO. This project is packaged similarly to an ISO due to the configurations and content being stored inside various archives. If you want to see what changes I've made, you can view them [here](https://github.com/Michael-Sebero/ULU/tree/main/files/ulu-packages).
+Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithxyz/LARBS), which is why ULU's installer is script-based. This project is packaged similarly to an ISO due to the configurations and content being stored inside various archives. If you want to see what changes I've made, you can view them [here](https://github.com/Michael-Sebero/ULU/tree/main/files/ulu-packages).
 
 ## Feature Coverage
 * Artix Linux - **100%**
@@ -23,7 +23,7 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 * OpenSUSE -
 
 > [!IMPORTANT]
-> The only distro that contains the x86-64-v3 kernels is Artix Linux.
+> The only distro that includes the x86-64-v3 kernels is Artix Linux.
 
 ## **Core Components**
 
