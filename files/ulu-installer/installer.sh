@@ -561,6 +561,12 @@ careful_install \
   libdisplay-info-32bit gallery-dl tesseract-ocr tesseract-ocr-eng \
   fwupd chrony dnsmasq mesa mesa-32bit tk scx libgamemode-32bit
 
+# Headers for the currently running/installed kernel (needed by DKMS drivers like NVIDIA).
+KVER=$(uname -r | cut -d. -f1-2)
+if [ -n "$KVER" ]; then
+  careful_install "linux${KVER}-headers"
+fi
+
 # INSTALL PYTHON PACKAGES
 careful_install \
   python3-dateutil python3-xlib python3-PyAudio python3-pipenv \
