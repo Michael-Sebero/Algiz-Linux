@@ -368,6 +368,7 @@ add_service dnscrypt-proxy
 add_service dnsmasq
 add_service ufw
 add_service earlyoom
+add_service usbguard
 
 if pacman -Qq | grep -q ''^thunar$''; then
     add_service NetworkManager
@@ -684,6 +685,7 @@ add_service dnscrypt-proxy
 add_service dnsmasq
 add_service ufw
 add_service earlyoom
+add_service usbguard
 
 if xbps-query thunar &>/dev/null; then
     add_service NetworkManager
