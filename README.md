@@ -47,7 +47,7 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 ### **Additional Features**
 * Includes a comprehensive [manual](https://raw.githubusercontent.com/Michael-Sebero/ULU/refs/heads/main/files/ulu-manual/Manual)
 * Machine ID and MAC address randomization
-* [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) and [Flatpak](https://flatpak.org/) repositories
+* [ALHP](https://wiki.archlinux.org/title/Unofficial_user_repositories#ALHP), [Chaotic AUR](https://github.com/chaotic-aur/packages) (for Artix) and [Flatpak](https://flatpak.org/) repositories
 * Steam [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom) prefix
 * [Booster](https://github.com/anatol/booster) - Faster mkinitcpio replacement
 * Battery life optimizations for laptops via [TLP](https://github.com/linrunner/TLP)
