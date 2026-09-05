@@ -560,7 +560,7 @@ careful_install \
   inotify-tools preload dialog tree parallel sof-firmware Vulkan-Tools mimalloc mold \
   protontricks python3-pip ccache yt-dlp \
   libdisplay-info-32bit gallery-dl tesseract-ocr tesseract-ocr-eng \
-  fwupd chrony dnsmasq mesa mesa-32bit tk scx libgamemode-32bit
+  fwupd chrony dnsmasq mesa mesa-32bit tk scx libgamemode-32bit nix
 
 # Headers for the currently running/installed kernel (needed by DKMS drivers like NVIDIA).
 KVER=$(uname -r | cut -d. -f1-2)
@@ -742,13 +742,7 @@ else
 # DEBIAN/UBUNTU/OPENSUSE/FEDORA LINUX SECTION #
 ###############################################
 
-## use unified configs for all without redundancy, from void to debian, ubuntu, opensuse and fedora itll use nix but void will mostly use its own packages, this is done to make package name management easier. Note: from debian to fedora itll only use nix packages and not their own package manager to install packages for convenience.
 
-### Detect OS > if Ubuntu/Debian = nix, if Fedora = nix, if OpenSUSE = nix, if Void Linux = nix + xbps, if Arch = pacman, if Artix = pacman + detect init for services > unpack zip files into directories but move specific files depending how each OS does it
-
-    echo "No supported package manager found (expected pacman for Artix or xbps-install for Void)." >&2
-    echo "Debian/Ubuntu/openSUSE/Fedora support is not implemented in this script." >&2
-    exit 1
 
 fi
 '
