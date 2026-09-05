@@ -754,13 +754,6 @@ else
     exit 1
 fi
 
-DISTRO_ID="unknown"
-if [ -f /etc/os-release ]; then
-    DISTRO_ID=$(. /etc/os-release && echo "$ID")
-fi
-
-echo -e "\e[1mDetected distribution: $DISTRO_ID ($PKG_MANAGER)\e[0m"
-
 ### INIT SYSTEM ###
 # Linux Mint, Ubuntu, Fedora and OpenSUSE all ship systemd.
 INIT_SYSTEM="systemd"
