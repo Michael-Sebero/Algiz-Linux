@@ -24,7 +24,6 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 
 > [!IMPORTANT]
 > Depending on the distro you choose you may be feature limited. The only variant which contains the x86-64-v3 XanMod kernel is Artix Linux. All variants contain the same security and performance tweaks.)
-> ```
 
 ## **Core Components**
 
