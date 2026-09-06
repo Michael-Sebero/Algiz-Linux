@@ -1231,25 +1231,36 @@ if check_kernel_version; then
             echo "No scx-scheds package on apt-based systems; skipping (build it from source if you need it)."
             ;;
         dnf)
-            dnf copr enable -y bieszczaders/kernel-cachyos-addons 2>/dev/null || true
-            careful_install_raw scx-scheds
-            # This COPR package can enable a default sched-ext scheduler on
-            # install. sched-ext schedulers run at the kernel scheduling
-            # level and are experimental - an incompatible one can hang the
-            # whole machine (not just a graphical session), so make sure
-            # nothing auto-starts and leave it strictly opt-in.
-            for scx_unit in scx.service scx_loader.service; do
-                systemctl disable --now "$scx_unit" 2>/dev/null || true
-            done
-            echo "scx-scheds installed but left disabled; enable a specific scx_* scheduler yourself if you want one running." >&2
+            # Fedora ships sched-ext schedulers natively - scx_c_schedulers
+            # (scx_simple, scx_qmap, scx_nest, etc.) and scx_layered are in
+            # the official repos, so there is no need to enable the
+            # third-party CachyOS COPR at all. Falling back to that COPR
+            # only if the native packages are unavailable (very old Fedora).
+            if dnf info scx_c_schedulers &>/dev/null || dnf info scx_layered &>/dev/null; then
+                careful_install_raw scx_c_schedulers scx_layered
+            else
+                echo "Native scx packages not found for this Fedora release, falling back to the CachyOS COPR." >&2
+                dnf copr enable -y bieszczaders/kernel-cachyos-addons 2>/dev/null || true
+                careful_install_raw scx-scheds
+                # That COPR package can enable a default sched-ext scheduler
+                # on install. sched-ext schedulers run at the kernel
+                # scheduling level and are experimental - an incompatible
+                # one can hang the whole machine (not just a graphical
+                # session), so make sure nothing auto-starts here either.
+                for scx_unit in scx.service scx_loader.service; do
+                    systemctl disable --now "$scx_unit" 2>/dev/null || true
+                done
+            fi
+            echo "sched-ext scheduler binaries installed but nothing is enabled; run a specific scx_* scheduler yourself if you want one active." >&2
             ;;
         zypper)
+            # Native openSUSE Factory/Tumbleweed package, no third-party repo needed.
             careful_install_raw scx
-            # Same precaution as above: do not let any scheduler auto-start.
+            # Precaution only: do not let any scheduler auto-start.
             for scx_unit in scx.service scx_loader.service; do
                 systemctl disable --now "$scx_unit" 2>/dev/null || true
             done
-            echo "scx-scheds installed but left disabled; enable a specific scx_* scheduler yourself if you want one running." >&2
+            echo "sched-ext scheduler binaries installed but nothing is enabled; run a specific scx_* scheduler yourself if you want one active." >&2
             ;;
     esac
 else
