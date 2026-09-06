@@ -542,17 +542,19 @@ if [ "$INIT_SYSTEM" = "systemd" ] && [ -f /etc/rc.local ]; then
 cat > /etc/systemd/system/rc-local.service <<EOF
 [Unit]
 Description=/etc/rc.local Compatibility
+Documentation=man:systemd-rc-local-generator(8)
 ConditionFileIsExecutable=/etc/rc.local
 After=network-online.target
 Wants=network-online.target
 
 [Service]
-Type=oneshot
-ExecStart=/etc/rc.local
+Type=forking
+ExecStart=/etc/rc.local start
 TimeoutSec=0
+RemainAfterExit=yes
+GuessMainPID=no
 StandardOutput=journal+console
 StandardError=journal+console
-RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
@@ -1273,17 +1275,19 @@ if [ -f "$RC_LOCAL_PATH" ]; then
 cat > /etc/systemd/system/rc-local.service <<EOF
 [Unit]
 Description=/etc/rc.local Compatibility
+Documentation=man:systemd-rc-local-generator(8)
 ConditionFileIsExecutable=$RC_LOCAL_PATH
 After=network-online.target
 Wants=network-online.target
 
 [Service]
-Type=oneshot
-ExecStart=$RC_LOCAL_PATH
+Type=forking
+ExecStart=$RC_LOCAL_PATH start
 TimeoutSec=0
+RemainAfterExit=yes
+GuessMainPID=no
 StandardOutput=journal+console
 StandardError=journal+console
-RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
