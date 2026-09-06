@@ -3,9 +3,35 @@
 su -c '
 if command -v pacman &>/dev/null; then
 
-#######################
-# ARTIX LINUX SECTION #
-#######################
+##############################
+# ARTIX / ARCH LINUX SECTION #
+##############################
+
+### DISTRO DETECTION ###
+detect_distro() {
+    local os_id
+    os_id=$(. /etc/os-release 2>/dev/null; echo "$ID")
+    case "$os_id" in
+        artix)
+            echo "artix"
+            ;;
+        *)
+            echo "arch"
+            ;;
+    esac
+}
+
+DISTRO=$(detect_distro)
+
+### RESOLVE INIT-SPECIFIC PACKAGE NAME ###
+init_pkg() {
+    local base_pkg="$1"
+    if [ "$INIT_SYSTEM" = "systemd" ]; then
+        echo "$base_pkg"
+    else
+        echo "${base_pkg}-${INIT_SYSTEM}"
+    fi
+}
 
 ### INIT SYSTEM DETECTION ###
 detect_init_system() {
@@ -33,7 +59,11 @@ detect_init_system() {
     esac
 }
 
-INIT_SYSTEM=$(detect_init_system)
+if [ "$DISTRO" = "artix" ]; then
+    INIT_SYSTEM=$(detect_init_system)
+else
+    INIT_SYSTEM="systemd"
+fi
 
 ### INSTALL PACKAGES ONE BY ONE WITH RETRIES ###
 careful_install() {
@@ -81,6 +111,9 @@ add_service() {
         dinit)
             ln -sf "/etc/dinit.d/$service_name" /etc/dinit.d/boot.d/
             ;;
+        systemd)
+            systemctl enable "$service_name" &>/dev/null || true
+            ;;
     esac
 }
 
@@ -99,10 +132,13 @@ remove_service() {
         dinit)
             unlink "/etc/dinit.d/boot.d/$service_name" 2>/dev/null || true
             ;;
+        systemd)
+            systemctl disable "$service_name" &>/dev/null || true
+            ;;
     esac
 }
 
-# Sync s6 repo after package installs/removals (requires root)
+# Sync s6 repo after package installs/removals
 sync_s6_repo() {
     if [ "$INIT_SYSTEM" = "s6" ]; then
         s6 repo sync
@@ -138,19 +174,34 @@ curl -s https://raw.githubusercontent.com/chaotic-aur/.github/refs/heads/main/pr
 | bash
 
 # AURIS
-curl https://auris.artixlinux.org/api/packages/auris/arch/repository.key -o repository.key
-gpg --show-keys repository.key
-pacman-key --add repository.key
-pacman-key --lsign-key 74E5750C4A3C00F037070EF2357B525A97500B9F
+if [ "$DISTRO" = "artix" ]; then
+    curl https://auris.artixlinux.org/api/packages/auris/arch/repository.key -o repository.key
+    gpg --show-keys repository.key
+    pacman-key --add repository.key
+    pacman-key --lsign-key 74E5750C4A3C00F037070EF2357B525A97500B9F
+fi
 
-### FIRST COMMANDS AND ULU-LINUX IMPORT P1 ###
+### FIRST COMMANDS AND ULU IMPORT P1 ###
 killall xfce4-screensaver || true
+
+# INITIALIZE KEYRING (must run before any pacman/paru call that checks signatures)
+pacman-key --init
+
 pacman -Sy --noconfirm --needed p7zip unzip git base-devel
 mkdir /home/ulu-files/
 git clone https://github.com/Michael-Sebero/ULU /home/ulu-files/
 cd /home/ulu-files/files/ulu-packages/
-pacman -Sy --noconfirm artix-archlinux-support pacman-contrib artix-keyring archlinux-keyring artix-mirrorlist archlinux-mirrorlist
+if [ "$DISTRO" = "artix" ]; then
+    pacman -Sy --noconfirm artix-archlinux-support pacman-contrib artix-keyring archlinux-keyring artix-mirrorlist archlinux-mirrorlist
+    pacman-key --populate archlinux artix
+else
+    pacman -Sy --noconfirm pacman-contrib archlinux-keyring
+    pacman-key --populate archlinux
+fi
+
 pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+pacman-key --populate chaotic
+if [ "$DISTRO" = "artix" ]; then
 cat >> /etc/pacman.conf <<'\''EOF'\''
 
 [auris]
@@ -160,22 +211,29 @@ Server = https://auris.artixlinux.org/api/packages/auris/arch/$repo/$arch
 [chaotic-aur]
 Include = /etc/pacman.d/chaotic-mirrorlist
 EOF
-pacman -Sy --noconfirm alhp-keyring alhp-mirrorlist
+else
+cat >> /etc/pacman.conf <<'\''EOF'\''
+
+[chaotic-aur]
+Include = /etc/pacman.d/chaotic-mirrorlist
+EOF
+fi
+pacman -Sy --noconfirm --needed paru
+paru -S --noconfirm --needed alhp-keyring alhp-mirrorlist
 
 # CPU ARCHITECTURE DETECTION
 arch_support=$(/lib/ld-linux-x86-64.so.2 --help 2>&1 | grep '\''supported'\'' | head -n 1 | awk '\''{print $1}'\'')
 if [ "$arch_support" = "x86-64-v3" ]; then
-    unzip -o ulu-artix-v3.zip -d /etc
+    unzip -o "ulu-${DISTRO}-v3.zip" -d /etc
 elif [ "$arch_support" = "x86-64-v4" ]; then
-    unzip -o ulu-artix-v4.zip -d /etc
+    unzip -o "ulu-${DISTRO}-v4.zip" -d /etc
 fi
 
 # ACTIVATE REPOS
 find /etc/pacman.conf -type f -exec sed -i 's/#//g' {} +
 
 # POPULATE & REFRESH
-pacman-key --init
-pacman-key --populate archlinux artix alhp chaotic
+pacman-key --populate alhp
 pacman -Syy
 
 # FIND QUICKEST MIRRORLIST
@@ -192,7 +250,7 @@ pacman -Syy
     done
 )
 
-### FIRST COMMANDS AND ULU-LINUX IMPORT P2 ###
+### FIRST COMMANDS AND ULU IMPORT P2 ###
 pacman -S paru --noconfirm --needed
 for attempt in $(seq 1 5); do
   echo "Running full system update (attempt $attempt/5)..." >&2
@@ -219,8 +277,13 @@ for pkg in linux linux-headers pulseaudio pulseaudio-alsa pulseaudio-bluetooth p
 done
 
 # INSTALL BASE PACKAGES
+if [ "$DISTRO" = "artix" ]; then
+    # Bridges Artix multilib repo to Arch - Arch already has native
+    # multilib once the [multilib] section above is uncommented.
+    careful_install lib32-artix-archlinux-support
+fi
 careful_install \
-  lib32-artix-archlinux-support unrar flatpak \
+  unrar flatpak \
   gamemode lib32-gamemode dnscrypt-proxy apparmor \
   clamav gufw macchanger wine-git wine-mono winetricks-git steam lynis rkhunter opendoas \
   downgrade rust usbguard chkrootkit expect earlyoom \
@@ -291,7 +354,7 @@ if [ "$choice" = "1" ]; then
   careful_install \
     linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers \
     vulkan-radeon lib32-vulkan-radeon protonup-git libva-utils \
-    fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM}
+    fail2ban $(init_pkg fail2ban) cpupower $(init_pkg cpupower)
 fi
 
 # AMD-LAPTOP CHOICE
@@ -299,7 +362,7 @@ if [ "$choice" = "2" ]; then
   careful_install \
     linux-x64v3 linux-x64v3-headers \
     vulkan-radeon lib32-vulkan-radeon libva-utils throttled \
-    tlp tlp-${INIT_SYSTEM} blueman bluez bluez-${INIT_SYSTEM} brightnessctl
+    tlp $(init_pkg tlp) blueman bluez $(init_pkg bluez) brightnessctl
 fi
 
 # INTEL-DESKTOP CHOICE
@@ -310,7 +373,7 @@ if [ "$choice" = "3" ]; then
   careful_install \
     linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers \
     vulkan-intel lib32-vulkan-intel protonup-git libva-utils \
-    fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM}
+    fail2ban $(init_pkg fail2ban) cpupower $(init_pkg cpupower)
 fi
 
 # INTEL-LAPTOP CHOICE
@@ -318,7 +381,7 @@ if [ "$choice" = "4" ]; then
   careful_install \
     linux-x64v3 linux-x64v3-headers \
     vulkan-intel lib32-vulkan-intel libva-utils throttled \
-    tlp tlp-${INIT_SYSTEM} blueman bluez bluez-${INIT_SYSTEM} brightnessctl
+    tlp $(init_pkg tlp) blueman bluez $(init_pkg bluez) brightnessctl
 fi
 
 # NVIDIA-OPENSOURCE-DESKTOP CHOICE
@@ -328,8 +391,8 @@ if [ "$choice" = "5" ]; then
   fi
   careful_install \
     linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers protonup-git \
-    nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings \
-    fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM} nvidia-open-dkms
+    nvidia-utils $(init_pkg nvidia-utils) nvidia-settings \
+    fail2ban $(init_pkg fail2ban) cpupower $(init_pkg cpupower) nvidia-open-dkms
   # lib32 NVIDIA / Vulkan fallback
   careful_install lib32-nvidia-utils || careful_install lib32-vulkan-driver
 fi
@@ -341,8 +404,8 @@ if [ "$choice" = "6" ]; then
   fi
   careful_install \
     linux-xanmod-edge-x64v3 linux-xanmod-edge-x64v3-headers protonup-git \
-    nvidia-utils nvidia-utils-${INIT_SYSTEM} nvidia-settings \
-    fail2ban fail2ban-${INIT_SYSTEM} cpupower cpupower-${INIT_SYSTEM} nvidia-dkms
+    nvidia-utils $(init_pkg nvidia-utils) nvidia-settings \
+    fail2ban $(init_pkg fail2ban) cpupower $(init_pkg cpupower) nvidia-dkms
   # lib32 NVIDIA / Vulkan fallback
   careful_install lib32-nvidia-utils || careful_install lib32-vulkan-driver
 fi
@@ -401,11 +464,15 @@ fi
 
 # REMOVE CONNMAN & REFRESH
 if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null || pacman -Qi connman-runit &>/dev/null || pacman -Qi connman-dinit &>/dev/null; then
-    s6-rc -d change connmand || true
-    s6 set disable connmand || true
-    find /etc/s6 \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
-    find /etc/runit \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
-    find /etc/dinit.d \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
+    if [ "$INIT_SYSTEM" = "systemd" ]; then
+        systemctl disable --now connman &>/dev/null || true
+    else
+        s6-rc -d change connmand || true
+        s6 set disable connmand || true
+        find /etc/s6 \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
+        find /etc/runit \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
+        find /etc/dinit.d \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
+    fi
     CONNMAN_PKGS=()
     for pkg in connman connman-s6 connman-openrc connman-runit connman-dinit connman-gtk; do
         pacman -Qi "$pkg" &>/dev/null && CONNMAN_PKGS+=("$pkg")
@@ -428,6 +495,9 @@ case "$INIT_SYSTEM" in
         ;;
     dinit)
         # boot.d symlinks are picked up on next dinit start; no explicit reload step needed
+        ;;
+    systemd)
+        systemctl daemon-reload || true
         ;;
 esac
 
@@ -465,6 +535,37 @@ if [ -d /etc/runlevels ]; then
   mv -f /etc/rc.local /etc/local.d/rc.start
   chmod 755 /etc/local.d/rc.start
   add_service local
+fi
+
+# systemd
+if [ "$INIT_SYSTEM" = "systemd" ] && [ -f /etc/rc.local ]; then
+    chmod +x /etc/rc.local
+    if ! grep -q "^exit 0" /etc/rc.local; then
+        echo "" >> /etc/rc.local
+        echo "exit 0" >> /etc/rc.local
+    fi
+    if ! systemctl list-unit-files rc-local.service 2>/dev/null | grep -q rc-local.service; then
+cat > /etc/systemd/system/rc-local.service <<EOF
+[Unit]
+Description=/etc/rc.local Compatibility
+ConditionFileIsExecutable=/etc/rc.local
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/etc/rc.local
+TimeoutSec=0
+StandardOutput=journal+console
+StandardError=journal+console
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+        systemctl daemon-reload
+    fi
+    add_service rc-local
 fi
 
 # RESET PERMISSIONS
@@ -541,7 +642,7 @@ echo "6. NVIDIA-PROPRIETARY-DESKTOP"
 
 read -p "Enter your choice (1-6): " choice
 
-### FIRST COMMANDS AND ULU-LINUX IMPORT P1 ###
+### FIRST COMMANDS AND ULU IMPORT P1 ###
 xbps-install -Syu 7zip unzip git xbps
 mkdir -p /home/ulu-files/
 git clone https://github.com/Michael-Sebero/ULU /home/ulu-files/
@@ -790,10 +891,6 @@ remove_service() {
 }
 
 ### PACKAGE NAME MAPPING ###
-# Translates the canonical package name used throughout this script (the
-# same names the Artix/Void sections above install) into whatever apt
-# calls it. Echoes "" for anything with no equivalent, or that is
-# handled separately below - careful_install() just skips those quietly.
 map_package_names() {
     local base_pkg="$1"
     case "$base_pkg" in
@@ -951,7 +1048,7 @@ if command -v add-apt-repository &>/dev/null; then
 fi
 apt-get update
 
-### FIRST COMMANDS AND ULU-LINUX IMPORT P1 ###
+### FIRST COMMANDS AND ULU IMPORT P1 ###
 mkdir -p /home/ulu-files/
 git clone https://github.com/Michael-Sebero/ULU /home/ulu-files/
 cd /home/ulu-files/files/ulu-packages/
@@ -1132,13 +1229,6 @@ fi
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 
-### PROTON-GE NOTE ###
-# On Arch/Void this step auto-downloads a Proton-GE build via protonup-git
-# with no equivalent CLI tool available here, so nothing is installed
-# automatically - only a Flathub remote is added above. If you want
-# Proton-GE, install ProtonUp-Qt yourself (flatpak install flathub
-# net.davidotek.pupgui2) and pick a build from its UI.
-
 ### ULU INSTALL ###
 
 # AMD/INTEL SELECTION
@@ -1169,7 +1259,7 @@ if [ "$choice" = "5" ] || [ "$choice" = "6" ]; then
     add_service cpupower
 fi
 
-### INSTALL UNIVERSAL RC.LOCAL (systemd compatibility unit) ###
+### INSTALL UNIVERSAL RC.LOCAL ###
 RC_LOCAL_PATH="/etc/rc.local"
 
 if [ -f "$RC_LOCAL_PATH" ]; then
@@ -1245,15 +1335,7 @@ if [ "$choice" = "1" ] || [ "$choice" = "3" ] || [ "$choice" = "5" ] || [ "$choi
 fi
 
 # ADD USER TO REALTIME
-# No native "realtime-privileges" package on these distros - create the
-# group and PAM limits by hand instead (works the same everywhere systemd
-# and pam_limits are used).
 groupadd -f realtime
-cat > /etc/security/limits.d/99-realtime-privileges.conf <<EOF
-@realtime - rtprio 95
-@realtime - memlock unlimited
-@realtime - nice -19
-EOF
 usermod -aG realtime "$(logname)"
 
 # RESET PERMISSIONS
