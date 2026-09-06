@@ -7,10 +7,6 @@
 	<img src="https://i.postimg.cc/fbvDJcnG/740019dcf9a94a804d725079cedf0e2f250ea164da39a3ee5e6b4b0d3255bfef95601890afd80709da39a3ee5e6b4b0d3255.png" width="65%" />
 </p>
 
-<p align="center">
-  ᛉ EST. Since 2022
-</p>
-
 ## Summary / TLDR
 This project is a combination of significant upgrades and micro-optimizations. I've implemented most of the known and esoteric Linux performance tweaks along with some original implementations. The philosophy behind this configuration set is to utilize current hardware features and resources generously (when needed) while increasing system hardness greatly beyond the default.
 
@@ -158,3 +154,5 @@ Specialized for LLM workloads with larger HugePages allocation and no security m
 ## Contact and Donations
 * [Email](michaelsebero@disroot.org)
 * [PayPal](https://www.paypal.com/donate/?cmd=_donations&business=YYGU9JWJEE2AG)
+
+ᛉ EST. Since 2022
