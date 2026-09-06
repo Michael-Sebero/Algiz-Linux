@@ -16,6 +16,7 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 
 ## Feature Coverage
 * Artix Linux - **100%**
+* Arch Linux - 
 * Void Linux - **96%**
 * Linux Mint -
 * Ubuntu -

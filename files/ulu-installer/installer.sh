@@ -149,18 +149,18 @@ pacman -Sy --noconfirm --needed p7zip unzip git base-devel
 mkdir /home/ulu-files/
 git clone https://github.com/Michael-Sebero/ULU /home/ulu-files/
 cd /home/ulu-files/files/ulu-packages/
-unzip -o ulu-pacman-temp-1.zip -d /etc
+unzip -o ulu-artix-temp-1.zip -d /etc
 pacman -Sy --noconfirm artix-archlinux-support pacman-contrib artix-keyring archlinux-keyring artix-mirrorlist archlinux-mirrorlist
 pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-unzip -o ulu-pacman-temp-2.zip -d /etc
+unzip -o ulu-artix-temp-2.zip -d /etc
 pacman -Sy --noconfirm alhp-keyring alhp-mirrorlist
 
 # CPU ARCHITECTURE DETECTION
 arch_support=$(/lib/ld-linux-x86-64.so.2 --help 2>&1 | grep '\''supported'\'' | head -n 1 | awk '\''{print $1}'\'')
 if [ "$arch_support" = "x86-64-v3" ]; then
-    unzip -o ulu-pacman-v3.zip -d /etc
+    unzip -o ulu-artix-v3.zip -d /etc
 elif [ "$arch_support" = "x86-64-v4" ]; then
-    unzip -o ulu-pacman-v4.zip -d /etc
+    unzip -o ulu-artix-v4.zip -d /etc
 fi
 
 # ACTIVATE REPOS
