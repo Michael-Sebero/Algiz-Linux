@@ -24,7 +24,7 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 * Debian -
 
 > [!IMPORTANT]
-> The only distros that include the x86-64-v3 kernels are Arch based.
+> Only Arch based distros include the x86-64-v3 kernels.
 
 ## **Core Components**
 
