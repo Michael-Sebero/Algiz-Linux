@@ -546,13 +546,13 @@ Documentation=man:systemd-rc-local-generator(8)
 ConditionFileIsExecutable=/etc/rc.local
 After=network-online.target
 Wants=network-online.target
+Before=display-manager.service graphical.target
 
 [Service]
-Type=forking
+Type=oneshot
 ExecStart=/etc/rc.local start
 TimeoutSec=0
 RemainAfterExit=yes
-GuessMainPID=no
 StandardOutput=journal+console
 StandardError=journal+console
 
@@ -1279,13 +1279,13 @@ Documentation=man:systemd-rc-local-generator(8)
 ConditionFileIsExecutable=$RC_LOCAL_PATH
 After=network-online.target
 Wants=network-online.target
+Before=display-manager.service graphical.target
 
 [Service]
-Type=forking
+Type=oneshot
 ExecStart=$RC_LOCAL_PATH start
 TimeoutSec=0
 RemainAfterExit=yes
-GuessMainPID=no
 StandardOutput=journal+console
 StandardError=journal+console
 
