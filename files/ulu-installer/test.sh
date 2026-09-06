@@ -7,7 +7,7 @@ if command -v pacman &>/dev/null; then
 # ARTIX / ARCH LINUX SECTION #
 ##############################
 
-### DISTRO DETECTION (both ship pacman) ###
+### DISTRO DETECTION ###
 detect_distro() {
     local os_id
     os_id=$(. /etc/os-release 2>/dev/null; echo "$ID")
@@ -16,8 +16,6 @@ detect_distro() {
             echo "artix"
             ;;
         *)
-            # Vanilla Arch, or any other pacman-based distro not explicitly
-            # handled above - treat as Arch (systemd).
             echo "arch"
             ;;
     esac
@@ -26,10 +24,6 @@ detect_distro() {
 DISTRO=$(detect_distro)
 
 ### RESOLVE INIT-SPECIFIC PACKAGE NAME ###
-# Artix ships a separate "-s6"/"-openrc"/"-runit"/"-dinit" service package
-# alongside the base package for each daemon. Arch is systemd-only and its
-# packages already bundle the systemd unit directly, so no suffixed variant
-# exists there - fall back to the base package name.
 init_pkg() {
     local base_pkg="$1"
     if [ "$INIT_SYSTEM" = "systemd" ]; then
@@ -39,7 +33,7 @@ init_pkg() {
     fi
 }
 
-### INIT SYSTEM DETECTION (Artix only - Arch is always systemd) ###
+### INIT SYSTEM DETECTION ###
 detect_init_system() {
     if pacman -Qi runit &>/dev/null; then
         echo "runit"
@@ -144,7 +138,7 @@ remove_service() {
     esac
 }
 
-# Sync s6 repo after package installs/removals (requires root)
+# Sync s6 repo after package installs/removals
 sync_s6_repo() {
     if [ "$INIT_SYSTEM" = "s6" ]; then
         s6 repo sync
@@ -179,7 +173,7 @@ curl -s https://raw.githubusercontent.com/chaotic-aur/.github/refs/heads/main/pr
 | sed "s/--recv-key \([0-9A-F]*\)/--recv-key \1; pacman-key --lsign-key \1/" \
 | bash
 
-# AURIS (Artix own Arch-compat repo/key - Arch already has native repos, skip)
+# AURIS
 if [ "$DISTRO" = "artix" ]; then
     curl https://auris.artixlinux.org/api/packages/auris/arch/repository.key -o repository.key
     gpg --show-keys repository.key
@@ -187,7 +181,7 @@ if [ "$DISTRO" = "artix" ]; then
     pacman-key --lsign-key 74E5750C4A3C00F037070EF2357B525A97500B9F
 fi
 
-### FIRST COMMANDS AND ULU-LINUX IMPORT P1 ###
+### FIRST COMMANDS AND ULU IMPORT P1 ###
 killall xfce4-screensaver || true
 pacman -Sy --noconfirm --needed p7zip unzip git base-devel
 mkdir /home/ulu-files/
@@ -252,7 +246,7 @@ pacman -Syy
     done
 )
 
-### FIRST COMMANDS AND ULU-LINUX IMPORT P2 ###
+### FIRST COMMANDS AND ULU IMPORT P2 ###
 pacman -S paru --noconfirm --needed
 for attempt in $(seq 1 5); do
   echo "Running full system update (attempt $attempt/5)..." >&2
@@ -345,10 +339,6 @@ case "$INIT_SYSTEM" in
         careful_install \
           dnscrypt-proxy-dinit dnsmasq-dinit apparmor-dinit clamav-dinit \
           ufw-dinit usbguard-dinit earlyoom-dinit
-        ;;
-    systemd)
-        # Arch package builds already bundle the systemd unit in the base
-        # package installed above - no separate service package needed.
         ;;
 esac
 
@@ -543,7 +533,7 @@ if [ -d /etc/runlevels ]; then
   add_service local
 fi
 
-# systemd (Arch)
+# systemd
 if [ "$INIT_SYSTEM" = "systemd" ] && [ -f /etc/rc.local ]; then
     chmod +x /etc/rc.local
     if ! grep -q "^exit 0" /etc/rc.local; then
@@ -648,7 +638,7 @@ echo "6. NVIDIA-PROPRIETARY-DESKTOP"
 
 read -p "Enter your choice (1-6): " choice
 
-### FIRST COMMANDS AND ULU-LINUX IMPORT P1 ###
+### FIRST COMMANDS AND ULU IMPORT P1 ###
 xbps-install -Syu 7zip unzip git xbps
 mkdir -p /home/ulu-files/
 git clone https://github.com/Michael-Sebero/ULU /home/ulu-files/
@@ -1058,7 +1048,7 @@ if command -v add-apt-repository &>/dev/null; then
 fi
 apt-get update
 
-### FIRST COMMANDS AND ULU-LINUX IMPORT P1 ###
+### FIRST COMMANDS AND ULU IMPORT P1 ###
 mkdir -p /home/ulu-files/
 git clone https://github.com/Michael-Sebero/ULU /home/ulu-files/
 cd /home/ulu-files/files/ulu-packages/
@@ -1276,7 +1266,7 @@ if [ "$choice" = "5" ] || [ "$choice" = "6" ]; then
     add_service cpupower
 fi
 
-### INSTALL UNIVERSAL RC.LOCAL (systemd compatibility unit) ###
+### INSTALL UNIVERSAL RC.LOCAL ###
 RC_LOCAL_PATH="/etc/rc.local"
 
 if [ -f "$RC_LOCAL_PATH" ]; then
@@ -1352,15 +1342,7 @@ if [ "$choice" = "1" ] || [ "$choice" = "3" ] || [ "$choice" = "5" ] || [ "$choi
 fi
 
 # ADD USER TO REALTIME
-# No native "realtime-privileges" package on these distros - create the
-# group and PAM limits by hand instead (works the same everywhere systemd
-# and pam_limits are used).
 groupadd -f realtime
-cat > /etc/security/limits.d/99-realtime-privileges.conf <<EOF
-@realtime - rtprio 95
-@realtime - memlock unlimited
-@realtime - nice -19
-EOF
 usermod -aG realtime "$(logname)"
 
 # RESET PERMISSIONS
