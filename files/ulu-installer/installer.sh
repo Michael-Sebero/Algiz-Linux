@@ -278,8 +278,6 @@ done
 
 # INSTALL BASE PACKAGES
 if [ "$DISTRO" = "artix" ]; then
-    # Bridges Artix multilib repo to Arch - Arch already has native
-    # multilib once the [multilib] section above is uncommented.
     careful_install lib32-artix-archlinux-support
 fi
 careful_install \
@@ -489,12 +487,6 @@ case "$INIT_SYSTEM" in
         ;;
     openrc)
         rc-update -u || true
-        ;;
-    runit)
-        # runsvdir polls /etc/runit/runsvdir/default automatically; no explicit reload step needed
-        ;;
-    dinit)
-        # boot.d symlinks are picked up on next dinit start; no explicit reload step needed
         ;;
     systemd)
         systemctl daemon-reload || true
