@@ -16,14 +16,15 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 
 ## Feature Coverage
 * Artix Linux - **100%**
-* Arch Linux - 
+* Arch Linux - **100%**
+* EndeavourOS - **100%**
 * Void Linux - **96%**
 * Linux Mint -
 * Ubuntu -
 * Debian -
 
 > [!IMPORTANT]
-> The only distro that includes the x86-64-v3 kernels is Artix Linux.
+> The only distros that includes the x86-64-v3 kernels are Arch based.
 
 ## **Core Components**
 
