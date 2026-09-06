@@ -531,12 +531,14 @@ fi
 
 # systemd
 if [ "$INIT_SYSTEM" = "systemd" ] && [ -f /etc/rc.local ]; then
+    if ! head -1 /etc/rc.local | grep -q "^#!"; then
+        sed -i "1i #!/bin/bash" /etc/rc.local
+    fi
     chmod +x /etc/rc.local
     if ! grep -q "^exit 0" /etc/rc.local; then
         echo "" >> /etc/rc.local
         echo "exit 0" >> /etc/rc.local
     fi
-    if ! systemctl list-unit-files rc-local.service 2>/dev/null | grep -q rc-local.service; then
 cat > /etc/systemd/system/rc-local.service <<EOF
 [Unit]
 Description=/etc/rc.local Compatibility
@@ -555,9 +557,13 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 EOF
-        systemctl daemon-reload
+    systemctl daemon-reload
+    if systemctl enable --now rc-local.service; then
+        echo "rc-local.service: enabled and started"
+    else
+        echo "rc-local.service: FAILED to enable/start" >&2
+        systemctl status rc-local.service --no-pager >&2
     fi
-    add_service rc-local
 fi
 
 # RESET PERMISSIONS
@@ -1255,13 +1261,15 @@ fi
 RC_LOCAL_PATH="/etc/rc.local"
 
 if [ -f "$RC_LOCAL_PATH" ]; then
+    if ! head -1 "$RC_LOCAL_PATH" | grep -q "^#!"; then
+        sed -i "1i #!/bin/bash" "$RC_LOCAL_PATH"
+    fi
     chmod +x "$RC_LOCAL_PATH"
     if ! grep -q "^exit 0" "$RC_LOCAL_PATH"; then
         echo "" >> "$RC_LOCAL_PATH"
         echo "exit 0" >> "$RC_LOCAL_PATH"
     fi
 
-    if ! systemctl list-unit-files rc-local.service 2>/dev/null | grep -q rc-local.service; then
 cat > /etc/systemd/system/rc-local.service <<EOF
 [Unit]
 Description=/etc/rc.local Compatibility
@@ -1280,10 +1288,13 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 EOF
-        systemctl daemon-reload
+    systemctl daemon-reload
+    if systemctl enable --now rc-local.service; then
+        echo "rc-local.service: enabled and started"
+    else
+        echo "rc-local.service: FAILED to enable/start" >&2
+        systemctl status rc-local.service --no-pager >&2
     fi
-
-    add_service rc-local
 fi
 
 ### LAST COMMANDS ###
