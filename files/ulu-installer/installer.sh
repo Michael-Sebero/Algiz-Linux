@@ -13,9 +13,16 @@ detect_init_system() {
         echo "runit"
         return
     fi
+    if pacman -Qi dinit &>/dev/null; then
+        echo "dinit"
+        return
+    fi
     case "$(ps -p 1 -o comm=)" in
         s6-svscan)
             echo "s6"
+            ;;
+        dinit)
+            echo "dinit"
             ;;
         init|openrc-init)
             echo "openrc"
@@ -71,6 +78,9 @@ add_service() {
         runit)
             ln -sf "/etc/runit/sv/$service_name" /etc/runit/runsvdir/default/
             ;;
+        dinit)
+            ln -sf "/etc/dinit.d/$service_name" /etc/dinit.d/boot.d/
+            ;;
     esac
 }
 
@@ -85,6 +95,9 @@ remove_service() {
             ;;
         runit)
             unlink "/etc/runit/runsvdir/default/$service_name" 2>/dev/null || true
+            ;;
+        dinit)
+            unlink "/etc/dinit.d/boot.d/$service_name" 2>/dev/null || true
             ;;
     esac
 }
@@ -231,6 +244,9 @@ if pacman -Qq | grep -q ''^thunar$''; then
         runit)
             careful_install networkmanager-runit
             ;;
+        dinit)
+            careful_install networkmanager-dinit
+            ;;
     esac
 else
     echo "Thunar not detected, skipping XFCE packages."
@@ -252,6 +268,11 @@ case "$INIT_SYSTEM" in
         careful_install \
           dnscrypt-proxy-runit dnsmasq-runit apparmor-runit clamav-runit \
           ufw-runit usbguard-runit earlyoom-runit
+        ;;
+    dinit)
+        careful_install \
+          dnscrypt-proxy-dinit dnsmasq-dinit apparmor-dinit clamav-dinit \
+          ufw-dinit usbguard-dinit earlyoom-dinit
         ;;
 esac
 
@@ -372,13 +393,14 @@ if pacman -Qq | grep -q ''^thunar$''; then
 fi
 
 # REMOVE CONNMAN & REFRESH
-if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null || pacman -Qi connman-runit &>/dev/null; then
+if pacman -Qi connman &>/dev/null || pacman -Qi connman-s6 &>/dev/null || pacman -Qi connman-openrc &>/dev/null || pacman -Qi connman-runit &>/dev/null || pacman -Qi connman-dinit &>/dev/null; then
     s6-rc -d change connmand || true
     s6 set disable connmand || true
     find /etc/s6 \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
     find /etc/runit \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
+    find /etc/dinit.d \( -iname '*connman*' -o -iname '*connmand*' \) -print -exec rm -rf {} + || true
     CONNMAN_PKGS=()
-    for pkg in connman connman-s6 connman-openrc connman-runit connman-gtk; do
+    for pkg in connman connman-s6 connman-openrc connman-runit connman-dinit connman-gtk; do
         pacman -Qi "$pkg" &>/dev/null && CONNMAN_PKGS+=("$pkg")
     done
     pacman -Rdd --noconfirm "${CONNMAN_PKGS[@]}" || true
@@ -396,6 +418,9 @@ case "$INIT_SYSTEM" in
         ;;
     runit)
         # runsvdir polls /etc/runit/runsvdir/default automatically; no explicit reload step needed
+        ;;
+    dinit)
+        # boot.d symlinks are picked up on next dinit start; no explicit reload step needed
         ;;
 esac
 
