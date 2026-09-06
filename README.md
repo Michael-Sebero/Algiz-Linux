@@ -155,4 +155,4 @@ Specialized for LLM workloads with larger HugePages allocation and no security m
 * [Email](michaelsebero@disroot.org)
 * [PayPal](https://www.paypal.com/donate/?cmd=_donations&business=YYGU9JWJEE2AG)
 
-ᛉ EST. Since 2022
+- ᛉ EST. Since 2022
