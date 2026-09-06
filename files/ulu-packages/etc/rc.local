@@ -1,0 +1,178 @@
+#!/bin/bash
+
+# Enter custom commands here. By default, they will be executed on startup in parallel with the other services
+
+# System Security: Firewall Initialization
+ufw enable || true
+
+# Package Manager: Lock File Cleanup
+[ -f /var/lib/pacman/db.lck ] && rm -f /var/lib/pacman/db.lck
+
+# Memory Management: Compressed RAM Device Configuration
+if modprobe zram 2>/dev/null; then
+    if [ -f /sys/class/zram-control/hot_add ]; then
+        ZRAM_ID=$(cat /sys/class/zram-control/hot_add 2>/dev/null)
+        ZRAM_DEV="/dev/zram${ZRAM_ID}"
+
+        if [ -b "$ZRAM_DEV" ]; then
+            echo 1 > "/sys/block/zram${ZRAM_ID}/reset" 2>/dev/null || true
+
+            # Calculate zram size (25% of RAM)
+            RAM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo) || RAM_KB=2097152
+            ZRAM_SIZE_BYTES=$(( RAM_KB * 1024 / 4 ))
+
+            # Use zstd for better compression ratio; fall back to lz4 if unavailable
+            if grep -q zstd /sys/block/zram${ZRAM_ID}/comp_algorithm 2>/dev/null; then
+                echo zstd > "/sys/block/zram${ZRAM_ID}/comp_algorithm" 2>/dev/null || true
+            else
+                echo lz4 > "/sys/block/zram${ZRAM_ID}/comp_algorithm" 2>/dev/null || true
+            fi
+
+            # Dynamically detect CPU core count
+            CPU_CORES=$(nproc 2>/dev/null || grep -c ^processor /proc/cpuinfo || echo 4)
+            echo "$CPU_CORES" > "/sys/block/zram${ZRAM_ID}/max_comp_streams" 2>/dev/null || true
+
+            if echo "$ZRAM_SIZE_BYTES" > "/sys/block/zram${ZRAM_ID}/disksize" 2>/dev/null; then
+                mkswap "$ZRAM_DEV" >/dev/null 2>&1 && swapon "$ZRAM_DEV" -p 100 || true
+            fi
+        fi
+    fi
+fi
+
+# Kernel Parameters: Runtime Configuration Reload
+sysctl -p || true
+
+# Application Prefetching: Daemon Initialization
+preload || true
+
+# Process Scheduling: Power-Efficient Scheduler Initialization
+if command -v scx_aura >/dev/null 2>&1; then
+    nohup scx_bpfland --cpufreq --idle-resume-us 48 --throttle-us 500 -s 5000 --slice-us-lag 8000 >/dev/null 2>&1 &
+else
+    nohup scx_rusty >/dev/null 2>&1 &
+fi
+
+# Network Interface: MAC Address Randomization (Down interfaces only)
+sleep 2
+for iface in /sys/class/net/*; do
+    iface=$(basename "$iface")
+    [[ "$iface" == "lo" || "$iface" == "vir"* || "$iface" == "docker"* || "$iface" == "br"* ]] && continue
+
+    if [ -d "/sys/class/net/$iface" ]; then
+        # Only randomize if interface is DOWN
+        state=$(cat "/sys/class/net/$iface/operstate" 2>/dev/null)
+        if [[ "$state" == "down" ]]; then
+            ip link set "$iface" down 2>/dev/null || true
+            sleep 0.5
+            macchanger "$iface" -r 2>/dev/null || true
+            ip link set "$iface" up 2>/dev/null || true
+        fi
+    fi
+done
+
+# Security: Hardening Script (runs once every 5 months)
+HARDENING_STAMP="/ulu/timestamps/HARDENING_STAMP"
+HARDENING_INTERVAL=$((5 * 30 * 24 * 60 * 60))  # ~5 months
+NOW=$(date +%s)
+
+mkdir -p "$(dirname "$HARDENING_STAMP")" 2>/dev/null || true
+
+LAST_HARDENING=$(cat "$HARDENING_STAMP" 2>/dev/null || echo 0)
+TIME_SINCE_HARDENING=$((NOW - LAST_HARDENING))
+
+if [ "$TIME_SINCE_HARDENING" -ge "$HARDENING_INTERVAL" ]; then
+    if hardening-script; then
+        echo "$NOW" > "$HARDENING_STAMP" 2>/dev/null
+    fi
+fi
+
+# Storage Maintenance: SSD TRIM Operation (runs once every 7 days)
+TRIM_DIR="/ulu/timestamps"
+TRIM_INTERVAL=$((7 * 24 * 60 * 60))
+NOW=$(date +%s)
+TRIM_STAMP="$TRIM_DIR/TRIM_STAMP"
+TRIM_LOG="$TRIM_DIR/TRIM_LOG"
+
+mkdir -p "$TRIM_DIR" 2>/dev/null || true
+
+LAST=$(cat "$TRIM_STAMP" 2>/dev/null || echo 0)
+TIME_SINCE_TRIM=$((NOW - LAST))
+
+if [ "$TIME_SINCE_TRIM" -ge "$TRIM_INTERVAL" ]; then
+    TRIMMED_ANY=0
+    {
+        echo "=== $(date -Iseconds) ==="
+
+        # Only trim mounts backed by a real block device that actually
+        # supports discard (queue/discard_granularity != 0), deduped by
+        # physical disk. This is what keeps ephemeral-overlay's tmpfs
+        # dirs (and any bind mounts of them) out of the list, even if
+        # one of them happens to report an on-disk fs type like f2fs --
+        # SOURCE for those is never a real /dev/* path.
+        declare -A SEEN_DEVICES=()
+        CANDIDATES=()
+
+        while IFS= read -r line; do
+            [ -z "$line" ] && continue
+            eval "$line"
+
+            devpath="${SOURCE%%\[*}"
+            case "$devpath" in
+                /dev/*) ;;
+                *) continue ;;    # overlay, tmpfs, etc. -- not real storage
+            esac
+
+            devname=$(lsblk -no PKNAME "$devpath" 2>/dev/null)
+            [ -z "$devname" ] && devname=$(basename "$devpath")
+
+            gran=$(cat "/sys/block/$devname/queue/discard_granularity" 2>/dev/null)
+            case "$gran" in
+                ''|*[!0-9]*) gran=0 ;;
+            esac
+            [ "$gran" -eq 0 ] && continue    # device doesn't support trim
+
+            [ -n "${SEEN_DEVICES[$devname]:-}" ] && continue    # already queued
+            SEEN_DEVICES[$devname]=1
+
+            CANDIDATES+=("$TARGET")
+        done < <(findmnt -P -n -t ext4,xfs,btrfs,f2fs -o TARGET,SOURCE)
+
+        if [ "${#CANDIDATES[@]}" -eq 0 ]; then
+            echo "candidate mounts: none"
+        else
+            echo "candidate mounts: ${CANDIDATES[0]}"
+            printf '%s\n' "${CANDIDATES[@]:1}"
+        fi
+
+        for mountpoint in "${CANDIDATES[@]}"; do
+            if fstrim -v "$mountpoint"; then
+                TRIMMED_ANY=1
+            fi
+        done
+
+        echo "trimmed_any=$TRIMMED_ANY"
+    } >> "$TRIM_LOG" 2>&1
+
+    [ "$TRIMMED_ANY" -eq 1 ] && echo "$NOW" > "$TRIM_STAMP" 2>/dev/null
+fi
+
+# Security: Randomize Machine ID
+{ dbus-uuidgen >| /var/lib/dbus/machine-id || true; } &
+{ dbus-uuidgen >| /etc/machine-id || true; } &
+
+# Time Synchronization: NTP Sync and Hardware Clock Update
+(
+    setsid nohup sh -c '
+        mkdir -p /ulu/timestamps
+        for i in $(seq 1 30); do
+            getent hosts pool.ntp.org >/dev/null 2>&1 && break
+            sleep 1
+        done
+        if chronyd -q -t 15 "pool pool.ntp.org iburst" >>/ulu/timestamps/NTP_LOG 2>&1 && hwclock --systohc >>/ulu/timestamps/NTP_LOG 2>&1; then
+            echo "$(date -Iseconds) ntp sync ok" >>/ulu/timestamps/NTP_LOG
+        else
+            rc=$?
+            echo "$(date -Iseconds) ntp sync failed (exit $rc)" >>/ulu/timestamps/NTP_LOG
+        fi
+    ' >/dev/null 2>&1
+) &
