@@ -902,7 +902,7 @@ map_package_names() {
                 tesseract-data-eng) echo "tesseract-langpack-eng" ;;
                 debtap) echo "" ;;
                 downgrade) echo "" ;;
-                opendoas) echo "doas" ;;
+                opendoas) echo "opendoas" ;;
                 rust) echo "rust cargo" ;;
                 scx-scheds) echo "" ;;
                 fwupd) echo "fwupd" ;;
@@ -915,7 +915,7 @@ map_package_names() {
                 seahorse) echo "seahorse" ;;
                 ffmpegthumbnailer) echo "ffmpegthumbnailer" ;;
                 libva-utils) echo "libva-utils" ;;
-                clamav) echo "clamav clamav-update" ;;
+                clamav) echo "clamav clamav-data" ;;
                 earlyoom) echo "earlyoom" ;;
                 fail2ban) echo "fail2ban fail2ban-firewalld" ;;
                 cpupower) echo "kernel-tools" ;;
@@ -938,7 +938,7 @@ map_package_names() {
                 python-brotli) echo "python3-brotli" ;;
                 python-websockets) echo "python3-websockets" ;;
                 python-librosa) echo "" ;;
-                python-pypdf2) echo "python3-pypdf2" ;;
+                python-pypdf2) echo "python3-PyPDF2" ;;
                 python-pytesseract) echo "python3-pytesseract" ;;
                 *) echo "$base_pkg" ;;
             esac
@@ -981,11 +981,10 @@ map_package_names() {
                 yt-dlp) echo "yt-dlp" ;;
                 lib32-libdisplay-info) echo "" ;;
                 realtime-privileges) echo "" ;;
-                gallery-dl) echo "gallery-dl" ;;
                 tesseract-data-eng) echo "tesseract-ocr-traineddata-english" ;;
                 debtap) echo "" ;;
                 downgrade) echo "" ;;
-                opendoas) echo "doas" ;;
+                opendoas) echo "opendoas" ;;
                 rust) echo "rust cargo" ;;
                 scx-scheds) echo "scx" ;;
                 fwupd) echo "fwupd" ;;
@@ -1474,6 +1473,18 @@ if [ "$choice" = "5" ] || [ "$choice" = "6" ]; then
     add_service cpupower
 fi
 
+### FIX SELINUX FILE CONTEXTS ###
+# Fedora and OpenSUSE enforce SELinux/AppArmor by default. unzip has no idea
+# about security contexts, so every file it just wrote under /etc, /usr,
+# /bin and /home has whatever context it happened to inherit rather than
+# the context the policy expects. Left alone, this can silently block
+# services, PAM, or the display manager from starting at boot. Relabel
+# everything the zips could plausibly have touched before we reboot.
+if command -v restorecon &>/dev/null; then
+    echo -e "\e[1mRestoring SELinux file contexts...\e[0m"
+    restorecon -R -F /etc /usr /bin /sbin /lib /lib64 /home /var 2>/dev/null || true
+fi
+
 ### INSTALL UNIVERSAL RC.LOCAL (systemd compatibility unit) ###
 case "$PKG_MANAGER" in
     dnf|zypper) RC_LOCAL_PATH="/etc/rc.d/rc.local" ;;
@@ -1587,6 +1598,14 @@ cat > /etc/security/limits.d/99-realtime-privileges.conf <<EOF
 @realtime - nice -19
 EOF
 usermod -aG realtime "$(logname)"
+
+# FINAL SELINUX RELABEL
+# Catches the rc-local.service unit and limits.d file created above (in
+# addition to the earlier pass over the unzipped ULU files), so nothing
+# newly written this run boots with a stale or missing context.
+if command -v restorecon &>/dev/null; then
+    restorecon -R -F /etc /usr /bin /sbin /lib /lib64 /home /var 2>/dev/null || true
+fi
 
 # RESET PERMISSIONS
 reset-permissions
