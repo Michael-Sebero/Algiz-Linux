@@ -116,7 +116,7 @@ reload_s6_db() {
     fi
 }
 
-### ULU LINUX CHOICE SELECTION ###
+### ULU CHOICE SELECTION ###
 
 echo -e "\e[1mSelect a ULU Variant\e[0m"
 echo "1. AMD-DESKTOP"
@@ -149,10 +149,17 @@ pacman -Sy --noconfirm --needed p7zip unzip git base-devel
 mkdir /home/ulu-files/
 git clone https://github.com/Michael-Sebero/ULU /home/ulu-files/
 cd /home/ulu-files/files/ulu-packages/
-unzip -o ulu-artix-temp-1.zip -d /etc
 pacman -Sy --noconfirm artix-archlinux-support pacman-contrib artix-keyring archlinux-keyring artix-mirrorlist archlinux-mirrorlist
 pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-unzip -o ulu-artix-temp-2.zip -d /etc
+cat >> /etc/pacman.conf <<'\''EOF'\''
+
+[auris]
+SigLevel = Required
+Server = https://auris.artixlinux.org/api/packages/auris/arch/$repo/$arch
+
+[chaotic-aur]
+Include = /etc/pacman.d/chaotic-mirrorlist
+EOF
 pacman -Sy --noconfirm alhp-keyring alhp-mirrorlist
 
 # CPU ARCHITECTURE DETECTION
@@ -348,7 +355,7 @@ if pacman -Q protonup-git &>/dev/null; then
     su - "$USER" -c "protonup -d /home/$USER/.local/share/Steam/compatibilitytools.d/ && protonup -y"
 fi
 
-### ULU LINUX INSTALL ###
+### ULU INSTALL ###
 
 # AMD/INTEL SELECTION
 if [ "$choice" = "1" ] || [ "$choice" = "3" ]; then
@@ -471,7 +478,7 @@ cd /
 grub-install || true
 update-grub
 rm -rf /home/ulu-files/
-echo -e "\e[1mULU Linux has been successfully installed\e[0m"
+echo -e "\e[ULU has been successfully installed\e[0m"
 reboot
 
 elif command -v xbps-install &>/dev/null; then
@@ -522,7 +529,7 @@ careful_install() {
   fi
 }
 
-### ULU LINUX CHOICE SELECTION ###
+### ULU CHOICE SELECTION ###
 
 echo -e "\e[1mSelect a ULU Variant\e[0m"
 echo "1. AMD-DESKTOP"
@@ -666,7 +673,7 @@ if xbps-query protonup-ng &>/dev/null; then
     su - "$USER" -c "protonup -d /home/$USER/.local/share/Steam/compatibilitytools.d/ && protonup -y"
 fi
 
-### ULU LINUX INSTALL ###
+### ULU INSTALL ###
 
 # AMD/INTEL SELECTION
 if [ "$choice" = "1" ] || [ "$choice" = "3" ]; then
@@ -752,7 +759,7 @@ hardening-script
 cd /
 grub-install || true
 rm -rf /home/ulu-files/
-echo -e "\e[1mULU Linux has been successfully installed\e[0m"
+echo -e "\e[ULU has been successfully installed\e[0m"
 reboot
 
 else
@@ -917,7 +924,7 @@ careful_install() {
     fi
 }
 
-### ULU LINUX CHOICE SELECTION ###
+### ULU CHOICE SELECTION ###
 
 echo -e "\e[1mSelect a ULU Variant\e[0m"
 echo "1. AMD-DESKTOP"
@@ -1132,7 +1139,7 @@ flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/fl
 # Proton-GE, install ProtonUp-Qt yourself (flatpak install flathub
 # net.davidotek.pupgui2) and pick a build from its UI.
 
-### ULU LINUX INSTALL ###
+### ULU INSTALL ###
 
 # AMD/INTEL SELECTION
 if [ "$choice" = "1" ] || [ "$choice" = "3" ]; then
@@ -1258,7 +1265,7 @@ hardening-script
 # EXIT
 cd /
 rm -rf /home/ulu-files/
-echo -e "\e[1mULU Linux has been successfully installed\e[0m"
+echo -e "\e[ULU has been successfully installed\e[0m"
 reboot
 
 fi
