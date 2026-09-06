@@ -334,7 +334,6 @@ if [ "$choice" = "1" ] || [ "$choice" = "3" ]; then
   unzip -o ulu-dotfiles.zip -d /home/$USER/
   unzip -o ulu-root-main.zip -d /
   unzip -o ulu-root-programs.zip -d /
-  unzip -o ulu-root.zip -d /
   add_service fail2ban
   add_service cpupower
 fi
@@ -344,7 +343,6 @@ if [ "$choice" = "2" ] || [ "$choice" = "4" ]; then
   unzip -o ulu-dotfiles.zip -d /home/$USER/
   unzip -o ulu-root-main.zip -d /
   unzip -o ulu-root-programs.zip -d /
-  unzip -o ulu-root.zip -d /
   unzip -o ulu-root-laptop.zip -d /
   add_service tlp
 fi
@@ -354,7 +352,6 @@ if [ "$choice" = "5" ] || [ "$choice" = "6" ]; then
   unzip -o ulu-dotfiles.zip -d /home/$USER/
   unzip -o ulu-root-main.zip -d /
   unzip -o ulu-root-programs.zip -d /
-  unzip -o ulu-root.zip -d /
   unzip -o ulu-nvidia-patch.zip -d /
   add_service fail2ban
   add_service cpupower
@@ -651,7 +648,6 @@ if [ "$choice" = "1" ] || [ "$choice" = "3" ]; then
   unzip -o ulu-dotfiles.zip -d /home/$USER/
   unzip -o ulu-root-main.zip -d /
   unzip -o ulu-root-programs.zip -d /
-  unzip -o ulu-root.zip -d /
   add_service fail2ban
   add_service cpupower
 fi
@@ -661,7 +657,6 @@ if [ "$choice" = "2" ] || [ "$choice" = "4" ]; then
   unzip -o ulu-dotfiles.zip -d /home/$USER/
   unzip -o ulu-root-main.zip -d /
   unzip -o ulu-root-programs.zip -d /
-  unzip -o ulu-root.zip -d /
   unzip -o ulu-root-laptop.zip -d /
   add_service tlp
 fi
@@ -671,7 +666,6 @@ if [ "$choice" = "5" ] || [ "$choice" = "6" ]; then
   unzip -o ulu-dotfiles.zip -d /home/$USER/
   unzip -o ulu-root-main.zip -d /
   unzip -o ulu-root-programs.zip -d /
-  unzip -o ulu-root.zip -d /
   unzip -o ulu-nvidia-patch.zip -d /
   add_service fail2ban
   add_service cpupower
@@ -1447,7 +1441,6 @@ if [ "$choice" = "1" ] || [ "$choice" = "3" ]; then
     unzip -o ulu-dotfiles.zip -d /home/$USER/
     unzip -o ulu-root-main.zip -d /
     unzip -o ulu-root-programs.zip -d /
-    unzip -o ulu-root.zip -d /
     add_service fail2ban
     add_service cpupower
 fi
@@ -1457,7 +1450,6 @@ if [ "$choice" = "2" ] || [ "$choice" = "4" ]; then
     unzip -o ulu-dotfiles.zip -d /home/$USER/
     unzip -o ulu-root-main.zip -d /
     unzip -o ulu-root-programs.zip -d /
-    unzip -o ulu-root.zip -d /
     unzip -o ulu-root-laptop.zip -d /
     add_service tlp
 fi
@@ -1467,7 +1459,6 @@ if [ "$choice" = "5" ] || [ "$choice" = "6" ]; then
     unzip -o ulu-dotfiles.zip -d /home/$USER/
     unzip -o ulu-root-main.zip -d /
     unzip -o ulu-root-programs.zip -d /
-    unzip -o ulu-root.zip -d /
     unzip -o ulu-nvidia-patch.zip -d /
     add_service fail2ban
     add_service cpupower
