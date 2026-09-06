@@ -887,10 +887,6 @@ remove_service() {
 }
 
 ### PACKAGE NAME MAPPING ###
-# Translates the canonical package name used throughout this script (the
-# same names the Artix/Void sections above install) into whatever apt
-# calls it. Echoes "" for anything with no equivalent, or that is
-# handled separately below - careful_install() just skips those quietly.
 map_package_names() {
     local base_pkg="$1"
     case "$base_pkg" in
@@ -1228,13 +1224,6 @@ fi
 ### IMPORT FLATHUB + FLATPAK BETA REPOS ###
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-
-### PROTON-GE NOTE ###
-# On Arch/Void this step auto-downloads a Proton-GE build via protonup-git
-# with no equivalent CLI tool available here, so nothing is installed
-# automatically - only a Flathub remote is added above. If you want
-# Proton-GE, install ProtonUp-Qt yourself (flatpak install flathub
-# net.davidotek.pupgui2) and pick a build from its UI.
 
 ### ULU INSTALL ###
 
