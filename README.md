@@ -19,8 +19,6 @@ Originally, I was inspired by Luke Smith's [LARBS](https://github.com/LukeSmithx
 * Void Linux - **96%**
 * Linux Mint -
 * Ubuntu -
-* Fedora -
-* OpenSUSE -
 
 > [!IMPORTANT]
 > The only distro that includes the x86-64-v3 kernels is Artix Linux.

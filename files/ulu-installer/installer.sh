@@ -732,24 +732,18 @@ reboot
 
 else
 
-###############################################
-# DEBIAN/UBUNTU/OPENSUSE/FEDORA LINUX SECTION #
-###############################################
+###############################
+# DEBIAN/UBUNTU LINUX SECTION #
+###############################
 
 ### PACKAGE MANAGER / DISTRO DETECTION ###
-if command -v apt-get &>/dev/null; then
-    PKG_MANAGER="apt"
-elif command -v dnf &>/dev/null; then
-    PKG_MANAGER="dnf"
-elif command -v zypper &>/dev/null; then
-    PKG_MANAGER="zypper"
-else
-    echo "Unsupported distribution. This section supports Linux Mint, Ubuntu, Fedora and OpenSUSE." >&2
+if ! command -v apt-get &>/dev/null; then
+    echo "Unsupported distribution. This section supports Linux Mint and Ubuntu." >&2
     exit 1
 fi
 
 ### INIT SYSTEM ###
-# Linux Mint, Ubuntu, Fedora and OpenSUSE all ship systemd.
+# Linux Mint and Ubuntu both ship systemd.
 INIT_SYSTEM="systemd"
 
 ### SERVICE MANAGEMENT FUNCTIONS ###
@@ -765,260 +759,91 @@ remove_service() {
 
 ### PACKAGE NAME MAPPING ###
 # Translates the canonical package name used throughout this script (the
-# same names the Artix/Void sections above install) into whatever apt, dnf
-# or zypper calls it. Echoes "" for anything with no equivalent, or that is
+# same names the Artix/Void sections above install) into whatever apt
+# calls it. Echoes "" for anything with no equivalent, or that is
 # handled separately below - careful_install() just skips those quietly.
 map_package_names() {
     local base_pkg="$1"
-    case "$PKG_MANAGER" in
-        apt)
-            case "$base_pkg" in
-                unrar) echo "unrar" ;;
-                flatpak) echo "flatpak" ;;
-                gamemode) echo "gamemode" ;;
-                lib32-gamemode) echo "libgamemode0:i386" ;;
-                dnscrypt-proxy) echo "dnscrypt-proxy" ;;
-                dnsmasq) echo "dnsmasq" ;;
-                apparmor) echo "apparmor apparmor-utils" ;;
-                gufw) echo "gufw" ;;
-                macchanger) echo "macchanger" ;;
-                wine) echo "wine" ;;
-                wine-mono) echo "" ;;
-                winetricks) echo "winetricks" ;;
-                steam) echo "steam-installer" ;;
-                lynis) echo "lynis" ;;
-                rkhunter) echo "rkhunter" ;;
-                usbguard) echo "usbguard" ;;
-                chkrootkit) echo "chkrootkit" ;;
-                expect) echo "expect" ;;
-                inotify-tools) echo "inotify-tools" ;;
-                preload) echo "preload" ;;
-                dialog) echo "dialog" ;;
-                tree) echo "tree" ;;
-                parallel) echo "parallel" ;;
-                sof-firmware) echo "firmware-sof-signed" ;;
-                booster) echo "" ;;
-                vulkan-tools) echo "vulkan-tools" ;;
-                mimalloc) echo "libmimalloc2.0" ;;
-                mold) echo "mold" ;;
-                protontricks) echo "" ;;
-                poetry) echo "" ;;
-                pyenv) echo "" ;;
-                python-pip) echo "python3-pip" ;;
-                ccache) echo "ccache" ;;
-                yt-dlp) echo "yt-dlp" ;;
-                lib32-libdisplay-info) echo "" ;;
-                realtime-privileges) echo "" ;;
-                gallery-dl) echo "gallery-dl" ;;
-                tesseract-data-eng) echo "tesseract-ocr-eng" ;;
-                debtap) echo "" ;;
-                downgrade) echo "" ;;
-                opendoas) echo "doas" ;;
-                rust) echo "rustc cargo" ;;
-                scx-scheds) echo "" ;;
-                fwupd) echo "fwupd" ;;
-                chrony) echo "chrony" ;;
-                mesa) echo "mesa-utils" ;;
-                lib32-mesa) echo "libgl1-mesa-dri:i386" ;;
-                tk) echo "tk" ;;
-                nix) echo "" ;;
-                networkmanager) echo "network-manager" ;;
-                seahorse) echo "seahorse" ;;
-                ffmpegthumbnailer) echo "ffmpegthumbnailer" ;;
-                libva-utils) echo "libva-utils" ;;
-                clamav) echo "clamav clamav-daemon" ;;
-                earlyoom) echo "earlyoom" ;;
-                fail2ban) echo "fail2ban" ;;
-                cpupower) echo "linux-tools-common linux-tools-generic" ;;
-                tlp) echo "tlp tlp-rdw" ;;
-                throttled) echo "" ;;
-                blueman) echo "blueman" ;;
-                bluez) echo "bluez" ;;
-                brightnessctl) echo "brightnessctl" ;;
-                vulkan-driver) echo "mesa-vulkan-drivers" ;;
-                lib32-vulkan-driver) echo "mesa-vulkan-drivers:i386" ;;
-                python-dateutil) echo "python3-dateutil" ;;
-                python-xlib) echo "python3-xlib" ;;
-                python-pyaudio) echo "python3-pyaudio" ;;
-                python-pipenv) echo "pipenv" ;;
-                python-matplotlib) echo "python3-matplotlib" ;;
-                python-tqdm) echo "python3-tqdm" ;;
-                python-magic) echo "python3-magic" ;;
-                python-piexif) echo "python3-piexif" ;;
-                python-moviepy) echo "" ;;
-                python-brotli) echo "python3-brotli" ;;
-                python-websockets) echo "python3-websockets" ;;
-                python-librosa) echo "" ;;
-                python-pypdf2) echo "python3-pypdf2" ;;
-                python-pytesseract) echo "python3-pytesseract" ;;
-                *) echo "$base_pkg" ;;
-            esac
-            ;;
-        dnf)
-            case "$base_pkg" in
-                unrar) echo "unrar" ;;
-                flatpak) echo "flatpak" ;;
-                gamemode) echo "gamemode" ;;
-                lib32-gamemode) echo "gamemode.i686" ;;
-                dnscrypt-proxy) echo "dnscrypt-proxy" ;;
-                dnsmasq) echo "dnsmasq" ;;
-                apparmor) echo "" ;;
-                gufw) echo "firewall-config" ;;
-                macchanger) echo "macchanger" ;;
-                wine) echo "wine" ;;
-                wine-mono) echo "" ;;
-                winetricks) echo "winetricks" ;;
-                steam) echo "steam" ;;
-                lynis) echo "lynis" ;;
-                rkhunter) echo "rkhunter" ;;
-                usbguard) echo "usbguard" ;;
-                chkrootkit) echo "chkrootkit" ;;
-                expect) echo "expect" ;;
-                inotify-tools) echo "inotify-tools" ;;
-                preload) echo "" ;;
-                dialog) echo "dialog" ;;
-                tree) echo "tree" ;;
-                parallel) echo "parallel" ;;
-                sof-firmware) echo "alsa-sof-firmware" ;;
-                booster) echo "" ;;
-                vulkan-tools) echo "vulkan-tools" ;;
-                mimalloc) echo "mimalloc" ;;
-                mold) echo "mold" ;;
-                protontricks) echo "" ;;
-                poetry) echo "" ;;
-                pyenv) echo "" ;;
-                python-pip) echo "python3-pip" ;;
-                ccache) echo "ccache" ;;
-                yt-dlp) echo "yt-dlp" ;;
-                lib32-libdisplay-info) echo "" ;;
-                realtime-privileges) echo "" ;;
-                gallery-dl) echo "gallery-dl" ;;
-                tesseract-data-eng) echo "tesseract-langpack-eng" ;;
-                debtap) echo "" ;;
-                downgrade) echo "" ;;
-                opendoas) echo "opendoas" ;;
-                rust) echo "rust cargo" ;;
-                scx-scheds) echo "" ;;
-                fwupd) echo "fwupd" ;;
-                chrony) echo "chrony" ;;
-                mesa) echo "glx-utils" ;;
-                lib32-mesa) echo "mesa-dri-drivers.i686" ;;
-                tk) echo "tk" ;;
-                nix) echo "" ;;
-                networkmanager) echo "NetworkManager" ;;
-                seahorse) echo "seahorse" ;;
-                ffmpegthumbnailer) echo "ffmpegthumbnailer" ;;
-                libva-utils) echo "libva-utils" ;;
-                clamav) echo "clamav clamav-data" ;;
-                earlyoom) echo "earlyoom" ;;
-                fail2ban) echo "fail2ban fail2ban-firewalld" ;;
-                cpupower) echo "kernel-tools" ;;
-                tlp) echo "tlp" ;;
-                throttled) echo "" ;;
-                blueman) echo "blueman" ;;
-                bluez) echo "bluez" ;;
-                brightnessctl) echo "brightnessctl" ;;
-                vulkan-driver) echo "mesa-vulkan-drivers" ;;
-                lib32-vulkan-driver) echo "mesa-vulkan-drivers.i686" ;;
-                python-dateutil) echo "python3-dateutil" ;;
-                python-xlib) echo "python3-xlib" ;;
-                python-pyaudio) echo "python3-pyaudio" ;;
-                python-pipenv) echo "pipenv" ;;
-                python-matplotlib) echo "python3-matplotlib" ;;
-                python-tqdm) echo "python3-tqdm" ;;
-                python-magic) echo "python3-magic" ;;
-                python-piexif) echo "python3-piexif" ;;
-                python-moviepy) echo "" ;;
-                python-brotli) echo "python3-brotli" ;;
-                python-websockets) echo "python3-websockets" ;;
-                python-librosa) echo "" ;;
-                python-pypdf2) echo "python3-PyPDF2" ;;
-                python-pytesseract) echo "python3-pytesseract" ;;
-                *) echo "$base_pkg" ;;
-            esac
-            ;;
-        zypper)
-            case "$base_pkg" in
-                unrar) echo "unrar" ;;
-                flatpak) echo "flatpak" ;;
-                gamemode) echo "gamemode" ;;
-                lib32-gamemode) echo "gamemode-32bit" ;;
-                dnscrypt-proxy) echo "dnscrypt-proxy" ;;
-                dnsmasq) echo "dnsmasq" ;;
-                apparmor) echo "apparmor apparmor-utils" ;;
-                gufw) echo "firewall-config" ;;
-                macchanger) echo "macchanger" ;;
-                wine) echo "wine" ;;
-                wine-mono) echo "" ;;
-                winetricks) echo "winetricks" ;;
-                steam) echo "steam" ;;
-                lynis) echo "lynis" ;;
-                rkhunter) echo "rkhunter" ;;
-                usbguard) echo "usbguard" ;;
-                chkrootkit) echo "chkrootkit" ;;
-                expect) echo "expect" ;;
-                inotify-tools) echo "inotify-tools" ;;
-                preload) echo "" ;;
-                dialog) echo "dialog" ;;
-                tree) echo "tree" ;;
-                parallel) echo "parallel" ;;
-                sof-firmware) echo "sof-firmware" ;;
-                booster) echo "" ;;
-                vulkan-tools) echo "vulkan-tools" ;;
-                mimalloc) echo "mimalloc" ;;
-                mold) echo "mold" ;;
-                protontricks) echo "" ;;
-                poetry) echo "" ;;
-                pyenv) echo "" ;;
-                python-pip) echo "python3-pip" ;;
-                ccache) echo "ccache" ;;
-                yt-dlp) echo "yt-dlp" ;;
-                lib32-libdisplay-info) echo "" ;;
-                realtime-privileges) echo "" ;;
-                tesseract-data-eng) echo "tesseract-ocr-traineddata-english" ;;
-                debtap) echo "" ;;
-                downgrade) echo "" ;;
-                opendoas) echo "opendoas" ;;
-                rust) echo "rust cargo" ;;
-                scx-scheds) echo "scx" ;;
-                fwupd) echo "fwupd" ;;
-                chrony) echo "chrony" ;;
-                mesa) echo "Mesa-demo-x" ;;
-                lib32-mesa) echo "Mesa-libGL1-32bit" ;;
-                tk) echo "tk" ;;
-                nix) echo "" ;;
-                networkmanager) echo "NetworkManager" ;;
-                seahorse) echo "seahorse" ;;
-                ffmpegthumbnailer) echo "ffmpegthumbnailer" ;;
-                libva-utils) echo "libva-utils" ;;
-                clamav) echo "clamav" ;;
-                earlyoom) echo "earlyoom" ;;
-                fail2ban) echo "fail2ban" ;;
-                cpupower) echo "cpupower" ;;
-                tlp) echo "tlp" ;;
-                throttled) echo "" ;;
-                blueman) echo "blueman" ;;
-                bluez) echo "bluez" ;;
-                brightnessctl) echo "brightnessctl" ;;
-                vulkan-driver) echo "Mesa-vulkan-drivers" ;;
-                lib32-vulkan-driver) echo "Mesa-vulkan-drivers-32bit" ;;
-                python-dateutil) echo "python3-python-dateutil" ;;
-                python-xlib) echo "python3-python-xlib" ;;
-                python-pyaudio) echo "python3-PyAudio" ;;
-                python-pipenv) echo "python3-pipenv" ;;
-                python-matplotlib) echo "python3-matplotlib" ;;
-                python-tqdm) echo "python3-tqdm" ;;
-                python-magic) echo "python3-python-magic" ;;
-                python-piexif) echo "python3-piexif" ;;
-                python-moviepy) echo "" ;;
-                python-brotli) echo "python3-Brotli" ;;
-                python-websockets) echo "python3-websockets" ;;
-                python-librosa) echo "" ;;
-                python-pypdf2) echo "python3-PyPDF2" ;;
-                python-pytesseract) echo "python3-pytesseract" ;;
-                *) echo "$base_pkg" ;;
-            esac
-            ;;
+    case "$base_pkg" in
+        unrar) echo "unrar" ;;
+        flatpak) echo "flatpak" ;;
+        gamemode) echo "gamemode" ;;
+        lib32-gamemode) echo "libgamemode0:i386" ;;
+        dnscrypt-proxy) echo "dnscrypt-proxy" ;;
+        dnsmasq) echo "dnsmasq" ;;
+        apparmor) echo "apparmor apparmor-utils" ;;
+        gufw) echo "gufw" ;;
+        macchanger) echo "macchanger" ;;
+        wine) echo "wine" ;;
+        wine-mono) echo "" ;;
+        winetricks) echo "winetricks" ;;
+        steam) echo "steam-installer" ;;
+        lynis) echo "lynis" ;;
+        rkhunter) echo "rkhunter" ;;
+        usbguard) echo "usbguard" ;;
+        chkrootkit) echo "chkrootkit" ;;
+        expect) echo "expect" ;;
+        inotify-tools) echo "inotify-tools" ;;
+        preload) echo "preload" ;;
+        dialog) echo "dialog" ;;
+        tree) echo "tree" ;;
+        parallel) echo "parallel" ;;
+        sof-firmware) echo "firmware-sof-signed" ;;
+        booster) echo "" ;;
+        vulkan-tools) echo "vulkan-tools" ;;
+        mimalloc) echo "libmimalloc2.0" ;;
+        mold) echo "mold" ;;
+        protontricks) echo "" ;;
+        poetry) echo "" ;;
+        pyenv) echo "" ;;
+        python-pip) echo "python3-pip" ;;
+        ccache) echo "ccache" ;;
+        yt-dlp) echo "yt-dlp" ;;
+        lib32-libdisplay-info) echo "" ;;
+        realtime-privileges) echo "" ;;
+        gallery-dl) echo "gallery-dl" ;;
+        tesseract-data-eng) echo "tesseract-ocr-eng" ;;
+        debtap) echo "" ;;
+        downgrade) echo "" ;;
+        opendoas) echo "doas" ;;
+        rust) echo "rustc cargo" ;;
+        scx-scheds) echo "" ;;
+        fwupd) echo "fwupd" ;;
+        chrony) echo "chrony" ;;
+        mesa) echo "mesa-utils" ;;
+        lib32-mesa) echo "libgl1-mesa-dri:i386" ;;
+        tk) echo "tk" ;;
+        nix) echo "" ;;
+        networkmanager) echo "network-manager" ;;
+        seahorse) echo "seahorse" ;;
+        ffmpegthumbnailer) echo "ffmpegthumbnailer" ;;
+        libva-utils) echo "libva-utils" ;;
+        clamav) echo "clamav clamav-daemon" ;;
+        earlyoom) echo "earlyoom" ;;
+        fail2ban) echo "fail2ban" ;;
+        cpupower) echo "linux-tools-common linux-tools-generic" ;;
+        tlp) echo "tlp tlp-rdw" ;;
+        throttled) echo "" ;;
+        blueman) echo "blueman" ;;
+        bluez) echo "bluez" ;;
+        brightnessctl) echo "brightnessctl" ;;
+        vulkan-driver) echo "mesa-vulkan-drivers" ;;
+        lib32-vulkan-driver) echo "mesa-vulkan-drivers:i386" ;;
+        python-dateutil) echo "python3-dateutil" ;;
+        python-xlib) echo "python3-xlib" ;;
+        python-pyaudio) echo "python3-pyaudio" ;;
+        python-pipenv) echo "pipenv" ;;
+        python-matplotlib) echo "python3-matplotlib" ;;
+        python-tqdm) echo "python3-tqdm" ;;
+        python-magic) echo "python3-magic" ;;
+        python-piexif) echo "python3-piexif" ;;
+        python-moviepy) echo "" ;;
+        python-brotli) echo "python3-brotli" ;;
+        python-websockets) echo "python3-websockets" ;;
+        python-librosa) echo "" ;;
+        python-pypdf2) echo "python3-pypdf2" ;;
+        python-pytesseract) echo "python3-pytesseract" ;;
+        *) echo "$base_pkg" ;;
     esac
 }
 
@@ -1029,13 +854,7 @@ careful_install_raw() {
         local success=false
         for attempt in $(seq 1 5); do
             echo "Installing $pkg (attempt $attempt/5)..." >&2
-            local result=0
-            case "$PKG_MANAGER" in
-                apt)    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "$pkg" || result=$? ;;
-                dnf)    dnf install -y "$pkg" || result=$? ;;
-                zypper) zypper --non-interactive install --no-recommends "$pkg" || result=$? ;;
-            esac
-            if [ "$result" -eq 0 ]; then
+            if DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "$pkg"; then
                 success=true
                 break
             else
@@ -1087,53 +906,18 @@ read -p "Enter your choice (1-6): " choice
 
 ### INITIAL SETUP & PREREQUISITE TOOLS ###
 echo -e "\e[1mUpdating package lists...\e[0m"
-case "$PKG_MANAGER" in
-    apt)
-        export DEBIAN_FRONTEND=noninteractive
-        dpkg --add-architecture i386
-        apt-get update
-        apt-get install -y --no-install-recommends ca-certificates curl gnupg wget git unzip p7zip-full software-properties-common apt-transport-https
-        ;;
-    dnf)
-        dnf install -y dnf-plugins-core git unzip p7zip curl wget
-        ;;
-    zypper)
-        zypper --non-interactive install curl wget git unzip p7zip gpg2
-        ;;
-esac
+export DEBIAN_FRONTEND=noninteractive
+dpkg --add-architecture i386
+apt-get update
+apt-get install -y --no-install-recommends ca-certificates curl gnupg wget git unzip p7zip-full software-properties-common apt-transport-https
 
 ### ENABLE ADDITIONAL REPOSITORIES ###
 echo -e "\e[1mEnabling additional repositories...\e[0m"
-case "$PKG_MANAGER" in
-    apt)
-        if command -v add-apt-repository &>/dev/null; then
-            add-apt-repository -y universe 2>/dev/null || true
-            add-apt-repository -y multiverse 2>/dev/null || true
-        fi
-        apt-get update
-        ;;
-    dnf)
-        FEDORA_VER=$(rpm -E %fedora)
-        dnf install -y --nogpgcheck \
-            "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${FEDORA_VER}.noarch.rpm" \
-            "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${FEDORA_VER}.noarch.rpm" || true
-        dnf config-manager --set-enabled crb 2>/dev/null || true
-        dnf makecache
-        ;;
-    zypper)
-        . /etc/os-release
-        if [ "$ID" = "opensuse-tumbleweed" ]; then
-            PACKMAN_URL="https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/"
-            NVIDIA_URL="https://download.nvidia.com/opensuse/tumbleweed/"
-        else
-            PACKMAN_URL="https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_${VERSION_ID}/"
-            NVIDIA_URL="https://download.nvidia.com/opensuse/leap/${VERSION_ID}/"
-        fi
-        zypper --non-interactive addrepo -cfp 90 "$PACKMAN_URL" packman 2>/dev/null || true
-        zypper --non-interactive addrepo -f "$NVIDIA_URL" nvidia 2>/dev/null || true
-        zypper --gpg-auto-import-keys refresh
-        ;;
-esac
+if command -v add-apt-repository &>/dev/null; then
+    add-apt-repository -y universe 2>/dev/null || true
+    add-apt-repository -y multiverse 2>/dev/null || true
+fi
+apt-get update
 
 ### FIRST COMMANDS AND ULU-LINUX IMPORT P1 ###
 mkdir -p /home/ulu-files/
@@ -1143,13 +927,7 @@ cd /home/ulu-files/files/ulu-packages/
 ### FULL SYSTEM UPDATE WITH RETRIES ###
 for attempt in $(seq 1 5); do
     echo "Running full system update (attempt $attempt/5)..." >&2
-    result=0
-    case "$PKG_MANAGER" in
-        apt)    DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade || result=$? ;;
-        dnf)    dnf upgrade -y --refresh || result=$? ;;
-        zypper) zypper --non-interactive update || result=$? ;;
-    esac
-    if [ "$result" -eq 0 ]; then
+    if DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade; then
         echo "System update succeeded." >&2
         break
     else
@@ -1165,25 +943,11 @@ done
 mv /home/ulu-files/files/ulu-manual/Manual /home/$USER/Desktop/
 
 ### REMOVE CONFLICTING PACKAGES ###
-case "$PKG_MANAGER" in
-    apt)
-        for pkg in pulseaudio pulseaudio-module-bluetooth modemmanager; do
-            if dpkg -s "$pkg" &>/dev/null; then
-                apt-get purge -y "$pkg" || true
-            fi
-        done
-        ;;
-    dnf|zypper)
-        for pkg in pulseaudio ModemManager; do
-            if rpm -q "$pkg" &>/dev/null; then
-                case "$PKG_MANAGER" in
-                    dnf)    dnf remove -y "$pkg" || true ;;
-                    zypper) zypper --non-interactive remove "$pkg" || true ;;
-                esac
-            fi
-        done
-        ;;
-esac
+for pkg in pulseaudio pulseaudio-module-bluetooth modemmanager; do
+    if dpkg -s "$pkg" &>/dev/null; then
+        apt-get purge -y "$pkg" || true
+    fi
+done
 
 ### INSTALL BASE PACKAGES ###
 careful_install \
@@ -1196,8 +960,8 @@ careful_install \
   fwupd chrony dnsmasq mesa lib32-mesa tk
 
 ### INSTALL NIX PACKAGE MANAGER ###
-# No native package on these distros; the official multi-user installer
-# works identically regardless of PKG_MANAGER.
+# No native package on this distro family; the official multi-user
+# installer works the same regardless.
 if ! command -v nix &>/dev/null; then
     echo -e "\e[1mInstalling the Nix package manager...\e[0m"
     sh <(curl -L https://nixos.org/nix/install) --daemon --yes || echo "Nix installation failed, skipping." >&2
@@ -1218,44 +982,7 @@ check_kernel_version() {
 }
 
 if check_kernel_version; then
-    echo -e "\e[1mKernel is 6.12+, installing scx-scheds...\e[0m"
-    case "$PKG_MANAGER" in
-        apt)
-            echo "No scx-scheds package on apt-based systems; skipping (build it from source if you need it)."
-            ;;
-        dnf)
-            # Fedora ships sched-ext schedulers natively - scx_c_schedulers
-            # (scx_simple, scx_qmap, scx_nest, etc.) and scx_layered are in
-            # the official repos, so there is no need to enable the
-            # third-party CachyOS COPR at all. Falling back to that COPR
-            # only if the native packages are unavailable (very old Fedora).
-            if dnf info scx_c_schedulers &>/dev/null || dnf info scx_layered &>/dev/null; then
-                careful_install_raw scx_c_schedulers scx_layered
-            else
-                echo "Native scx packages not found for this Fedora release, falling back to the CachyOS COPR." >&2
-                dnf copr enable -y bieszczaders/kernel-cachyos-addons 2>/dev/null || true
-                careful_install_raw scx-scheds
-                # That COPR package can enable a default sched-ext scheduler
-                # on install. sched-ext schedulers run at the kernel
-                # scheduling level and are experimental - an incompatible
-                # one can hang the whole machine (not just a graphical
-                # session), so make sure nothing auto-starts here either.
-                for scx_unit in scx.service scx_loader.service; do
-                    systemctl disable --now "$scx_unit" 2>/dev/null || true
-                done
-            fi
-            echo "sched-ext scheduler binaries installed but nothing is enabled; run a specific scx_* scheduler yourself if you want one active." >&2
-            ;;
-        zypper)
-            # Native openSUSE Factory/Tumbleweed package, no third-party repo needed.
-            careful_install_raw scx
-            # Precaution only: do not let any scheduler auto-start.
-            for scx_unit in scx.service scx_loader.service; do
-                systemctl disable --now "$scx_unit" 2>/dev/null || true
-            done
-            echo "sched-ext scheduler binaries installed but nothing is enabled; run a specific scx_* scheduler yourself if you want one active." >&2
-            ;;
-    esac
+    echo "Kernel is 6.12+, but no scx-scheds package is available on apt-based systems; skipping (build it from source if you need it)." >&2
 else
     echo "Kernel is below 6.12, skipping scx-scheds installation." >&2
 fi
@@ -1276,14 +1003,14 @@ else
     echo "Thunar not detected, skipping XFCE packages."
 fi
 
-### CPU MICROARCHITECTURE DETECTION (used for the XanMod kernel on apt systems) ###
+### CPU MICROARCHITECTURE DETECTION (used for the XanMod kernel) ###
 arch_support=$(/lib/ld-linux-x86-64.so.2 --help 2>&1 | grep supported | head -n 1 | awk "{print \$1}")
 XANMOD_SUFFIX="x64v3"
 if [ "$arch_support" = "x86-64-v4" ]; then
     XANMOD_SUFFIX="x64v4"
 fi
 
-### XANMOD KERNEL HELPER (apt-based systems only) ###
+### XANMOD KERNEL HELPER ###
 setup_xanmod_repo() {
     if [ -f /etc/apt/sources.list.d/xanmod-release.list ]; then
         return 0
@@ -1308,38 +1035,24 @@ install_xanmod_kernel() {
 # AMD-DESKTOP CHOICE
 if [ "$choice" = "1" ]; then
     if command -v thunar &>/dev/null; then
-        case "$PKG_MANAGER" in
-            apt)    apt-get purge -y xfce4-power-manager xfce4-battery-plugin || true ;;
-            dnf)    dnf remove -y xfce4-power-manager xfce4-battery-plugin || true ;;
-            zypper) zypper --non-interactive remove xfce4-power-manager xfce4-battery-plugin || true ;;
-        esac
+        apt-get purge -y xfce4-power-manager xfce4-battery-plugin || true
     fi
-    if [ "$PKG_MANAGER" = "apt" ]; then
-        install_xanmod_kernel edge
-    fi
+    install_xanmod_kernel edge
     careful_install vulkan-driver lib32-vulkan-driver libva-utils fail2ban cpupower
 fi
 
 # AMD-LAPTOP CHOICE
 if [ "$choice" = "2" ]; then
-    if [ "$PKG_MANAGER" = "apt" ]; then
-        install_xanmod_kernel ""
-    fi
+    install_xanmod_kernel ""
     careful_install vulkan-driver lib32-vulkan-driver libva-utils tlp blueman bluez brightnessctl
 fi
 
 # INTEL-DESKTOP CHOICE
 if [ "$choice" = "3" ]; then
     if command -v thunar &>/dev/null; then
-        case "$PKG_MANAGER" in
-            apt)    apt-get purge -y xfce4-power-manager xfce4-battery-plugin || true ;;
-            dnf)    dnf remove -y xfce4-power-manager xfce4-battery-plugin || true ;;
-            zypper) zypper --non-interactive remove xfce4-power-manager xfce4-battery-plugin || true ;;
-        esac
+        apt-get purge -y xfce4-power-manager xfce4-battery-plugin || true
     fi
-    if [ "$PKG_MANAGER" = "apt" ]; then
-        install_xanmod_kernel edge
-    fi
+    install_xanmod_kernel edge
     # Mesa Vulkan driver package covers both AMD and Intel on this distro
     # family, unlike the Arch split vulkan-radeon/vulkan-intel packages.
     careful_install vulkan-driver lib32-vulkan-driver libva-utils fail2ban cpupower
@@ -1347,79 +1060,39 @@ fi
 
 # INTEL-LAPTOP CHOICE
 if [ "$choice" = "4" ]; then
-    if [ "$PKG_MANAGER" = "apt" ]; then
-        install_xanmod_kernel ""
-    fi
+    install_xanmod_kernel ""
     careful_install vulkan-driver lib32-vulkan-driver libva-utils tlp blueman bluez brightnessctl
 fi
 
 # NVIDIA-OPENSOURCE-DESKTOP CHOICE
 if [ "$choice" = "5" ]; then
     if command -v thunar &>/dev/null; then
-        case "$PKG_MANAGER" in
-            apt)    apt-get purge -y xfce4-power-manager xfce4-battery-plugin || true ;;
-            dnf)    dnf remove -y xfce4-power-manager xfce4-battery-plugin || true ;;
-            zypper) zypper --non-interactive remove xfce4-power-manager xfce4-battery-plugin || true ;;
-        esac
+        apt-get purge -y xfce4-power-manager xfce4-battery-plugin || true
     fi
-    case "$PKG_MANAGER" in
-        apt)
-            install_xanmod_kernel edge
-            apt-get install -y --no-install-recommends ubuntu-drivers-common 2>/dev/null || true
-            RECOMMENDED_DRIVER=$(ubuntu-drivers devices 2>/dev/null | awk "/recommended/{print \$3}" | head -n1)
-            if [ -n "$RECOMMENDED_DRIVER" ]; then
-                careful_install_raw "${RECOMMENDED_DRIVER}-open" || careful_install_raw "$RECOMMENDED_DRIVER"
-            else
-                ubuntu-drivers autoinstall || true
-            fi
-            ;;
-        dnf)
-            careful_install_raw akmod-nvidia-open xorg-x11-drv-nvidia-cuda
-            ;;
-        zypper)
-            NVIDIA_OPEN_PKG=$(zypper --non-interactive packages -r nvidia 2>/dev/null | awk -F"|" "{print \$3}" | grep -E "^ *nvidia-open-driver-G[0-9]+-signed-kmp-default *$" | head -n1 | tr -d " ")
-            if [ -n "$NVIDIA_OPEN_PKG" ]; then
-                careful_install_raw "$NVIDIA_OPEN_PKG"
-            else
-                zypper --non-interactive install-new-recommends --repo nvidia || true
-            fi
-            ;;
-    esac
+    install_xanmod_kernel edge
+    apt-get install -y --no-install-recommends ubuntu-drivers-common 2>/dev/null || true
+    RECOMMENDED_DRIVER=$(ubuntu-drivers devices 2>/dev/null | awk "/recommended/{print \$3}" | head -n1)
+    if [ -n "$RECOMMENDED_DRIVER" ]; then
+        careful_install_raw "${RECOMMENDED_DRIVER}-open" || careful_install_raw "$RECOMMENDED_DRIVER"
+    else
+        ubuntu-drivers autoinstall || true
+    fi
     careful_install libva-utils fail2ban cpupower
 fi
 
 # NVIDIA-PROPRIETARY-DESKTOP CHOICE
 if [ "$choice" = "6" ]; then
     if command -v thunar &>/dev/null; then
-        case "$PKG_MANAGER" in
-            apt)    apt-get purge -y xfce4-power-manager xfce4-battery-plugin || true ;;
-            dnf)    dnf remove -y xfce4-power-manager xfce4-battery-plugin || true ;;
-            zypper) zypper --non-interactive remove xfce4-power-manager xfce4-battery-plugin || true ;;
-        esac
+        apt-get purge -y xfce4-power-manager xfce4-battery-plugin || true
     fi
-    case "$PKG_MANAGER" in
-        apt)
-            install_xanmod_kernel edge
-            apt-get install -y --no-install-recommends ubuntu-drivers-common 2>/dev/null || true
-            RECOMMENDED_DRIVER=$(ubuntu-drivers devices 2>/dev/null | awk "/recommended/{print \$3}" | head -n1)
-            if [ -n "$RECOMMENDED_DRIVER" ]; then
-                careful_install_raw "$RECOMMENDED_DRIVER"
-            else
-                ubuntu-drivers autoinstall || true
-            fi
-            ;;
-        dnf)
-            careful_install_raw akmod-nvidia xorg-x11-drv-nvidia-cuda
-            ;;
-        zypper)
-            NVIDIA_PROP_PKG=$(zypper --non-interactive packages -r nvidia 2>/dev/null | awk -F"|" "{print \$3}" | grep -E "^ *nvidia-driver-G[0-9]+-kmp-default *$" | head -n1 | tr -d " ")
-            if [ -n "$NVIDIA_PROP_PKG" ]; then
-                careful_install_raw "$NVIDIA_PROP_PKG"
-            else
-                zypper --non-interactive install-new-recommends --repo nvidia || true
-            fi
-            ;;
-    esac
+    install_xanmod_kernel edge
+    apt-get install -y --no-install-recommends ubuntu-drivers-common 2>/dev/null || true
+    RECOMMENDED_DRIVER=$(ubuntu-drivers devices 2>/dev/null | awk "/recommended/{print \$3}" | head -n1)
+    if [ -n "$RECOMMENDED_DRIVER" ]; then
+        careful_install_raw "$RECOMMENDED_DRIVER"
+    else
+        ubuntu-drivers autoinstall || true
+    fi
     careful_install libva-utils fail2ban cpupower
 fi
 
@@ -1427,12 +1100,12 @@ fi
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 
-### INSTALL PROTON-GE ###
-# ProtonUp-Qt (Flatpak) replaces the Arch-only protonup-git CLI tool and
-# works identically across every distro this section supports.
-if command -v flatpak &>/dev/null; then
-    flatpak install -y flathub net.davidotek.pupgui2 2>/dev/null || echo "ProtonUp-Qt install failed, skipping." >&2
-fi
+### PROTON-GE NOTE ###
+# On Arch/Void this step auto-downloads a Proton-GE build via protonup-git
+# with no equivalent CLI tool available here, so nothing is installed
+# automatically - only a Flathub remote is added above. If you want
+# Proton-GE, install ProtonUp-Qt yourself (flatpak install flathub
+# net.davidotek.pupgui2) and pick a build from its UI.
 
 ### ULU LINUX INSTALL ###
 
@@ -1464,31 +1137,9 @@ if [ "$choice" = "5" ] || [ "$choice" = "6" ]; then
     add_service cpupower
 fi
 
-### FIX SELINUX FILE CONTEXTS ###
-# Fedora and OpenSUSE enforce SELinux/AppArmor by default. unzip has no idea
-# about security contexts, so every file it just wrote under /etc, /usr,
-# /bin and /home has whatever context it happened to inherit rather than
-# the context the policy expects. Left alone, this can silently block
-# services, PAM, or the display manager from starting at boot. Relabel
-# everything the zips could plausibly have touched before we reboot.
-if command -v restorecon &>/dev/null; then
-    echo -e "\e[1mRestoring SELinux file contexts...\e[0m"
-    restorecon -R -F /etc /usr /bin /sbin /lib /lib64 /home /var 2>/dev/null || true
-fi
-
 ### INSTALL UNIVERSAL RC.LOCAL (systemd compatibility unit) ###
-case "$PKG_MANAGER" in
-    dnf|zypper) RC_LOCAL_PATH="/etc/rc.d/rc.local" ;;
-    apt)        RC_LOCAL_PATH="/etc/rc.local" ;;
-esac
+RC_LOCAL_PATH="/etc/rc.local"
 
-# Only move a real file, never a symlink - Fedora/OpenSUSE already ship
-# /etc/rc.local as a symlink to /etc/rc.d/rc.local, and mv-ing a symlink
-# onto its own target destroys the real file underneath it.
-if [ -f /etc/rc.local ] && [ ! -L /etc/rc.local ] && [ "/etc/rc.local" != "$RC_LOCAL_PATH" ]; then
-    mkdir -p "$(dirname "$RC_LOCAL_PATH")"
-    mv /etc/rc.local "$RC_LOCAL_PATH"
-fi
 if [ -f "$RC_LOCAL_PATH" ]; then
     chmod +x "$RC_LOCAL_PATH"
     if ! grep -q "^exit 0" "$RC_LOCAL_PATH"; then
@@ -1496,10 +1147,6 @@ if [ -f "$RC_LOCAL_PATH" ]; then
         echo "exit 0" >> "$RC_LOCAL_PATH"
     fi
 
-    # Fedora and OpenSUSE already ship an rc-local.service (from the
-    # systemd package itself) at /usr/lib/systemd/system/ or
-    # /lib/systemd/system/. Only create our own if none exists anywhere,
-    # so we never shadow/duplicate the distro built-in unit.
     if ! systemctl list-unit-files rc-local.service 2>/dev/null | grep -q rc-local.service; then
 cat > /etc/systemd/system/rc-local.service <<EOF
 [Unit]
@@ -1536,31 +1183,18 @@ add_service usbguard
 if command -v ufw &>/dev/null; then
     add_service ufw
 fi
-if command -v firewalld &>/dev/null; then
-    add_service firewalld
-fi
 
 # REMOVE CONNMAN & REFRESH
 CONNMAN_INSTALLED=false
-case "$PKG_MANAGER" in
-    apt)        dpkg -s connman &>/dev/null && CONNMAN_INSTALLED=true ;;
-    dnf|zypper) rpm -q connman &>/dev/null && CONNMAN_INSTALLED=true ;;
-esac
+dpkg -s connman &>/dev/null && CONNMAN_INSTALLED=true
 if [ "$CONNMAN_INSTALLED" = true ]; then
     systemctl disable --now connman 2>/dev/null || true
-    case "$PKG_MANAGER" in
-        apt)    apt-get purge -y connman connman-gtk || true ;;
-        dnf)    dnf remove -y connman || true ;;
-        zypper) zypper --non-interactive remove connman || true ;;
-    esac
+    apt-get purge -y connman connman-gtk || true
 else
     echo "connman not detected, skipping removal."
 fi
 
-case "$PKG_MANAGER" in
-    apt)        update-grub 2>/dev/null || true ;;
-    dnf|zypper) grub2-mkconfig -o /boot/grub2/grub.cfg 2>/dev/null || true ;;
-esac
+update-grub 2>/dev/null || true
 
 # CREATE GAMEMODE GROUP
 if [ "$choice" = "1" ] || [ "$choice" = "3" ] || [ "$choice" = "5" ] || [ "$choice" = "6" ]; then
@@ -1589,14 +1223,6 @@ cat > /etc/security/limits.d/99-realtime-privileges.conf <<EOF
 @realtime - nice -19
 EOF
 usermod -aG realtime "$(logname)"
-
-# FINAL SELINUX RELABEL
-# Catches the rc-local.service unit and limits.d file created above (in
-# addition to the earlier pass over the unzipped ULU files), so nothing
-# newly written this run boots with a stale or missing context.
-if command -v restorecon &>/dev/null; then
-    restorecon -R -F /etc /usr /bin /sbin /lib /lib64 /home /var 2>/dev/null || true
-fi
 
 # RESET PERMISSIONS
 reset-permissions
