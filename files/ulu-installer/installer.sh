@@ -1260,32 +1260,18 @@ if [ "$choice" = "5" ] || [ "$choice" = "6" ]; then
 fi
 
 ### ADAPT ULU NETWORKMANAGER/DNSMASQ/DNSCRYPT-PROXY CONFIGS FOR APT ###
-# ulu-root-main.zip ships one dnscrypt-proxy.toml, dnsmasq.conf and
-# NetworkManager.conf for every distro ULU supports. None of that content
-# is actually Arch-specific (dnscrypt-proxy already listens on 5300 so it
-# does not fight avahi for 5353, and dnsmasq/NetworkManager.conf use plain
-# upstream options), so keep the shipped files and only patch the couple
-# of settings that do not hold on an apt/systemd system.
+
 echo -e "\e[1mAdapting dnscrypt-proxy/dnsmasq/NetworkManager configs for apt...\e[0m"
 
-# Make sure resolv.conf lands as a real file rather than being written
-# through a pre-existing systemd-resolved symlink.
 if [ -L /etc/resolv.conf ]; then
     rm -f /etc/resolv.conf
     unzip -o ulu-root-main.zip etc/resolv.conf -d /
 fi
 
-# Ubuntu/Mint do not ship isc-dhcp-client by default, so the shipped
-# "dhcp=dhclient" would leave NetworkManager without a usable DHCP
-# backend. Point it at the built-in client instead.
 if [ -f /etc/NetworkManager/NetworkManager.conf ]; then
     sed -i "s/^dhcp=dhclient$/dhcp=internal/" /etc/NetworkManager/NetworkManager.conf
 fi
 
-# The shipped dnscrypt-proxy.toml targets the 2.1+ schema. Older apt
-# releases can still carry dnscrypt-proxy 2.0.x, which only understands
-# the previous keys, so patch those in place when that is what apt
-# installed instead of overwriting the rest of the file.
 if command -v dnscrypt-proxy &>/dev/null && [ -f /etc/dnscrypt-proxy/dnscrypt-proxy.toml ]; then
     DNSCRYPT_VERSION=$(dnscrypt-proxy -version 2>&1 | grep -oP "[0-9]+\.[0-9]+\.[0-9]+" | head -1)
     MAJOR_VERSION=$(echo "$DNSCRYPT_VERSION" | cut -d. -f1)
@@ -1297,14 +1283,9 @@ if command -v dnscrypt-proxy &>/dev/null && [ -f /etc/dnscrypt-proxy/dnscrypt-pr
     fi
 fi
 
-# systemd-resolved otherwise fights dnsmasq for DNS duty on port 53 and
-# keeps regenerating its own resolv.conf symlink.
 systemctl disable --now systemd-resolved 2>/dev/null || true
 systemctl mask systemd-resolved 2>/dev/null || true
 
-# Bring the stack up in dependency order: dnscrypt-proxy first (dnsmasq
-# forwards to it on 127.0.0.1:5300), then dnsmasq, then reload
-# NetworkManager so it picks up dns=none from the config above.
 systemctl enable dnscrypt-proxy 2>/dev/null || true
 systemctl restart dnscrypt-proxy 2>/dev/null || true
 sleep 3
